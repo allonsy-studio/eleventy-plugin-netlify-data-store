@@ -1,0 +1,182 @@
+/* ============================================================
+   BASE ELEMENTS — global resets, links & form controls.
+   Lifted from the production site's core.css so consumers get
+   the exact same element behaviour (validation ticks, focus
+   rings, smooth scroll, accent-tinted selection).
+   ============================================================ */
+
+html {
+	scroll-behavior: smooth;
+	scroll-padding-block-start: var(--theme--container--space);
+}
+
+body {
+	position: relative;
+	margin: 0;
+	font-family: var(--theme--text--FontFamily);
+	font-size: 18px;
+	font-optical-sizing: auto;
+	line-height: var(--theme--text--LineHeight);
+	color: var(--theme--text--Color);
+	background-color: var(--theme--surface--color);
+	-webkit-font-smoothing: subpixel-antialiased;
+}
+
+::selection {
+	background: color-mix(in hsl, var(--theme--surface--color--accent) 80%, transparent);
+	color: var(--theme--text--Color);
+}
+
+:where(a) {
+	text-decoration: none;
+	text-underline-offset: 0.2ex;
+	font-weight: var(--theme--FontWeight);
+	color: var(--theme--link--Color);
+
+	&:hover {
+		text-decoration: underline;
+		text-decoration-color: var(--theme--link--Color--hover);
+		color: var(--theme--link--Color--hover);
+	}
+
+	&:is(:focus, :focus-visible) {
+		text-decoration: underline;
+		color: var(--theme--link--Color--focus);
+		outline: var(--theme--OutlineWidth) solid var(--theme--link--Color--focus);
+		outline-offset: var(--theme--OutlineOffset);
+		border-radius: var(--theme--BorderRadius--thin);
+	}
+
+	&[aria-current="page"] {
+		color: inherit;
+		font-weight: var(--theme--FontWeight--semi-bold);
+		text-decoration: underline;
+		text-decoration-color: var(--theme--link--Color--active);
+	}
+}
+
+:is([hidden]) { display: none; }
+
+.sr-only {
+	position: absolute;
+	clip-path: inset(50%);
+	overflow: hidden;
+	white-space: nowrap;
+	inline-size: 1px;
+	block-size: 1px;
+	margin: -1px;
+	padding: 0;
+	border: 0;
+}
+
+.shadow {
+	box-shadow:
+		var(--theme--container--shadow) var(--theme--container--shadow-color),
+		var(--theme--container--shadow--light) var(--theme--container--shadow-color--light);
+}
+
+:where(label) {
+	text-wrap: stable;
+	font-weight: var(--theme--FontWeight--thin);
+	line-height: var(--theme--LineHeight);
+	color: var(--theme--text--Color);
+}
+
+:where(input, textarea, select, button) {
+	font: inherit;
+	color: inherit;
+}
+
+:where(input:not([type="checkbox"], [type="radio"], [type="submit"], [type="reset"], [type="button"], [type="image"], [type="file"], [type="range"], [type="color"], [type="hidden"]), textarea, select) {
+	box-sizing: border-box;
+	inline-size: 100%;
+	min-inline-size: 3em;
+	block-size: 2.5em;
+	padding: var(--theme--content--space);
+	vertical-align: top;
+	background-color: color-mix(in sRGB, var(--theme--surface--color) 80%, transparent);
+	border: var(--theme--BorderWidth) solid var(--theme--ui--color--subtle);
+	border-radius: var(--theme--BorderRadius);
+	color: var(--theme--text--Color);
+	text-overflow: ellipsis;
+	margin: 0;
+	appearance: none;
+
+	&:is(textarea) {
+		display: block;
+		min-block-size: 7em;
+		resize: vertical;
+		line-height: var(--theme--LineHeight);
+	}
+
+	&:hover { border-color: var(--theme--ui--color--active); }
+
+	&:focus-visible {
+		outline: var(--theme--OutlineWidth) solid var(--theme--ui--color--active);
+		outline-offset: var(--theme--OutlineOffset);
+		border-color: var(--theme--ui--color--active);
+	}
+
+	&::placeholder {
+		opacity: 1;
+		color: var(--theme--text--Color--subtle);
+	}
+
+	&:user-invalid:not(:focus-visible, :disabled, :read-only) {
+		border-color: var(--theme--feedback--error);
+	}
+
+	&:user-valid:not(:focus-visible, :disabled, :read-only) {
+		border-color: var(--theme--feedback--success);
+	}
+
+	&:disabled {
+		background-color: var(--theme--surface--color--disabled);
+		color: var(--theme--text--Color--subtle);
+		resize: none;
+	}
+}
+
+.field-group {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 12em), 1fr));
+	gap: calc((var(--theme--content--space) / 2) + 1cqi);
+
+	&:has(> *:only-child) { grid-template-columns: 1fr; }
+}
+
+label:has(:where(input, textarea, select)) {
+	position: relative;
+	display: grid;
+
+	&::after {
+		position: absolute;
+		content: "";
+		pointer-events: none;
+		inset-inline-end: 0.75em;
+		inset-block-start: calc(1em * var(--theme--LineHeight--spacious) + 0.2em);
+		font-weight: var(--theme--FontWeight--bold);
+	}
+
+	&:has(:is(input, textarea, select):user-valid:not(:focus-visible, :disabled, :read-only))::after {
+		content: "✓";
+		color: var(--theme--feedback--success);
+	}
+
+	&:has(:is(input, textarea, select):user-invalid:not(:focus-visible, :disabled, :read-only))::after {
+		content: "!";
+		color: var(--theme--feedback--error);
+	}
+}
+
+.form-status {
+	--status--BorderColor: var(--theme--ui--color--subtle);
+
+	border-inline-start: 4px solid var(--status--BorderColor);
+	background-color: color-mix(in sRGB, var(--status--BorderColor) 10%, var(--theme--surface--color));
+	border-radius: var(--theme--BorderRadius);
+	padding: 1em 1.25em;
+
+	&[data-state="success"] { --status--BorderColor: var(--theme--feedback--success); }
+	&[data-state="error"]   { --status--BorderColor: var(--theme--feedback--error); }
+}

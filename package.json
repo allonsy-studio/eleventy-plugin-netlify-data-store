@@ -1,0 +1,82 @@
+{
+	"name": "@allons-y/eleventy-plugin-netlify-data-store",
+	"version": "0.0.0",
+	"description": "Read & write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.",
+	"type": "module",
+	"main": "src/index.js",
+	"exports": {
+		".": "./src/index.js"
+	},
+	"files": [
+		"src",
+		"README.md",
+		"LICENSE"
+	],
+	"scripts": {
+		"changeset": "changeset",
+		"ci:test": "ava",
+		"format": "eslint . --fix",
+		"lint": "eslint .",
+		"release": "changeset publish",
+		"sample": "NODE_ENV=development eleventy --config=sample/eleventy.config.js --input=sample --output=sample/_site",
+		"test": "ava",
+		"test:watch": "ava --watch"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"license": "MPL-2.0",
+	"engines": {
+		"node": ">=22.12.0"
+	},
+	"keywords": [
+		"eleventy",
+		"eleventy-plugin",
+		"netlify",
+		"netlify-blobs",
+		"data-store",
+		"cache"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store.git"
+	},
+	"bugs": "https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/issues",
+	"homepage": "https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store#readme",
+	"author": {
+		"name": "Allons-y Studio",
+		"url": "https://allons-y.studio"
+	},
+	"ava": {
+		"failFast": false,
+		"files": [
+			"test/*.test.js"
+		],
+		"watchMode": {
+			"ignoreChanges": [
+				"**/_site/**",
+				"**/.netlify/**"
+			]
+		}
+	},
+	"peerDependencies": {
+		"@11ty/eleventy": ">=3.0.0"
+	},
+	"peerDependenciesMeta": {
+		"@11ty/eleventy": {
+			"optional": true
+		}
+	},
+	"dependencies": {
+		"@netlify/blobs": "^11.0.3"
+	},
+	"devDependencies": {
+		"@11ty/eleventy": "^3.1.6",
+		"@changesets/cli": "^3.0.2",
+		"@eslint/js": "^9.39.5",
+		"ava": "^6.4.1",
+		"eslint": "^9.39.5",
+		"eslint-plugin-license-header": "^0.9.0"
+	},
+	"packageManager": "yarn@4.18.0"
+}

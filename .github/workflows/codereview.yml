@@ -1,0 +1,61 @@
+name: Code review
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+
+jobs:
+  code-review:
+    # Review non-draft PRs raised from inside the organization.
+    #
+    # `author_association` ships in the event payload, so this costs no API
+    # call and cannot fail closed on a token permission error. It reads OWNER
+    # on a user-owned repo and MEMBER on an org-owned one, so both are listed
+    # & this workflow stays portable between the two. Add "COLLABORATOR" to
+    # also cover outside collaborators granted write access.
+    #
+    # Fork branches are excluded because `pull_request` withholds secrets from
+    # them: the review would start & then fail on an empty credential.
+    if: >-
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      contains(fromJSON('["OWNER", "MEMBER"]'), github.event.pull_request.author_association)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: read
+      id-token: write
+
+    steps:
+      # `secrets` is not available to a job-level `if`, so the credential is
+      # checked here: an unconfigured repo skips the review instead of
+      # failing the check.
+      - name: Check the review credential is configured
+        id: credential
+        env:
+          REVIEW_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          if [ -n "$REVIEW_TOKEN" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::CLAUDE_CODE_OAUTH_TOKEN is not set on this repository; skipping the code review."
+          fi
+
+      - name: Checkout repository
+        if: steps.credential.outputs.configured == 'true'
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Run code review
+        id: claude-review
+        if: steps.credential.outputs.configured == 'true'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          plugin_marketplaces: 'https://github.com/anthropics/claude-code.git'
+          plugins: 'code-review@claude-code-plugins'
+          prompt: '/code-review:code-review ${{ github.repository }}/pull/${{ github.event.pull_request.number }}'

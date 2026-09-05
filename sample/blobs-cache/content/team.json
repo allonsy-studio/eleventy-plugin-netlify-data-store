@@ -1,0 +1,13 @@
+{
+	"cachedAt": "2026-08-14T09:00:00.000Z",
+	"value": {
+		"meta": {
+			"generatedAt": "2026-08-14T09:00:00Z",
+			"source": "netlify-blobs"
+		},
+		"team": [
+			{ "name": "Ada Lovelace", "role": "Design systems architect" },
+			{ "name": "Grace Hopper", "role": "Front-end engineer" }
+		]
+	}
+}
