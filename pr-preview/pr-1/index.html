@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>eleventy-plugin-netlify-data-store | Allons-y Studio</title>
-  <meta name="description" content="Read and write build-time content for Eleventy from Netlify Blobs, with a repo-managed JSON layer and a local cache for offline development. A free, open-source Eleventy plugin from Allons-y Studio.">
+  <meta name="description" content="Read and write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds. A free, open-source Eleventy plugin from Allons-y Studio.">
   <link rel="icon" href="assets/favicon.svg">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/template.css">
@@ -35,7 +35,7 @@
 
     <h1 style="font-family:var(--theme--code--FontFamily);font-size:clamp(2rem,7vw,3.1rem);font-weight:400;letter-spacing:-0.01em;margin:0;word-break:break-word;">eleventy-plugin-netlify-<span style="color:var(--theme--text--Color--accent);">data-store</span></h1>
 
-    <p class="headline" style="--headline--FontSize:1.5rem;margin:0;max-inline-size:44ch;text-wrap:pretty;">Build-time content from <span class="inline-c">Netlify Blobs</span> — with a repo-managed JSON layer, a local cache for offline builds, and reads that never fail the build.</p>
+    <p class="headline" style="--headline--FontSize:1.5rem;margin:0;max-inline-size:44ch;text-wrap:pretty;">Build-time content from <span class="inline-c">Netlify Blobs</span> — cached locally with a TTL you control, so builds stay fast, survive an outage, and never fail on missing data.</p>
 
     <div class="code" data-code style="max-inline-size:620px;inline-size:100%;">
       <div class="code__bar"><span class="code__name"><i class="fa-solid fa-terminal" aria-hidden="true"></i>Terminal</span><button class="code__copy" type="button"><i class="fa-regular fa-copy" aria-hidden="true"></i><span data-copy-label>Copy</span></button></div>
@@ -75,11 +75,11 @@
       <!-- WHY -->
       <section id="why">
         <h2 class="ay-title ay-title--highlight">Why this plugin</h2>
-        <p class="reading">Some content belongs in git, edited by a human. Some content is written by a scheduled function long after the last deploy. Both end up in the same templates — this plugin puts them behind one API so a template never has to care which is which.</p>
+        <p class="reading">Content written long after the last deploy — by a scheduled function, a form handler, a webhook — has to reach your templates at build time. This plugin fetches it from Netlify Blobs and keeps a local copy, so builds are fast, work offline, and degrade gracefully when the store is down.</p>
         <div class="cards">
-          <div class="card"><i class="fa-solid fa-layer-group" aria-hidden="true"></i><h3>Two layers, one API</h3><p>Repo-managed JSON and Netlify Blobs read through the same call. Swap a name between layers without touching a template.</p></div>
-          <div class="card"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><h3>Never fails a build</h3><p>A dead network, a missing blob, or absent credentials return an error envelope — not an exception. Templates render a fallback.</p></div>
-          <div class="card"><i class="fa-solid fa-plane-up" aria-hidden="true"></i><h3>Builds offline</h3><p>Development reads a local, uncommitted cache. One warm build and every build after it runs with no credentials and no network.</p></div>
+          <div class="card"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i><h3>Cached by default</h3><p>Reads hit a local cache first and only reach Netlify Blobs once the entry passes its TTL. Fewer calls, faster builds, everywhere.</p></div>
+          <div class="card"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><h3>Never fails a build</h3><p>If the store is unreachable the last good copy is served, flagged stale. Past that, an error envelope — never an exception.</p></div>
+          <div class="card"><i class="fa-solid fa-plane-up" aria-hidden="true"></i><h3>Builds offline</h3><p>One warm build and every build inside the TTL runs with no credentials and no network — locally and in CI alike.</p></div>
           <div class="card"><i class="fa-solid fa-feather" aria-hidden="true"></i><h3>One dependency</h3><p>Nothing but <span class="inline-c">@netlify/blobs</span>. No build step, no runtime, pure ESM.</p></div>
         </div>
       </section>
@@ -110,13 +110,13 @@
   <span class="t-kw">let</span> { readBlob } = eleventyConfig.addPlugin(netlifyDataStore, {
     immediate: <span class="t-kw">true</span>,
     storeName: <span class="t-str">"content"</span>,
-    localContent: [<span class="t-str">"team"</span>, <span class="t-str">"pages"</span>],
+    ttl: <span class="t-str">"1h"</span>,
   });
 
   eleventyConfig.addGlobalData(<span class="t-str">"activity"</span>, () =&gt; readBlob(<span class="t-str">"activity"</span>));
 }</code></pre>
         </div>
-        <p class="reading">Reads that reach Netlify Blobs need <span class="inline-c">NETLIFY_SITE_ID</span> and <span class="inline-c">NETLIFY_TOKEN</span>. Reads served from repo-managed JSON or a warm cache need no credentials at all.</p>
+        <p class="reading">Reads that reach Netlify Blobs need <span class="inline-c">NETLIFY_SITE_ID</span> and <span class="inline-c">NETLIFY_TOKEN</span>. A read served from a warm cache needs no credentials at all — which is what lets a build run offline.</p>
       </section>
 
       <!-- USAGE -->
@@ -143,6 +143,7 @@
   &lt;p&gt;Activity unavailable.&lt;/p&gt;
 {% <span class="t-kw">else</span> %}
   &lt;p&gt;Updated {{ activity.meta.generatedAt | generatedAt }}&lt;/p&gt;
+  {%- <span class="t-kw">if</span> activity.meta.stale %}&lt;p&gt;Last cached copy.&lt;/p&gt;{%- <span class="t-kw">endif</span> %}
   &lt;ul&gt;
   {%- <span class="t-kw">for</span> entry <span class="t-kw">in</span> activity.entries %}
     &lt;li&gt;{{ entry.title }}&lt;/li&gt;
@@ -151,7 +152,7 @@
 {% <span class="t-kw">endif</span> %}</code></pre>
           </div>
         </div>
-        <p class="reading">Reads resolve in order: a name listed in <span class="inline-c">localContent</span> comes straight from <span class="inline-c">&lt;dataDir&gt;/&lt;name&gt;.json</span>; in development the local cache answers next; otherwise the Netlify Blobs store does, and the result is written into the cache for the next offline build.</p>
+        <p class="reading">Reads resolve in order: the local cache answers while the entry is younger than <span class="inline-c">ttl</span>; otherwise Netlify Blobs does, and the result is written into the cache for the next build. If the store cannot be reached, an expired entry is served with <span class="inline-c">meta.stale</span> set rather than failing.</p>
       </section>
 
       <!-- API -->
@@ -161,31 +162,31 @@
         <div class="opts">
           <div class="opt">
             <div class="opt__meta"><code class="opt__name">readBlob(name, storeName?)</code><div class="opt__tags"><span class="opt__type">Promise&lt;object&gt;</span></div></div>
-            <p class="opt__desc">Returns the full <span class="inline-c">{ meta, ...content }</span> envelope, or <span class="inline-c">{ meta: { error } }</span> on any failure. Never throws.</p>
+            <p class="opt__desc">Cache first, then Netlify Blobs. Returns the full <span class="inline-c">{ meta, ...content }</span> envelope, or <span class="inline-c">{ meta: { error } }</span> on any failure. Never throws.</p>
           </div>
           <div class="opt">
             <div class="opt__meta"><code class="opt__name">writeBlob(name, data, storeName?)</code><div class="opt__tags"><span class="opt__type">Promise&lt;object&gt;</span></div></div>
-            <p class="opt__desc">Returns <span class="inline-c">{ statusCode, body }</span>. Refuses a repo-managed name with a 400 — that content is edited through git.</p>
+            <p class="opt__desc">Writes to the store and refreshes the cached copy. Returns <span class="inline-c">{ statusCode, body }</span>, never throws.</p>
           </div>
           <div class="opt">
             <div class="opt__meta"><code class="opt__name">listData(storeName?)</code><div class="opt__tags"><span class="opt__type">Promise&lt;string[]&gt;</span></div></div>
-            <p class="opt__desc">Blob keys in the store — or the local cache's keys in development, matching what a read would resolve.</p>
+            <p class="opt__desc">The blob keys held in the store.</p>
           </div>
           <div class="opt">
             <div class="opt__meta"><code class="opt__name">storeName</code><div class="opt__tags"><span class="opt__type">string</span><span class="opt__def">default: "content"</span></div></div>
             <p class="opt__desc">The Netlify Blobs store every call uses unless one is named explicitly.</p>
           </div>
           <div class="opt">
-            <div class="opt__meta"><code class="opt__name">localContent</code><div class="opt__tags"><span class="opt__type">string[]</span><span class="opt__def">default: []</span></div></div>
-            <p class="opt__desc">Content names served from repo-managed JSON instead of Blobs. Not registered as global data — Eleventy already loads the data directory on its own.</p>
+            <div class="opt__meta"><code class="opt__name">ttl</code><div class="opt__tags"><span class="opt__type">string | number</span><span class="opt__def">default: "1h"</span></div></div>
+            <p class="opt__desc">How long a cached entry stays fresh. Takes <span class="inline-c">eleventy-fetch</span> durations — <span class="inline-c">"30m"</span>, <span class="inline-c">"1h"</span>, <span class="inline-c">"7d"</span> — plus <span class="inline-c">"*"</span> to never expire and <span class="inline-c">0</span> to always refetch. An unparseable value throws at registration.</p>
           </div>
           <div class="opt">
-            <div class="opt__meta"><code class="opt__name">dataDir</code><div class="opt__tags"><span class="opt__type">string</span><span class="opt__def">default: Eleventy's data directory</span></div></div>
-            <p class="opt__desc">Where repo-managed JSON lives. Resolved on use, so a later <span class="inline-c">setDataDirectory()</span> is still honored.</p>
+            <div class="opt__meta"><code class="opt__name">staleIfError</code><div class="opt__tags"><span class="opt__type">boolean</span><span class="opt__def">default: true</span></div></div>
+            <p class="opt__desc">Serve an expired entry when the store is unreachable, flagged with <span class="inline-c">meta.stale</span> and <span class="inline-c">meta.cacheAge</span>. Set false to never serve data past its TTL.</p>
           </div>
           <div class="opt">
             <div class="opt__meta"><code class="opt__name">cacheDir</code><div class="opt__tags"><span class="opt__type">string</span><span class="opt__def">default: ".netlify/blobs-cache"</span></div></div>
-            <p class="opt__desc">The local, uncommitted Blobs cache. Written by the plugin, safe to delete, and gitignored via <span class="inline-c">.netlify</span>.</p>
+            <p class="opt__desc">The local, uncommitted cache. Each file wraps the value with the time it was fetched. Written by the plugin, safe to delete, and gitignored via <span class="inline-c">.netlify</span>.</p>
           </div>
           <div class="opt">
             <div class="opt__meta"><code class="opt__name">siteID</code> / <code class="opt__name">token</code><div class="opt__tags"><span class="opt__type">string</span><span class="opt__def">default: from the environment</span></div></div>
@@ -209,7 +210,7 @@
           <li><i class="fa-solid fa-check" aria-hidden="true"></i><span><strong>Eleventy 3.0+</strong> — declared as an optional peer dependency.</span></li>
           <li><i class="fa-solid fa-check" aria-hidden="true"></i><span><strong>Node.js 22.12+</strong> — the floor set by <span class="inline-c">@netlify/blobs</span>. Pure ESM, no build step.</span></li>
           <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Usable outside Eleventy — <span class="inline-c">createDataStore()</span> works in any Netlify Function.</span></li>
-          <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Only an explicit <span class="inline-c">NODE_ENV=development</span> reads the cache; unset is treated as production.</span></li>
+          <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Environment-agnostic — caching is governed by <span class="inline-c">ttl</span>, never by <span class="inline-c">NODE_ENV</span>.</span></li>
         </ul>
         <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;">
           <a class="ay-cta-link" href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/CHANGELOG.md">Changelog</a>
