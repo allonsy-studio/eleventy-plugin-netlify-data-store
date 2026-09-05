@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>eleventy-plugin-netlify-data-store | Allons-y Studio</title>
   <meta name="description" content="Read and write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds. A free, open-source Eleventy plugin from Allons-y Studio.">
-  <link rel="icon" href="assets/favicon.svg">
+  <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/favicon-180.png">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/template.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -16,7 +17,10 @@
   <!-- ============ MASTHEAD ============ -->
   <header class="wrap" style="padding-block:26px;display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center;justify-content:space-between;">
     <a href="https://allons-y.studio" aria-label="Allons-y Studio home" style="display:inline-flex;align-items:center;">
-      <img src="assets/logo-wordmark.png" alt="Allons-y Studio" style="block-size:44px;inline-size:auto;">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="assets/lockup-horizontal-dark.png">
+        <img src="assets/lockup-horizontal.svg" alt="Allons-y Studio" style="block-size:44px;inline-size:auto;">
+      </picture>
     </a>
     <nav aria-label="Primary" style="display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;">
       <a href="#why" style="font-family:var(--theme--heading--FontFamily);font-size:0.95rem;">Overview</a>
