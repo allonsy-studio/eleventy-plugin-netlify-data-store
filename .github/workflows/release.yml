@@ -5,8 +5,7 @@ on:
     branches:
       - main
 
-# Each job below narrows this to only what that stage needs; publishing is the
-# only stage that gets `id-token: write`.
+# Scoped on the job instead; nothing else in this workflow needs a token.
 permissions: {}
 
 concurrency:
@@ -18,13 +17,16 @@ defaults:
     shell: bash
 
 jobs:
-  mode:
-    name: Select mode
+  release:
+    name: Release
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-    outputs:
-      mode: ${{ steps.select.outputs.mode }}
+      # Version commits, git tags & the GitHub release.
+      contents: write
+      # The release PR.
+      pull-requests: write
+      # The OIDC token npm exchanges for a short-lived publish credential.
+      id-token: write
 
     steps:
       - name: Checkout repository
@@ -46,81 +48,20 @@ jobs:
       - name: Install Node dependencies
         run: yarn install --immutable
 
-      # `version` when changesets are pending, `publish` when a versioned
-      # release is sitting unpublished, `none` otherwise.
-      - name: Decide whether to version or publish
-        id: select
-        uses: changesets/action/select-mode@v2
-
-  version:
-    name: Version packages
-    needs: mode
-    if: needs.mode.outputs.mode == 'version'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-
-      - name: Use Node LTS version
-        uses: actions/setup-node@v7
-        with:
-          node-version-file: .nvmrc
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Install Node dependencies
-        run: yarn install --immutable
-
-      # A PAT rather than the job token so the release PR triggers CI.
-      - name: Open or update the release PR
-        uses: changesets/action/version@v2
+      # Opens the release PR while changesets are pending, publishes once one
+      # merges. No npm token: Yarn exchanges the Actions OIDC token with npm
+      # for a short-lived credential, so npm must list this workflow as a
+      # trusted publisher for the package.
+      #
+      # Deliberately not the select-mode/version/publish sub-actions: those
+      # declare `main: ../dist/*.js`, which climbs out of their own action
+      # directory, and GitHub rejects the workflow outright with a
+      # startup_failure at every ref.
+      - name: Create release PR or publish to npm
+        uses: changesets/action@v2
         with:
           github-token: ${{ secrets.PAT_GITHUB }}
-          script: yarn changeset version
+          publish-script: yarn release
+          version-script: yarn changeset version
           commit-message: "chore(release): version packages"
           pr-title: "chore(release): version packages"
-
-  publish:
-    name: Publish to npm
-    needs: mode
-    if: needs.mode.outputs.mode == 'publish'
-    runs-on: ubuntu-latest
-    permissions:
-      # Git tags & the GitHub release.
-      contents: write
-      # The OIDC token npm exchanges for a short-lived publish credential.
-      id-token: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-
-      - name: Use Node LTS version
-        uses: actions/setup-node@v7
-        with:
-          node-version-file: .nvmrc
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Install Node dependencies
-        run: yarn install --immutable
-
-      # No npm token: Yarn exchanges the Actions OIDC token with npm for a
-      # short-lived credential. npm must list this workflow as a trusted
-      # publisher for the package.
-      - name: Publish to npm
-        uses: changesets/action/publish@v2
-        with:
-          script: yarn release
