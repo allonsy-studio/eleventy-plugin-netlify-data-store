@@ -1,0 +1,39 @@
+{
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"baseBranchPatterns": ["main"],
+	"extends": ["config:best-practices", "group:githubArtifactActions"],
+	"labels": ["dependencies", "renovate"],
+	"lockFileMaintenance": {
+		"enabled": true,
+		"extends": ["schedule:monthly"]
+	},
+	"packageRules": [
+		{
+			"matchDatasources": ["npm"],
+			"minimumReleaseAge": "1 month"
+		},
+		{
+			"groupName": "ava ecosystem",
+			"matchPackageNames": ["ava"]
+		},
+		{
+			"groupName": "11ty ecosystem",
+			"matchPackageNames": ["@11ty/*"]
+		},
+		{
+			"groupName": "netlify ecosystem",
+			"matchPackageNames": ["@netlify/*"]
+		},
+		{
+			"groupName": "eslint ecosystem",
+			"matchPackageNames": ["eslint", "typescript-eslint", "@eslint/*", "eslint-plugin-*"]
+		},
+		{
+			"groupName": "changesets ecosystem",
+			"matchPackageNames": ["@changesets/*"]
+		}
+	],
+	"postUpdateOptions": ["yarnDedupeHighest"],
+	"rebaseWhen": "behind-base-branch",
+	"reviewers": ["castastrophe"]
+}

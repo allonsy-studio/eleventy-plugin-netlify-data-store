@@ -1,0 +1,127 @@
+name: Bug Report
+description: Something isn't working correctly in eleventy-plugin-netlify-data-store.
+labels: ["bug", "type: fix"]
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Thanks for taking the time to report a bug. Please fill out the sections below so we can reproduce and fix it quickly.
+
+    - type: dropdown
+      id: area
+      attributes:
+          label: Affected area
+          description: Which part of the plugin is affected?
+          options:
+              - "readBlob — reading content"
+              - "writeBlob — writing content"
+              - "listData — listing store keys"
+              - "Repo-managed content (localContent)"
+              - "Local Blobs cache (development)"
+              - "Netlify Blobs connection / credentials"
+              - "Plugin registration / options"
+              - "generatedAt filter / date formatting"
+              - "Tooling / scripts"
+              - "CI / GitHub Actions"
+              - "npm package / install"
+              - "Documentation"
+              - "Other"
+      validations:
+          required: true
+
+    - type: input
+      id: content-name
+      attributes:
+          label: Content name (if applicable)
+          description: The specific blob or repo-managed content name that's affected.
+          placeholder: "e.g. `csswg_activity`, `employees`"
+      validations:
+          required: false
+
+    - type: textarea
+      id: description
+      attributes:
+          label: What happened?
+          description: A clear description of the bug. Include the storage layer involved (repo-managed JSON, local cache, or Netlify Blobs) if relevant.
+          placeholder: "`readBlob` returns an error envelope for a blob that exists in the store when a custom `storeName` is passed."
+      validations:
+          required: true
+
+    - type: textarea
+      id: reproduction
+      attributes:
+          label: Steps to reproduce
+          description: Minimal steps that reliably reproduce the issue. A minimal `eleventy.config.js` plus the plugin options you passed is ideal.
+          placeholder: |
+              1. `yarn add @allons-y/eleventy-plugin-netlify-data-store`
+              2. Register the plugin in `eleventy.config.js` with `{ storeName: "content" }`
+              3. Call `readBlob("csswg_activity")` from a global data callback
+              4. See envelope / output ...
+      validations:
+          required: true
+
+    - type: textarea
+      id: expected
+      attributes:
+          label: Expected behavior
+          description: What did you expect to happen?
+      validations:
+          required: true
+
+    - type: textarea
+      id: envelope
+      attributes:
+          label: Returned envelope or response
+          description: For a read, paste the `meta` block returned. For a write, paste the `{ statusCode, body }` response. Redact any credentials.
+          render: json
+      validations:
+          required: false
+
+    - type: input
+      id: plugin-version
+      attributes:
+          label: Plugin version
+          placeholder: "0.1.0"
+      validations:
+          required: false
+
+    - type: input
+      id: eleventy-version
+      attributes:
+          label: Eleventy version
+          placeholder: "3.1.6"
+      validations:
+          required: false
+
+    - type: input
+      id: node-version
+      attributes:
+          label: Node.js version
+          placeholder: "v22.12.0"
+      validations:
+          required: false
+
+    - type: input
+      id: node-env
+      attributes:
+          label: NODE_ENV at build time
+          description: The plugin only uses the local cache when this is exactly `development`; anything else, including unset, reads Netlify Blobs.
+          placeholder: "development / production / unset"
+      validations:
+          required: false
+
+    - type: input
+      id: os
+      attributes:
+          label: Operating system
+          placeholder: "macOS 15.4 / Ubuntu 24.04 / Windows 11"
+      validations:
+          required: false
+
+    - type: textarea
+      id: context
+      attributes:
+          label: Additional context
+          description: Build logs, screenshots, or anything else that might help. Never paste `NETLIFY_TOKEN` or `NETLIFY_SITE_ID` values.
+      validations:
+          required: false

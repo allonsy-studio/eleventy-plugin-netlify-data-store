@@ -1,0 +1,13 @@
+{
+	"cachedAt": "2026-09-05T06:15:00.000Z",
+	"value": {
+		"meta": {
+			"generatedAt": "2026-09-05T06:15:00Z",
+			"source": "netlify-blobs"
+		},
+		"entries": [
+			{ "id": 412, "title": "Nightly content sync completed" },
+			{ "id": 411, "title": "Three entries imported from the upstream feed" }
+		]
+	}
+}

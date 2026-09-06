@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Netlify data store sample</title>
+</head>
+<body>
+	<h1>Team</h1>
+	<p>Generated {{ team.meta.generatedAt | generatedAt }}</p>
+	<ul>
+		{%- for person in team.team %}
+		<li>{{ person.name }} — {{ person.role }}</li>
+		{%- endfor %}
+	</ul>
+
+	<h1>Activity</h1>
+	{%- if activity.meta.error %}
+	<p>Activity unavailable: {{ activity.meta.error }}</p>
+	{%- else %}
+	<p>
+		Generated {{ activity.meta.generatedAt | generatedAt }}
+		{%- if activity.meta.stale %} (served from a stale cache){% endif %}
+	</p>
+	<ul>
+		{%- for entry in activity.entries %}
+		<li>#{{ entry.id }} {{ entry.title }}</li>
+		{%- endfor %}
+	</ul>
+	{%- endif %}
+</body>
+</html>

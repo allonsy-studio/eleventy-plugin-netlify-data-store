@@ -1,0 +1,80 @@
+name: Enhancement Request
+description: Suggest a new capability, option, or an improvement to existing behavior.
+labels: ["enhancement", "type: feature"]
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Use this template to propose a new capability or a behavior change for something that already exists in the plugin.
+
+    - type: dropdown
+      id: area
+      attributes:
+          label: What would you like to improve?
+          options:
+              - "New runtime function"
+              - "New plugin option"
+              - "Existing read behavior"
+              - "Existing write behavior"
+              - "Local cache behavior"
+              - "Repo-managed content handling"
+              - "Eleventy integration (filters, global data, watch)"
+              - "Error & logging behavior"
+              - "Tooling / scripts"
+              - "Documentation"
+              - "Other"
+      validations:
+          required: true
+
+    - type: input
+      id: surface-name
+      attributes:
+          label: Proposed or affected name
+          description: The function or option this is about.
+          placeholder: "e.g. `readBlob`, `cacheDir`, `localContent`"
+      validations:
+          required: false
+
+    - type: textarea
+      id: current
+      attributes:
+          label: Current behavior
+          description: What does it do today? (Leave blank if proposing something new.)
+          placeholder: "`listData` lists the local cache directory when NODE_ENV is development, rather than the remote store."
+      validations:
+          required: false
+
+    - type: textarea
+      id: desired
+      attributes:
+          label: Desired behavior
+          description: What should it do instead, or what should the new capability do? Be specific about the outcome, and include a config or template usage example if you can.
+          placeholder: |
+              `listData` should take an option to always list the remote store, even in development.
+
+              Example: `listData("content", { source: "remote" })`
+      validations:
+          required: true
+
+    - type: textarea
+      id: rationale
+      attributes:
+          label: Why would this be valuable?
+          description: Help us understand the use case and how many sites might benefit.
+      validations:
+          required: true
+
+    - type: textarea
+      id: alternatives
+      attributes:
+          label: Alternatives considered (optional)
+          description: Any workarounds you've tried, other plugins that cover this, or alternative approaches we should consider.
+      validations:
+          required: false
+
+    - type: checkboxes
+      id: contribution
+      attributes:
+          label: Contribution
+          options:
+              - label: I'm willing to implement this and open a PR.

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en" data-accent="orange">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>eleventy-plugin-netlify-data-store | Allons-y Studio</title>
+  <meta name="description" content="Read and write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds. A free, open-source Eleventy plugin from Allons-y Studio.">
+  <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/favicon-180.png">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/template.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<div class="page grid-backdrop accent--orange">
+
+  <!-- ============ MASTHEAD ============ -->
+  <header class="wrap" style="padding-block:26px;display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center;justify-content:space-between;">
+    <a href="https://allons-y.studio" aria-label="Allons-y Studio home" style="display:inline-flex;align-items:center;">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="assets/lockup-horizontal-dark.png">
+        <img src="assets/lockup-horizontal.svg" alt="Allons-y Studio" style="block-size:44px;inline-size:auto;">
+      </picture>
+    </a>
+    <nav aria-label="Primary" style="display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;">
+      <a href="#why" style="font-family:var(--theme--heading--FontFamily);font-size:0.95rem;">Overview</a>
+      <a href="#install" style="font-family:var(--theme--heading--FontFamily);font-size:0.95rem;">Docs</a>
+      <a href="#studio" style="font-family:var(--theme--heading--FontFamily);font-size:0.95rem;">The studio</a>
+      <a class="ay-btn ay-btn--outline" style="font-size:0.95rem;padding:7px 14px;" href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store"><i class="fa-brands fa-github" aria-hidden="true"></i>GitHub</a>
+    </nav>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="wrap" style="max-inline-size:840px;padding-block:48px 40px;display:flex;flex-direction:column;gap:22px;">
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+      <span class="pill"><i class="fa-solid fa-cube" aria-hidden="true"></i>Eleventy plugin</span>
+      <span class="pill pill--free"><i class="fa-solid fa-heart" aria-hidden="true"></i>Free &amp; open source · MPL-2.0</span>
+    </div>
+
+    <h1 style="font-family:var(--theme--code--FontFamily);font-size:clamp(2rem,7vw,3.1rem);font-weight:400;letter-spacing:-0.01em;margin:0;word-break:break-word;">eleventy-plugin-netlify-<span style="color:var(--theme--text--Color--accent);">data-store</span></h1>
+
+    <p class="headline" style="--headline--FontSize:1.5rem;margin:0;max-inline-size:44ch;text-wrap:pretty;">Build-time content from <span class="inline-c">Netlify Blobs</span> — cached locally with a TTL you control, so builds stay fast, survive an outage, and never fail on missing data.</p>
+
+    <div class="code" data-code style="max-inline-size:620px;inline-size:100%;">
+      <div class="code__bar"><span class="code__name"><i class="fa-solid fa-terminal" aria-hidden="true"></i>Terminal</span><button class="code__copy" type="button"><i class="fa-regular fa-copy" aria-hidden="true"></i><span data-copy-label>Copy</span></button></div>
+      <pre><code><span class="t-kw">yarn</span> add @allons-y/eleventy-plugin-netlify-data-store</code></pre>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;">
+      <a class="ay-btn ay-btn--solid" href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store"><i class="fa-brands fa-github" aria-hidden="true"></i>View on GitHub</a>
+      <a class="ay-btn ay-btn--outline" href="https://www.npmjs.com/package/@allons-y/eleventy-plugin-netlify-data-store"><i class="fa-brands fa-npm" aria-hidden="true"></i>View on npm</a>
+    </div>
+
+    <div class="badges">
+      <span class="badge"><span class="badge__k">eleventy</span><span class="badge__v">3.0+</span></span>
+      <span class="badge"><span class="badge__k">node</span><span class="badge__v">22.12+</span></span>
+      <span class="badge"><span class="badge__k">license</span><span class="badge__v">MPL-2.0</span></span>
+      <span class="badge"><span class="badge__k">dependencies</span><span class="badge__v badge__v--ok">1</span></span>
+    </div>
+  </section>
+
+  <!-- ============ BODY: TOC + CONTENT ============ -->
+  <div class="wrap body" style="padding-block:16px 8px;">
+
+    <aside class="toc">
+      <p>On this page</p>
+      <nav aria-label="Contents">
+        <a href="#why">Why this plugin</a>
+        <a href="#install">Installation</a>
+        <a href="#config">Configuration</a>
+        <a href="#usage">Usage</a>
+        <a href="#api">API &amp; options</a>
+        <a href="#compat">Compatibility</a>
+      </nav>
+    </aside>
+
+    <div class="content">
+
+      <!-- WHY -->
+      <section id="why">
+        <h2 class="ay-title ay-title--highlight">Why this plugin</h2>
+        <p class="reading">Content written long after the last deploy — by a scheduled function, a form handler, a webhook — has to reach your templates at build time. This plugin fetches it from Netlify Blobs and keeps a local copy, so builds are fast, work offline, and degrade gracefully when the store is down.</p>
+        <div class="cards">
+          <div class="card"><i class="fa-solid fa-gauge-high" aria-hidden="true"></i><h3>Cached by default</h3><p>Reads hit a local cache first and only reach Netlify Blobs once the entry passes its TTL. Fewer calls, faster builds, everywhere.</p></div>
+          <div class="card"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><h3>Never fails a build</h3><p>If the store is unreachable the last good copy is served, flagged stale. Past that, an error envelope — never an exception.</p></div>
+          <div class="card"><i class="fa-solid fa-plane-up" aria-hidden="true"></i><h3>Builds offline</h3><p>One warm build and every build inside the TTL runs with no credentials and no network — locally and in CI alike.</p></div>
+          <div class="card"><i class="fa-solid fa-feather" aria-hidden="true"></i><h3>One dependency</h3><p>Nothing but <span class="inline-c">@netlify/blobs</span>. No build step, no runtime, pure ESM.</p></div>
+        </div>
+      </section>
+
+      <!-- INSTALL -->
+      <section id="install">
+        <h2 class="ay-title ay-title--highlight">Installation</h2>
+        <p class="reading">Install alongside Eleventy 3 or newer. Node 22.12+ is required, which is the floor set by <span class="inline-c">@netlify/blobs</span>.</p>
+        <div class="code" data-code>
+          <div class="code__bar"><span class="code__name"><i class="fa-solid fa-terminal" aria-hidden="true"></i>Terminal</span><button class="code__copy" type="button"><i class="fa-regular fa-copy" aria-hidden="true"></i><span data-copy-label>Copy</span></button></div>
+          <pre><code><span class="t-com"># yarn</span>
+<span class="t-kw">yarn</span> add @allons-y/eleventy-plugin-netlify-data-store
+
+<span class="t-com"># npm</span>
+<span class="t-kw">npm</span> install @allons-y/eleventy-plugin-netlify-data-store</code></pre>
+        </div>
+      </section>
+
+      <!-- CONFIG -->
+      <section id="config">
+        <h2 class="ay-title ay-title--highlight">Configuration</h2>
+        <p class="reading">Register the plugin, then wire the reads you want into global data. <span class="inline-c">immediate: true</span> runs the plugin during the config file rather than after it, which is what lets the store be destructured on the spot.</p>
+        <div class="code" data-code>
+          <div class="code__bar"><span class="code__name"><i class="fa-solid fa-gear" aria-hidden="true"></i>eleventy.config.js</span><button class="code__copy" type="button"><i class="fa-regular fa-copy" aria-hidden="true"></i><span data-copy-label>Copy</span></button></div>
+          <pre><code><span class="t-kw">import</span> netlifyDataStore <span class="t-kw">from</span> <span class="t-str">"@allons-y/eleventy-plugin-netlify-data-store"</span>;
+
+<span class="t-kw">export default function</span> (eleventyConfig) {
+  <span class="t-kw">let</span> { readBlob } = eleventyConfig.addPlugin(netlifyDataStore, {
+    immediate: <span class="t-kw">true</span>,
+    storeName: <span class="t-str">"content"</span>,
+    ttl: <span class="t-str">"1h"</span>,
+  });
+
+  eleventyConfig.addGlobalData(<span class="t-str">"activity"</span>, () =&gt; readBlob(<span class="t-str">"activity"</span>));
+}</code></pre>
+        </div>
+        <p class="reading">Reads that reach Netlify Blobs need <span class="inline-c">NETLIFY_SITE_ID</span> and <span class="inline-c">NETLIFY_TOKEN</span>. A read served from a warm cache needs no credentials at all — which is what lets a build run offline.</p>
+      </section>
+
+      <!-- USAGE -->
+      <section id="usage">
+        <h2 class="ay-title ay-title--highlight">Usage</h2>
+        <p class="reading">Something writes an envelope — a scheduled function, a form handler, a webhook. A template reads the whole envelope back and destructures metadata and content together.</p>
+        <div class="twoup">
+          <div class="code code--sm" data-code>
+            <div class="code__bar"><span class="code__name">write — scheduled function</span><button class="code__copy" type="button"><i class="fa-regular fa-copy" aria-hidden="true"></i><span data-copy-label>Copy</span></button></div>
+            <pre><code><span class="t-kw">import</span> { createDataStore } <span class="t-kw">from</span>
+  <span class="t-str">"@allons-y/eleventy-plugin-netlify-data-store"</span>;
+
+<span class="t-kw">const</span> { writeBlob } = createDataStore();
+
+<span class="t-kw">export default async</span> () =&gt;
+  writeBlob(<span class="t-str">"activity"</span>, {
+    meta: { generatedAt: <span class="t-kw">new</span> Date().toISOString() },
+    entries: <span class="t-kw">await</span> fetchEntries(),
+  });</code></pre>
+          </div>
+          <div class="code code--sm code--accent" data-code>
+            <div class="code__bar"><span class="code__name"><i class="fa-solid fa-arrow-right-long" aria-hidden="true" style="color:var(--theme--ui--color);"></i>read — template</span><button class="code__copy" type="button"><i class="fa-regular fa-copy" aria-hidden="true"></i><span data-copy-label>Copy</span></button></div>
+            <pre><code>{% <span class="t-kw">if</span> activity.meta.error %}
+  &lt;p&gt;Activity unavailable.&lt;/p&gt;
+{% <span class="t-kw">else</span> %}
+  &lt;p&gt;Updated {{ activity.meta.generatedAt | generatedAt }}&lt;/p&gt;
+  {%- <span class="t-kw">if</span> activity.meta.stale %}&lt;p&gt;Last cached copy.&lt;/p&gt;{%- <span class="t-kw">endif</span> %}
+  &lt;ul&gt;
+  {%- <span class="t-kw">for</span> entry <span class="t-kw">in</span> activity.entries %}
+    &lt;li&gt;{{ entry.title }}&lt;/li&gt;
+  {%- <span class="t-kw">endfor</span> %}
+  &lt;/ul&gt;
+{% <span class="t-kw">endif</span> %}</code></pre>
+          </div>
+        </div>
+        <p class="reading">Reads resolve in order: the local cache answers while the entry is younger than <span class="inline-c">ttl</span>; otherwise Netlify Blobs does, and the result is written into the cache for the next build. If the store cannot be reached, an expired entry is served with <span class="inline-c">meta.stale</span> set rather than failing.</p>
+      </section>
+
+      <!-- API -->
+      <section id="api">
+        <h2 class="ay-title ay-title--highlight">API &amp; options</h2>
+        <p class="reading">Three runtime functions and a date filter, all bound to the options passed at registration.</p>
+        <div class="opts">
+          <div class="opt">
+            <div class="opt__meta"><code class="opt__name">readBlob(name, storeName?)</code><div class="opt__tags"><span class="opt__type">Promise&lt;object&gt;</span></div></div>
+            <p class="opt__desc">Cache first, then Netlify Blobs. Returns the full <span class="inline-c">{ meta, ...content }</span> envelope, or <span class="inline-c">{ meta: { error } }</span> on any failure. Never throws.</p>
+          </div>
+          <div class="opt">
+            <div class="opt__meta"><code class="opt__name">writeBlob(name, data, storeName?)</code><div class="opt__tags"><span class="opt__type">Promise&lt;object&gt;</span></div></div>
+            <p class="opt__desc">Writes to the store and refreshes the cached copy. Returns <span class="inline-c">{ statusCode, body }</span>, never throws.</p>
+          </div>
+          <div class="opt">
+            <div class="opt__meta"><code class="opt__name">listData(storeName?)</code><div class="opt__tags"><span class="opt__type">Promise&lt;string[]&gt;</span></div></div>
+            <p class="opt__desc">The blob keys held in the store.</p>
+          </div>
+          <div class="opt">
+            <div class="opt__meta"><code class="opt__name">storeName</code><div class="opt__tags"><span class="opt__type">string</span><span class="opt__def">default: "content"</span></div></div>
+            <p class="opt__desc">The Netlify Blobs store every call uses unless one is named explicitly.</p>
+          </div>
+          <div class="opt">
+            <div class="opt__meta"><code class="opt__name">ttl</code><div class="opt__tags"><span class="opt__type">string | number</span><span class="opt__def">default: "1h"</span></div></div>
+            <p class="opt__desc">How long a cached entry stays fresh. Takes <span class="inline-c">eleventy-fetch</span> durations — <span class="inline-c">"30m"</span>, <span class="inline-c">"1h"</span>, <span class="inline-c">"7d"</span> — plus <span class="inline-c">"*"</span> to never expire and <span class="inline-c">0</span> to always refetch. An unparseable value throws at registration.</p>
+          </div>
+          <div class="opt">
+            <div class="opt__meta"><code class="opt__name">staleIfError</code><div class="opt__tags"><span class="opt__type">boolean</span><span class="opt__def">default: true</span></div></div>
+            <p class="opt__desc">Serve an expired entry when the store is unreachable, flagged with <span class="inline-c">meta.stale</span> and <span class="inline-c">meta.cacheAge</span>. Set false to never serve data past its TTL.</p>
+          </div>
+          <div class="opt">
+            <div class="opt__meta"><code class="opt__name">cacheDir</code><div class="opt__tags"><span class="opt__type">string</span><span class="opt__def">default: ".netlify/blobs-cache"</span></div></div>
+            <p class="opt__desc">The local, uncommitted cache. Each file wraps the value with the time it was fetched. Written by the plugin, safe to delete, and gitignored via <span class="inline-c">.netlify</span>.</p>
+          </div>
+          <div class="opt">
+            <div class="opt__meta"><code class="opt__name">siteID</code> / <code class="opt__name">token</code><div class="opt__tags"><span class="opt__type">string</span><span class="opt__def">default: from the environment</span></div></div>
+            <p class="opt__desc">Fall back to <span class="inline-c">NETLIFY_SITE_ID</span> and <span class="inline-c">NETLIFY_TOKEN</span>. Missing credentials are logged as a configuration error, then returned as the usual envelope.</p>
+          </div>
+          <div class="opt">
+            <div class="opt__meta"><code class="opt__name">quiet</code><div class="opt__tags"><span class="opt__type">boolean</span><span class="opt__def">default: false</span></div></div>
+            <p class="opt__desc">Suppress the per-read log line. Errors are always surfaced. Logging routes through Eleventy's own logger.</p>
+          </div>
+          <div class="opt">
+            <div class="opt__meta"><code class="opt__name">filterName</code><div class="opt__tags"><span class="opt__type">string | false</span><span class="opt__def">default: "generatedAt"</span></div></div>
+            <p class="opt__desc">Name of the registered date filter for <span class="inline-c">meta.generatedAt</span>; <span class="inline-c">false</span> skips registration. Pair with <span class="inline-c">locale</span> and <span class="inline-c">dateFormat</span>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- COMPAT -->
+      <section id="compat">
+        <h2 class="ay-title ay-title--highlight">Compatibility</h2>
+        <ul class="compat">
+          <li><i class="fa-solid fa-check" aria-hidden="true"></i><span><strong>Eleventy 3.0+</strong> — declared as an optional peer dependency.</span></li>
+          <li><i class="fa-solid fa-check" aria-hidden="true"></i><span><strong>Node.js 22.12+</strong> — the floor set by <span class="inline-c">@netlify/blobs</span>. Pure ESM, no build step.</span></li>
+          <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Usable outside Eleventy — <span class="inline-c">createDataStore()</span> works in any Netlify Function.</span></li>
+          <li><i class="fa-solid fa-check" aria-hidden="true"></i><span>Environment-agnostic — caching is governed by <span class="inline-c">ttl</span>, never by <span class="inline-c">NODE_ENV</span>.</span></li>
+        </ul>
+        <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center;">
+          <a class="ay-cta-link" href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/CHANGELOG.md">Changelog</a>
+          <a class="ay-cta-link" href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/issues">Report an issue</a>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ============ STUDIO PITCH ============ -->
+  <section id="studio" class="band" style="margin-block-start:56px;">
+    <div style="max-inline-size:840px;margin-inline:auto;display:flex;flex-direction:column;gap:18px;">
+      <span class="eyebrow">Built by Allons-y Studio</span>
+      <p class="headline" style="--headline--FontSize:1.7rem;margin:0;max-inline-size:34ch;text-wrap:pretty;">Tools like this are open-sourced for the front-end community — <strong>free, forever.</strong></p>
+      <p style="margin:0;max-inline-size:58ch;font-size:1.05rem;color:var(--theme--text--Color--subtle);text-wrap:pretty;">Maintaining plugins like this one is how Allons-y Studio gives back to the ecosystem it works in every day. When your team needs a design system that scales — architecture, accessible components, and a front-end foundation you can build on — that's the studio's day job.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;">
+        <a class="ay-btn ay-btn--solid" href="mailto:consulting@allons-y.studio">Book a discovery call</a>
+        <a class="ay-cta-link" href="https://allons-y.studio">See the services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="foot">
+    <div class="wrap foot__row" style="padding-inline:0;">
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <p class="signature" style="font-size:2rem;color:var(--theme--text--Color--accent);margin:0;line-height:1;">Allons-y!</p>
+        <p style="margin:0;font-size:0.9rem;color:var(--theme--text--Color--subtle);max-inline-size:38ch;">eleventy-plugin-netlify-data-store is maintained by Allons-y Studio. MPL-2.0 licensed — free to use, fork, and ship.</p>
+      </div>
+      <nav class="foot__links" aria-label="Resources">
+        <div class="foot__col">
+          <span class="eyebrow">Project</span>
+          <a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store"><i class="fa-brands fa-github" aria-hidden="true"></i>GitHub</a>
+          <a href="https://www.npmjs.com/package/@allons-y/eleventy-plugin-netlify-data-store"><i class="fa-brands fa-npm" aria-hidden="true"></i>npm</a>
+          <a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/CHANGELOG.md"><i class="fa-solid fa-list" aria-hidden="true"></i>Changelog</a>
+        </div>
+        <div class="foot__col">
+          <span class="eyebrow">Studio</span>
+          <a href="https://allons-y.studio"><i class="fa-solid fa-globe" aria-hidden="true"></i>allons-y.studio</a>
+          <a href="mailto:consulting@allons-y.studio"><i class="fa-solid fa-envelope" aria-hidden="true"></i>Contact</a>
+        </div>
+      </nav>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // Copy-to-clipboard for every [data-code] block.
+  document.querySelectorAll("[data-code] .code__copy").forEach(function (btn) {
+    btn.addEventListener("click", async function () {
+      var block = btn.closest("[data-code]");
+      var code = block && block.querySelector("code");
+      if (!code) return;
+      try { await navigator.clipboard.writeText(code.innerText.trim()); } catch (e) {}
+      var label = btn.querySelector("[data-copy-label]");
+      if (label) { var prev = label.textContent; label.textContent = "Copied"; setTimeout(function () { label.textContent = prev; }, 1600); }
+    });
+  });
+</script>
+</body>
+</html>
