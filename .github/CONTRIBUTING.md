@@ -134,11 +134,22 @@ Releases are managed by [Changesets](https://github.com/changesets/changesets).
 
 **What happens on merge:**
 
-1. On every push to `main`, the **Release** workflow runs `changesets/action`.
-2. If pending changesets exist, it opens (or updates) a **"Version packages"** PR that consumes them, bumps `package.json`, and prepends an entry to `CHANGELOG.md`.
-3. Merging the "Version packages" PR triggers the same workflow, which then publishes to npm and tags the release on GitHub.
+1. On every push to `main`, the **Release** workflow asks `changesets/action/select-mode` whether the repo needs versioning or publishing.
+2. If pending changesets exist, the **version** job opens (or updates) a **"Version packages"** PR that consumes them, bumps `package.json`, and prepends an entry to `CHANGELOG.md`.
+3. Merging the "Version packages" PR triggers the workflow again. This time there are no changesets and an unpublished version, so the **publish** job publishes to npm and tags the release on GitHub.
 
 **Do not** edit `version` in `package.json` or the released sections of `CHANGELOG.md` by hand — those are owned by the Release workflow.
+
+### npm authentication
+
+Publishing uses [npm trusted publishing](https://docs.npmjs.com/trusted-publishers). There is no npm token: the publish job requests a GitHub Actions OIDC token, and Yarn exchanges it with npm for a short-lived, single-package publish credential. That is also what signs the [provenance](https://docs.npmjs.com/generating-provenance-statements) attestation enabled by `publishConfig.provenance` in `package.json`.
+
+For this to work, npm must list this repository's `release.yml` workflow as a trusted publisher for the package — under **Settings → Trusted publisher** on the package's npm page, or with `npm trust github` (npm 11.15+). Publishing fails with `YN0033: No authentication configured for request` when that entry is missing, because Yarn has no other credential to fall back on.
+
+Two things follow from this:
+
+- **A new package cannot bootstrap itself.** npm only accepts a trusted publisher for a package that already exists, so the very first version of a new package has to be published by a maintainer running `npm publish` while signed in. Every release after that goes through the workflow.
+- **Yarn ignores `.npmrc`.** An `NPM_TOKEN` secret and a `registry-url:` on `setup-node` do nothing here — both write to `.npmrc`, which Yarn Berry does not read. Yarn only reads `.yarnrc.yml` and `YARN_NPM_*` environment variables. Don't add either back expecting them to authenticate the publish.
 
 ## Code of Conduct
 

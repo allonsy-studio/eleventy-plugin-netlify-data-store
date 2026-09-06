@@ -23,7 +23,8 @@
 		"test:watch": "ava --watch"
 	},
 	"publishConfig": {
-		"access": "public"
+		"access": "public",
+		"provenance": true
 	},
 	"license": "MPL-2.0",
 	"engines": {
