@@ -1,6 +1,6 @@
 {
 	"name": "@allons-y/eleventy-plugin-netlify-data-store",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"description": "Read & write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.",
 	"type": "module",
 	"main": "src/index.js",
