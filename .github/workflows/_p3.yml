@@ -1,0 +1,15 @@
+name: P3 actions v7
+on:
+  push:
+    branches: [claude/release-npm-oidc-mzsb3z]
+jobs:
+  a:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc

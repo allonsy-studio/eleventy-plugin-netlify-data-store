@@ -1,0 +1,32 @@
+name: P2 structure
+on:
+  push:
+    branches: [claude/release-npm-oidc-mzsb3z]
+permissions: {}
+concurrency:
+  group: p2-${{ github.ref }}
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+jobs:
+  mode:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      mode: ${{ steps.select.outputs.mode }}
+    steps:
+      - name: fake select
+        id: select
+        run: echo "mode=publish" >> "$GITHUB_OUTPUT"
+  publish:
+    needs: mode
+    if: needs.mode.outputs.mode == 'publish'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: noop
+        run: echo p2-publish

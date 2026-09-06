@@ -1,0 +1,10 @@
+name: P1 baseline
+on:
+  push:
+    branches: [claude/release-npm-oidc-mzsb3z]
+jobs:
+  a:
+    runs-on: ubuntu-latest
+    steps:
+      - name: noop
+        run: echo p1
