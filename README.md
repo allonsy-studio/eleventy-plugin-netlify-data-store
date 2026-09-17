@@ -83,13 +83,13 @@ Requires Node 22.12+ & Eleventy 3.0+.
 import netlifyDataStore from "@allons-y/eleventy-plugin-netlify-data-store";
 
 export default function (eleventyConfig) {
-	let { readBlob, listData } = eleventyConfig.addPlugin(netlifyDataStore, {
-		immediate: true,
-		storeName: "content",
-		ttl: "1h",
-	});
+ let { readBlob, listData } = eleventyConfig.addPlugin(netlifyDataStore, {
+  immediate: true,
+  storeName: "content",
+  ttl: "1h",
+ });
 
-	eleventyConfig.addGlobalData("activity", () => readBlob("activity"));
+ eleventyConfig.addGlobalData("activity", () => readBlob("activity"));
 }
 ```
 
@@ -102,7 +102,7 @@ already run:
 eleventyConfig.addPlugin(netlifyDataStore, { ttl: "1h" });
 
 eleventyConfig.addGlobalData("activity", () =>
-	eleventyConfig.netlifyDataStore.readBlob("activity")
+ eleventyConfig.netlifyDataStore.readBlob("activity")
 );
 ```
 
@@ -114,10 +114,10 @@ import { createDataStore } from "@allons-y/eleventy-plugin-netlify-data-store";
 const { writeBlob } = createDataStore({ storeName: "content" });
 
 export default async () =>
-	writeBlob("activity", {
-		meta: { generatedAt: new Date().toISOString() },
-		entries: await fetchEntries(),
-	});
+ writeBlob("activity", {
+  meta: { generatedAt: new Date().toISOString() },
+  entries: await fetchEntries(),
+ });
 ```
 
 ### Credentials
@@ -155,17 +155,17 @@ follows it sees the new value immediately.
 
 ```js
 eleventyConfig.addPlugin(netlifyDataStore, {
-	storeName: "content",          // default Netlify Blobs store
-	cacheDir: ".netlify/blobs-cache", // local, uncommitted cache
-	ttl: "1h",                     // how long a cached entry stays fresh
-	staleIfError: true,            // serve an expired entry if the store is unreachable
-	siteID: undefined,             // defaults to process.env.NETLIFY_SITE_ID
-	token: undefined,              // defaults to process.env.NETLIFY_TOKEN
-	quiet: false,                  // suppress per-read logging (errors still log)
-	locale: "en-GB",               // for formatGeneratedAt
-	dateFormat: undefined,         // Intl.DateTimeFormat options for formatGeneratedAt
-	filterName: "generatedAt",     // filter to register; false to skip
-	getStore: undefined,           // advanced: supply your own store factory
+ storeName: "content",             // default Netlify Blobs store
+ cacheDir: ".netlify/blobs-cache", // local, uncommitted cache
+ ttl: "1h",                        // how long a cached entry stays fresh
+ staleIfError: true,               // serve an expired entry if the store is unreachable
+ siteID: undefined,                // defaults to process.env.NETLIFY_SITE_ID
+ token: undefined,                 // defaults to process.env.NETLIFY_TOKEN
+ quiet: false,                     // suppress per-read logging (errors still log)
+ locale: "en-GB",                  // for formatGeneratedAt
+ dateFormat: undefined,            // Intl.DateTimeFormat options for formatGeneratedAt
+ filterName: "generatedAt",        // filter to register; false to skip
+ getStore: undefined,              // advanced: supply your own store factory
 });
 ```
 
@@ -196,8 +196,8 @@ it was fetched:
 
 ```json
 {
-	"cachedAt": "2026-09-05T06:15:00.000Z",
-	"value": { "meta": { "generatedAt": "…" }, "entries": [] }
+ "cachedAt": "2026-09-05T06:15:00.000Z",
+ "value": { "meta": { "generatedAt": "…" }, "entries": [] }
 }
 ```
 
