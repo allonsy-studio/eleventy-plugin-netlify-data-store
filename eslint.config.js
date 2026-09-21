@@ -1,4 +1,6 @@
 import js from "@eslint/js";
+import markdown from "@eslint/markdown";
+import { defineConfig } from "eslint/config";
 import licenseHeader from "eslint-plugin-license-header";
 
 const HEADER = [
@@ -8,12 +10,14 @@ const HEADER = [
 	" */",
 ];
 
-export default [
+export default defineConfig([
 	{
-		ignores: ["**/_site/**", "node_modules/**", "sample/blobs-cache/**"],
+		ignores: ["**/_site/**", "node_modules/**", "sample/blobs-cache/**", "CHANGELOG.md"],
 	},
-	js.configs.recommended,
 	{
+		files: ["**/*.js"],
+		plugins: { js },
+		extends: ["js/recommended"],
 		languageOptions: {
 			ecmaVersion: "latest",
 			sourceType: "module",
@@ -30,4 +34,10 @@ export default [
 			"license-header/header": ["error", HEADER],
 		},
 	},
-];
+	{
+		files: ["**/*.md"],
+		plugins: { markdown },
+		language: "markdown/gfm",
+		extends: ["markdown/recommended"],
+	},
+]);
