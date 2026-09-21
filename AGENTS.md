@@ -2,7 +2,7 @@
 
 An Eleventy v3 plugin that reads & writes build-time content from Netlify Blobs, with
 a TTL-based local cache so builds stay fast and survive going offline. ESM only,
-Node >= 22.12, Yarn 4. `@11ty/eleventy` (>= 3.0.0) is a peer dependency:
+Node >= 22.12, Yarn 4. `@11ty/eleventy` (>= 3.0.0) is a peer dependency.
 `@netlify/blobs` is the only runtime dependency, and it should stay that way.
 
 ## Layout
@@ -37,16 +37,16 @@ credentials.
 
 Live store access needs `NETLIFY_SITE_ID` & `NETLIFY_TOKEN` in the environment, or
 `siteID` & `token` passed as plugin options. `getStore` throws with that message when
-neither is present. Tests must never need real credentials: inject a `getStore`
+neither is present. Tests must never need real credentials; inject a `getStore`
 factory through the context instead, the way `test/_helpers.js` does.
 
 ## Conventions
 
 - Every source file carries an SPDX copyright header. New files get one too.
 - Keep code self-documenting. When a comment is warranted, keep it brief and explain
-  only the *why* the code can't show: never restate what the code does.
+  only the *why* the code can't show; never restate what the code does.
 - README sections between `weaver:*:START` / `weaver:*:END` markers are auto-generated
-  by Weaver: never edit inside them.
+  by Weaver; never edit inside them.
 
 ## Commits, releases & pull requests
 
