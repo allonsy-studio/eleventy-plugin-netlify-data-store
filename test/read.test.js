@@ -101,7 +101,7 @@ test.serial("serves a stale entry when credentials are missing", async (t) => {
 	let cacheDir = await tempDir(t);
 	await seedCache(cacheDir, "content", "activity", { meta: {}, entries: ["cached"] }, 2 * HOUR);
 
-	let { readBlob } = createDataStore({ ...quiet, cacheDir, ttl: "1h", getStore: fakeBlobs().factory });
+	let { readBlob } = createDataStore({ ...quiet, cacheDir, ttl: "1h" });
 
 	let result = await readBlob("activity");
 	t.deepEqual(result.entries, ["cached"]);
@@ -156,7 +156,7 @@ test("returns an error envelope when the blob does not exist & nothing is cached
 	let result = await readBlob("missing");
 	t.is(result.meta.name, "missing");
 	t.is(result.meta.store, "content");
-	t.is(result.meta.source, "blobs");
+	t.is(result.meta.source, "custom");
 	t.regex(result.meta.error, /No blob named "missing"/);
 });
 
@@ -170,9 +170,35 @@ test("returns an error envelope rather than throwing when the store fails cold",
 test.serial("returns an error envelope rather than throwing when credentials are missing", async (t) => {
 	clearCredentials(t);
 	let cacheDir = await tempDir(t);
-	let { readBlob } = createDataStore({ ...quiet, cacheDir, getStore: fakeBlobs().factory });
+	let { readBlob } = createDataStore({ ...quiet, cacheDir });
 
-	t.regex((await readBlob("activity")).meta.error, /NETLIFY_SITE_ID/);
+	let result = await readBlob("activity");
+	t.regex(result.meta.error, /NETLIFY_SITE_ID/);
+	t.is(result.meta.source, "blobs");
+});
+
+test.serial("reads through a custom factory with no credentials set", async (t) => {
+	clearCredentials(t);
+	let cacheDir = await tempDir(t);
+	let remote = { meta: { generatedAt: "2026-09-05T00:00:00Z" }, entries: ["remote"] };
+	let store = fakeBlobs({ activity: remote });
+	let { readBlob } = createDataStore({ ...quiet, cacheDir, getStore: store.factory });
+
+	t.deepEqual(await readBlob("activity"), remote);
+	t.deepEqual(store.created, ["content"]);
+});
+
+test("logs a read through a custom factory without naming Netlify Blobs", async (t) => {
+	let cacheDir = await tempDir(t);
+	let lines = [];
+	let { readBlob } = createDataStore({
+		cacheDir,
+		logger: { log: (line) => lines.push(line), error() {} },
+		getStore: fakeBlobs({ activity: { meta: {} } }).factory,
+	});
+
+	await readBlob("activity");
+	t.is(lines[0], 'read "activity" from custom store "content"');
 });
 
 test("refetches when a cached file is not valid JSON", async (t) => {

@@ -4,7 +4,7 @@
  */
 
 import { readCacheEntry, writeCacheEntry } from "./cache.js";
-import { getStore } from "./store.js";
+import { getStore, storeLabel, storeSource } from "./store.js";
 
 /**
  * Builds the failure envelope. Reads never throw: callers destructure
@@ -13,14 +13,15 @@ import { getStore } from "./store.js";
  * @param {string} name
  * @param {string} storeName
  * @param {Error|string} error
+ * @param {import("./index.js").DataStoreContext} context
  * @returns {{meta: {name: string, store: string, source: string, error: string}}}
  */
-function errorEnvelope(name, storeName, error) {
+function errorEnvelope(name, storeName, error, context) {
 	return {
 		meta: {
 			name,
 			store: storeName,
-			source: "blobs",
+			source: storeSource(context),
 			error: error instanceof Error ? error.message : String(error),
 		},
 	};
@@ -69,10 +70,10 @@ export async function readBlob(name, storeName, context) {
 				context.log.log(`"${name}" is gone from store "${storeName}"; serving the stale cache`);
 				return markStale(cached.value, cached.age);
 			}
-			return errorEnvelope(name, storeName, `No blob named "${name}" in store "${storeName}".`);
+			return errorEnvelope(name, storeName, `No blob named "${name}" in store "${storeName}".`, context);
 		}
 
-		context.log.log(`read "${name}" from Netlify Blobs store "${storeName}"`);
+		context.log.log(`read "${name}" from ${storeLabel(context)} store "${storeName}"`);
 		await writeCacheEntry(name, storeName, value, context);
 		return value;
 	} catch (error) {
@@ -83,6 +84,6 @@ export async function readBlob(name, storeName, context) {
 			return markStale(cached.value, cached.age);
 		}
 
-		return errorEnvelope(name, storeName, error);
+		return errorEnvelope(name, storeName, error, context);
 	}
 }
