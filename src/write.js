@@ -4,7 +4,7 @@
  */
 
 import { writeCacheEntry } from "./cache.js";
-import { getStore } from "./store.js";
+import { getStore, storeLabel } from "./store.js";
 
 /**
  * Writes a `{meta, ...content}` envelope to the Netlify Blobs store &
@@ -29,7 +29,7 @@ export async function writeBlob(name, data, storeName, context) {
 	try {
 		let store = getStore(storeName, context);
 		await store.setJSON(name, data);
-		context.log.log(`wrote "${name}" to Netlify Blobs store "${storeName}"`);
+		context.log.log(`wrote "${name}" to ${storeLabel(context)} store "${storeName}"`);
 		await writeCacheEntry(name, storeName, data, context);
 		return { statusCode: 200, body: `Wrote "${name}" to store "${storeName}".` };
 	} catch (error) {

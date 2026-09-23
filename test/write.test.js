@@ -64,7 +64,7 @@ test("returns a 500 rather than throwing when the store fails", async (t) => {
 test.serial("returns a 500 rather than throwing when credentials are missing", async (t) => {
 	clearCredentials(t);
 	let cacheDir = await tempDir(t);
-	let { writeBlob } = createDataStore({ ...quiet, cacheDir, getStore: fakeBlobs().factory });
+	let { writeBlob } = createDataStore({ ...quiet, cacheDir });
 
 	let response = await writeBlob("activity", { meta: {} });
 	t.is(response.statusCode, 500);

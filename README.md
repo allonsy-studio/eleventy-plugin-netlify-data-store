@@ -123,13 +123,18 @@ export default async () =>
 ### Credentials
 
 `NETLIFY_SITE_ID` & `NETLIFY_TOKEN` must be set for any read or write that
-reaches Netlify Blobs. Missing credentials are a configuration error:
+reaches Netlify Blobs through the default `@netlify/blobs` factory. Missing
+credentials are a configuration error:
 `getStore` throws, & the calling `readBlob`/`writeBlob` converts that into the
 usual envelope or `{ statusCode: 500 }` so the build still completes. The
 reason is always logged.
 
 A read served from a warm cache needs no credentials at all — which is what
 lets a build run offline.
+
+A custom [`getStore`](#getstore) factory skips the check: it owns its own
+configuration. `siteID` & `token` are passed through when set, & are
+`undefined` otherwise.
 
 ## API
 
@@ -187,6 +192,29 @@ an outage, a missing credential, a deleted blob — the expired copy is served
 rather than failing, carrying `meta.stale: true` & `meta.cacheAge` in
 milliseconds so a template can say how old it is. Set it to `false` to never
 serve data past its TTL; reads then return the usual error envelope.
+
+### `getStore`
+
+Replaces the default `@netlify/blobs` factory. It is called once per store name
+with `{ name, siteID, token }` & must return an object with the methods the
+plugin uses: `get(key, { type: "json" })`, `setJSON(key, value)`, & `list()`.
+Use it to read from somewhere other than a Netlify Blobs store the build can
+reach directly, such as an HTTP endpoint:
+
+```js
+eleventyConfig.addPlugin(netlifyDataStore, {
+ getStore: ({ name }) => ({
+  async get(key) {
+   let response = await fetch(`https://example.com/.netlify/functions/blobs/${name}/${key}`);
+   return response.ok ? response.json() : null;
+  },
+ }),
+});
+```
+
+With a custom factory, credentials are optional, log lines name a `custom`
+store, & a read's error envelope carries `meta.source: "custom"` instead of
+`"blobs"`.
 
 ### The local cache
 

@@ -25,7 +25,7 @@ export { parseDuration } from "./cache.js";
  * @property {string} [locale="en-GB"] Locale for `formatGeneratedAt`.
  * @property {Intl.DateTimeFormatOptions} [dateFormat] Options for `formatGeneratedAt`.
  * @property {string|false} [filterName="generatedAt"] Filter to register; `false` to skip.
- * @property {Function} [getStore] Store factory; defaults to `getStore` from `@netlify/blobs`.
+ * @property {Function} [getStore] Store factory; defaults to `getStore` from `@netlify/blobs`. A custom factory skips the credential check.
  * @property {object} [logger] Eleventy's logger; supplied automatically by `addPlugin`.
  */
 

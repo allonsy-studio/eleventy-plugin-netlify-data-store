@@ -5,21 +5,46 @@
 
 import test from "ava";
 import { normalizeOptions } from "../src/index.js";
-import { getStore } from "../src/store.js";
+import { getStore, storeLabel, storeSource } from "../src/store.js";
 import { clearCredentials, fakeBlobs, quiet, setEnv } from "./_helpers.js";
 
 test.serial("throws when NETLIFY_SITE_ID is unset", (t) => {
 	clearCredentials(t);
-	let context = normalizeOptions({ ...quiet, token: "token", getStore: fakeBlobs().factory });
+	let context = normalizeOptions({ ...quiet, token: "token" });
 
 	t.throws(() => getStore("content", context), { message: /NETLIFY_SITE_ID/ });
 });
 
 test.serial("throws when NETLIFY_TOKEN is unset", (t) => {
 	clearCredentials(t);
-	let context = normalizeOptions({ ...quiet, siteID: "site-id", getStore: fakeBlobs().factory });
+	let context = normalizeOptions({ ...quiet, siteID: "site-id" });
 
 	t.throws(() => getStore("content", context), { message: /NETLIFY_TOKEN/ });
+});
+
+test.serial("a custom factory needs no credentials", (t) => {
+	clearCredentials(t);
+	let calls = [];
+	let context = normalizeOptions({
+		...quiet,
+		getStore(config) {
+			calls.push(config);
+			return {};
+		},
+	});
+
+	t.notThrows(() => getStore("content", context));
+	t.deepEqual(calls, [{ name: "content", siteID: undefined, token: undefined }]);
+});
+
+test("storeSource & storeLabel name the factory in use", (t) => {
+	let custom = normalizeOptions({ ...quiet, getStore: fakeBlobs().factory });
+	let netlify = normalizeOptions({ ...quiet });
+
+	t.is(storeSource(custom), "custom");
+	t.is(storeLabel(custom), "custom");
+	t.is(storeSource(netlify), "blobs");
+	t.is(storeLabel(netlify), "Netlify Blobs");
 });
 
 test.serial("falls back to the Netlify environment variables", (t) => {
