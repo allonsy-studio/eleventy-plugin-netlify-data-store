@@ -1,0 +1,42 @@
+/* ============================================================
+   TYPOGRAPHY TOKENS — families, weights, line heights, text color
+   Roboto (UI), Dancing Script (signature), EB Garamond (dense
+   editorial), PT Mono (code). All four are real Google Fonts.
+   ============================================================ */
+
+:root {
+	/* ---- Font weights (Roboto scale 100–900) ---- */
+	--theme--FontWeight--thin: 100; /* @kind font */
+	--theme--FontWeight--extra-light: 200; /* @kind font */
+	--theme--FontWeight--light: 300; /* @kind font */
+	--theme--FontWeight: 400; /* @kind font */
+	--theme--FontWeight--medium: 500; /* @kind font */
+	--theme--FontWeight--semi-bold: 600; /* @kind font */
+	--theme--FontWeight--bold: 700; /* @kind font */
+	--theme--FontWeight--extra-bold: 800; /* @kind font */
+	--theme--FontWeight--black: 900; /* @kind font */
+
+	/* ---- Line heights ---- */
+	--theme--LineHeight--dense: 1.1; /* @kind other */
+	--theme--LineHeight: 1.4; /* @kind other */
+	--theme--LineHeight--spacious: 1.8; /* @kind other */
+
+	/* ---- Families ---- */
+	--theme--text--FontFamily: "Roboto", "Helvetica Neue", helvetica, arial, sans-serif;
+	--theme--text--FontFamily--signature: "Dancing Script", cursive;
+	--theme--text--FontFamily--dense: "EB Garamond", "Georgia", serif;
+	--theme--text--LineHeight: var(--theme--LineHeight);
+
+	--theme--code--FontFamily: "PT Mono", monospace; /* @kind font */
+	--theme--code--FontSize: 0.8em; /* @kind font */
+	--theme--code--LineHeight: var(--theme--LineHeight); /* @kind other */
+
+	--theme--heading--FontFamily: "Roboto", "Helvetica Neue", helvetica, arial, sans-serif; /* @kind font */
+	--theme--heading--LineHeight: var(--theme--LineHeight--dense);
+	--theme--heading--Color: var(--theme--text--Color);
+
+	/* ---- Text colors ---- */
+	--theme--text--Color: light-dark(hsl(40deg 12% 20%), hsl(0deg 0% 100%));
+	--theme--text--Color--invert: light-dark(hsl(0deg 0% 100%), hsl(40deg 12% 20%));
+	--theme--text--Color--subtle: light-dark(hsl(40deg 10% 30%), hsl(0deg 0% 70%));
+}

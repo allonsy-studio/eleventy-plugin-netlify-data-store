@@ -1,0 +1,112 @@
+/* ============================================================
+   UTILITIES — CTAs, layout helpers, the grid backdrop.
+   ============================================================ */
+
+/* ---- Bordered CTA button (fills with accent on hover) ---- */
+.cta-button {
+	align-self: start;
+	display: inline-block;
+	font-family: var(--theme--heading--FontFamily);
+	border-width: var(--theme--BorderWidth--thin);
+	border-style: solid;
+	border-color: var(--theme--ui--color);
+	background: var(--theme--surface--color);
+	color: inherit;
+	padding: 0.5em 1em;
+	border-radius: var(--theme--BorderRadius);
+	text-decoration: none;
+	cursor: pointer;
+	transition: background 200ms ease-out, color 200ms ease-out;
+
+	&:hover { background: var(--theme--ui--color--hover); }
+
+	&:is(:focus, :focus-visible) {
+		background: var(--theme--ui--color--active);
+		outline: var(--theme--OutlineWidth) solid var(--theme--ui--color--active);
+		outline-offset: var(--theme--OutlineOffset);
+	}
+
+	&:active { background-color: var(--theme--ui--color--active); }
+}
+
+/* ---- Underlined text CTA with a sliding arrow ---- */
+.cta-link {
+	font-size: 1.1em;
+	text-decoration: underline;
+	text-underline-offset: 0.2ex;
+	text-decoration-color: var(--theme--link--Color);
+	text-decoration-thickness: 0.2ex;
+
+	&::after {
+		display: inline-block;
+		content: "↬";
+		margin-inline-start: 0.25em;
+		transition: transform 0.2s ease-in-out;
+	}
+
+	&:is(:hover, :focus, :focus-visible)::after {
+		transform: translateX(0.25em);
+	}
+}
+
+/* ---- Social / brand icon row ---- */
+.icon-group {
+	display: inline-flex;
+	gap: var(--theme--content--space);
+
+	a {
+		inline-size: 1.2em;
+		font-size: 1.2em;
+		display: inline-grid;
+		place-items: center;
+
+		&:where(:not(:hover, :focus, :focus-visible)) {
+			color: var(--theme--text--Color--subtle);
+		}
+	}
+}
+
+/* ---- Layout helpers ---- */
+.content {
+	max-inline-size: min(80ch, 100%);
+
+	> *:not(:last-child) { margin-block-end: 1em; }
+}
+
+.stacked {
+	display: flex;
+	flex-flow: column nowrap;
+	row-gap: var(--theme--content--space);
+}
+
+.columns {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 2em;
+}
+
+.flex {
+	display: flex;
+	flex-flow: row nowrap;
+	gap: calc(var(--theme--content--space) * 2);
+}
+
+.container { padding-block: var(--theme--container--space); }
+
+.no-wrap {
+	white-space: nowrap;
+
+	@media screen and (width <= 612px) { white-space: normal; }
+}
+
+/* ---- The signature dotted-grid backdrop ---- */
+.grid-backdrop {
+	--grid-size: 40px;
+
+	position: relative;
+	background-color: var(--theme--surface--color);
+	background-size: var(--grid-size) var(--grid-size);
+	background-image:
+		linear-gradient(to right, var(--theme--surface--color--emphasis) 1pt, transparent 1pt),
+		linear-gradient(to bottom, var(--theme--surface--color--emphasis) 1pt, transparent 1pt);
+}
