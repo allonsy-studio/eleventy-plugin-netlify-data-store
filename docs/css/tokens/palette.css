@@ -9,7 +9,7 @@
 	/* ---- Brand palette ---- */
 	--accent--red: hsl(336deg 65% 50%); /* #d22d6f — core brand */
 	--accent--orange: hsl(24deg 100% 65%); /* #ff944d */
-	--accent--blue: hsl(192deg 70% 50%); /* #26b6d4 */
+	--accent--blue: hsl(192deg 70% 40%); /* #1f91ad */
 	--accent--yellow: light-dark(hsl(42deg 100% 71%), hsl(42deg 100% 60%)); /* #ffd36b */
 
 	/* The default accent the whole UI keys off of. Swap --base
