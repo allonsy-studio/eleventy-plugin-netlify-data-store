@@ -33,7 +33,7 @@ html { scroll-behavior: smooth; }
 }
 .ay-btn--outline { border-color: var(--theme--ui--color); background: var(--theme--surface--color); }
 .ay-btn--outline:hover { background: var(--theme--ui--color--hover); }
-.ay-btn--solid { background: var(--theme--ui--color); color: #fff; border-color: var(--theme--ui--color); }
+.ay-btn--solid { background: var(--theme--ui--color); color: var(--theme--ui--color--ink); border-color: var(--theme--ui--color); }
 .ay-btn--solid:hover { background: color-mix(in srgb, var(--theme--ui--color) 85%, black); }
 .ay-btn:is(:focus, :focus-visible) { outline: var(--theme--OutlineWidth) solid var(--theme--ui--color--active); outline-offset: var(--theme--OutlineOffset); }
 .ay-btn:active { transform: translateY(0.5px); }
@@ -49,7 +49,7 @@ html { scroll-behavior: smooth; }
 	inline-size: max-content;
 	max-inline-size: 100%;
 }
-.ay-title--highlight { position: relative; display: inline-block; padding: 0.15em 0.5em; color: var(--theme--text--Color--invert); z-index: 1; }
+.ay-title--highlight { position: relative; display: inline-block; padding: 0.15em 0.5em; color: var(--theme--ui--color--ink); z-index: 1; }
 .ay-title--highlight::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--theme--ui--color); border-radius: var(--theme--BorderRadius--thin); }
 
 /* ---- CtaLink ---- */
@@ -79,15 +79,15 @@ html { scroll-behavior: smooth; }
 	background: var(--theme--surface--color--accent); color: var(--theme--text--Color--accent);
 	border: 1px solid color-mix(in srgb, var(--theme--ui--color) 40%, transparent);
 }
-.pill--free { background: color-mix(in srgb, hsl(140 55% 42%) 15%, var(--theme--surface--color)); color: hsl(140 55% 34%); border: 0; }
+.pill--free { background: color-mix(in srgb, hsl(140 55% 42%) 15%, var(--theme--surface--color)); color: light-dark(hsl(140 60% 24%), hsl(140 50% 65%)); border: 0; }
 
 /* ---- Shields-style metric badges ---- */
 .badges { display: flex; flex-wrap: wrap; gap: 9px; }
 .badge { display: inline-flex; font-family: var(--theme--code--FontFamily); font-size: 11.5px; border-radius: 5px; overflow: hidden; border: 1px solid var(--theme--surface--color--emphasis); }
 .badge > span { padding: 3px 8px; }
 .badge__k { background: var(--theme--surface--color--emphasis); color: var(--theme--text--Color--subtle); }
-.badge__v { background: var(--theme--ui--color); color: #fff; }
-.badge__v--ok { background: hsl(140 55% 40%); color: #fff; }
+.badge__v { background: var(--theme--ui--color); color: var(--theme--ui--color--ink); }
+.badge__v--ok { background: hsl(140 60% 28%); color: #fff; }
 
 /* ---- Code blocks (always dark) ---- */
 .code {
