@@ -32,10 +32,10 @@
 /* ---- Underlined text CTA with a sliding arrow ---- */
 .cta-link {
 	font-size: 1.1em;
-	text-decoration: underline;
+	text-decoration: underline dotted;
 	text-underline-offset: 0.2ex;
-	text-decoration-color: var(--theme--link--Color);
-	text-decoration-thickness: 0.2ex;
+	text-decoration-color: currentColor;
+	text-decoration-thickness: 1px;
 
 	&::after {
 		display: inline-block;

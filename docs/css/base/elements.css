@@ -28,8 +28,10 @@ body {
 }
 
 :where(a) {
-	text-decoration: none;
+	text-decoration: underline dotted;
+	text-decoration-color: currentColor;
 	text-underline-offset: 0.2ex;
+	text-decoration-thickness: 1px;
 	font-weight: var(--theme--FontWeight);
 	color: var(--theme--link--Color);
 
