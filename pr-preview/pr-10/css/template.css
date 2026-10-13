@@ -54,16 +54,19 @@ html { scroll-behavior: smooth; }
 
 /* ---- CtaLink ---- */
 .ay-cta-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
 	font-family: var(--theme--heading--FontFamily);
 	font-size: 1.1em;
 	color: var(--theme--link--Color);
-	text-decoration: underline;
+	text-decoration: underline dotted;
 	text-underline-offset: 0.2ex;
-	text-decoration-color: var(--theme--link--Color);
-	text-decoration-thickness: 0.2ex;
+	text-decoration-color: currentColor;
+	text-decoration-thickness: 1px;
 	cursor: pointer;
 }
-.ay-cta-link:hover { color: var(--theme--link--Color--hover); text-decoration-color: var(--theme--link--Color--hover); }
+.ay-cta-link:is(:hover, :focus-visible) { color: var(--theme--link--Color--hover); text-decoration-style: solid; }
 .ay-cta-link::after { display: inline-block; content: "\21ac"; margin-inline-start: 0.25em; transition: transform 0.2s ease-in-out; }
 .ay-cta-link:is(:hover, :focus, :focus-visible)::after { transform: translateX(0.25em); }
 
@@ -114,7 +117,8 @@ p .inline-c, li .inline-c, .headline .inline-c { font-family: var(--theme--code-
 /* ---- Feature cards ---- */
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
 .card { background: var(--theme--surface--color); border: 2px solid var(--theme--surface--color--emphasis); border-radius: var(--theme--BorderRadius); padding: 20px; display: flex; flex-direction: column; gap: 8px; }
-.card i { font-size: 1.1rem; color: var(--theme--text--Color--accent); }
+.icon { display: inline-flex; align-items: center; justify-content: center; }
+.card .icon { font-size: 0.75rem; color: var(--theme--text--Color--accent); align-self: flex-start; }
 .card h3 { margin: 0; font-size: 1rem; }
 .card p { margin: 0; font-size: 0.92rem; color: var(--theme--text--Color--subtle); }
 
@@ -134,7 +138,7 @@ p .inline-c, li .inline-c, .headline .inline-c { font-family: var(--theme--code-
 .toc { position: sticky; top: 16px; padding: 16px 18px; background: color-mix(in srgb, var(--theme--surface--color) 78%, transparent); border: 2px solid var(--theme--surface--color--emphasis); border-radius: var(--theme--BorderRadius); }
 .toc p { font-family: var(--theme--heading--FontFamily); font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--theme--text--Color--subtle); margin: 0 0 10px; }
 .toc nav { display: flex; flex-direction: column; gap: 9px; }
-.toc a { font-size: 0.9rem; text-decoration: none; color: var(--theme--text--Color--subtle); }
+.toc a { font-size: 0.9rem; color: var(--theme--text--Color--subtle); }
 .toc a:hover { color: var(--theme--text--Color--accent); }
 .content { min-inline-size: 0; display: flex; flex-direction: column; gap: 60px; padding-block: 4px 12px; }
 .content section { display: flex; flex-direction: column; gap: 20px; }
@@ -149,7 +153,7 @@ p .inline-c, li .inline-c, .headline .inline-c { font-family: var(--theme--code-
 /* ---- Compatibility list ---- */
 .compat { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
 .compat li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.98rem; }
-.compat i { color: hsl(140 55% 42%); margin-block-start: 3px; }
+.compat .fa-check { color: hsl(140 55% 42%); margin-block-start: 3px; }
 
 /* ---- Bands ---- */
 .band { padding: 56px 24px; background: color-mix(in srgb, var(--theme--surface--color) 82%, transparent); border-block: 2px solid var(--theme--surface--color--emphasis); }
@@ -162,6 +166,8 @@ p .inline-c, li .inline-c, .headline .inline-c { font-family: var(--theme--code-
 .foot__col { display: flex; flex-direction: column; gap: 8px; }
 .studio-banner { display: block; background: #33394e; }
 .studio-banner img { display: block; inline-size: 100%; max-inline-size: 2000px; block-size: auto; margin-inline: auto; }
-.foot__studio { margin-block-start: 32px; }
-.foot__studio img { display: block; max-inline-size: 100%; block-size: auto; margin-inline: auto; }
-.foot__col a { font-size: 0.92rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+.foot__studio { max-inline-size: 440px; }
+.foot__studio a { display: block; text-decoration: none; }
+.foot__studio img { display: block; max-inline-size: 100%; block-size: auto; }
+.foot__col a { font-size: 0.92rem; display: inline-flex; align-items: center; gap: 8px; }
+.foot .meta { margin: 0; font-size: 0.8rem; }
