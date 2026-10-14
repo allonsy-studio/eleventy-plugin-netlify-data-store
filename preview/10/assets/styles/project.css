@@ -5,3 +5,17 @@
 	--font-sans: "Your Sans", var(--sans-stack);
 	--font-display: "Your Display", var(--font-sans); */
 }
+
+/* Font Awesome icons: aligned with their label. */
+:is(a, h3):has(> [class*="fa-"][aria-hidden="true"]) {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 0.5em;
+}
+ul:has(> li > .fa-check) {
+	list-style: none;
+	padding-inline-start: 0;
+}
+li > .fa-check {
+	margin-inline-end: 0.5em;
+}
