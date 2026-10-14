@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+		<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API &amp; options: eleventy-plugin-netlify-data-store</title>
+<meta name="description" content="Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.">
+<link rel="canonical" href="https://projects.allons-y.studio/eleventy-plugin-netlify-data-store/">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="eleventy-plugin-netlify-data-store: Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds">
+<meta property="og:description" content="Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.">
+<meta property="og:url" content="https://projects.allons-y.studio/eleventy-plugin-netlify-data-store/">
+
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Mono&amp;display=swap">
+
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/tokens.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/reset.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/layout.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/components.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/studio.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/project.css">
+<script type="module" src="/eleventy-plugin-netlify-data-store/preview/10/assets/scripts/copy-code.js"></script>
+<script type="module" src="/eleventy-plugin-netlify-data-store/preview/10/assets/scripts/code-highlight.js"></script>
+
+	</head>
+	<body>
+		<a href="#main">Skip to content</a>
+		<header>
+			<a data-studio="banner" href="https://allons-y.studio">
+	<img src="https://raw.githubusercontent.com/allonsy-studio/.github/refs/heads/main/assets/svg/oss-banner.svg" alt="Brought to you by Allons-y Studio" width="1600" height="64">
+</a>
+
+			<div>
+	<a rel="home" href="/eleventy-plugin-netlify-data-store/preview/10/">
+		
+		<span>eleventy-plugin-netlify-data-store</span>
+	</a>
+	<nav aria-label="Primary">
+		
+		
+		
+		<a href="/eleventy-plugin-netlify-data-store/preview/10/getting-started/">Docs</a>
+		<a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store">GitHub</a>
+		<a href="https://www.npmjs.com/package/@allons-y/eleventy-plugin-netlify-data-store">npm</a>
+	</nav>
+</div>
+
+		</header>
+		<main id="main" tabindex="-1">
+			<div>
+	<nav aria-label="Documentation">
+	<ul>
+		<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/getting-started/">Getting started</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/usage/">Usage</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/api/" aria-current="page">API &amp; options</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/compatibility/">Compatibility</a>
+		</li>
+	</ul>
+</nav>
+
+	<article>
+		<h1>API &amp; options</h1>
+		
+	<p>Three runtime functions &amp; a date filter, all bound to the options passed at registration.</p>
+<h2>Functions</h2>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>readBlob(name, storeName?)</code></td>
+<td><code>Promise&lt;object&gt;</code></td>
+<td>Cache first, then Netlify Blobs. Returns the full <code>{ meta, ...content }</code> envelope, or <code>{ meta: { error } }</code> on any failure. Never throws</td>
+</tr>
+<tr>
+<td><code>writeBlob(name, data, storeName?)</code></td>
+<td><code>Promise&lt;object&gt;</code></td>
+<td>Writes to the store &amp; refreshes the cached copy. Returns <code>{ statusCode, body }</code>, never throws</td>
+</tr>
+<tr>
+<td><code>listData(storeName?)</code></td>
+<td><code>Promise&lt;string[]&gt;</code></td>
+<td>The blob keys held in the store</td>
+</tr>
+</tbody>
+</table>
+<h2>Options</h2>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Type</th>
+<th>Default</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>storeName</code></td>
+<td><code>string</code></td>
+<td><code>"content"</code></td>
+<td>The Netlify Blobs store every call uses unless one is named explicitly</td>
+</tr>
+<tr>
+<td><code>ttl</code></td>
+<td><code>string | number</code></td>
+<td><code>"1h"</code></td>
+<td>How long a cached entry stays fresh. Takes <code>eleventy-fetch</code> durations: <code>"30m"</code>, <code>"1h"</code>, <code>"7d"</code>, plus <code>"*"</code> to never expire &amp; <code>0</code> to always refetch. An unparseable value throws at registration</td>
+</tr>
+<tr>
+<td><code>staleIfError</code></td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>Serve an expired entry when the store is unreachable, flagged with <code>meta.stale</code> &amp; <code>meta.cacheAge</code>. Set <code>false</code> to never serve data past its TTL</td>
+</tr>
+<tr>
+<td><code>cacheDir</code></td>
+<td><code>string</code></td>
+<td><code>".netlify/blobs-cache"</code></td>
+<td>The local, uncommitted cache. Each file wraps the value with the time it was fetched. Written by the plugin, safe to delete, &amp; gitignored via <code>.netlify</code></td>
+</tr>
+<tr>
+<td><code>siteID</code> / <code>token</code></td>
+<td><code>string</code></td>
+<td>from the environment</td>
+<td>Fall back to <code>NETLIFY_SITE_ID</code> &amp; <code>NETLIFY_TOKEN</code>. Missing credentials are logged as a configuration error, then returned as the usual envelope</td>
+</tr>
+<tr>
+<td><code>quiet</code></td>
+<td><code>boolean</code></td>
+<td><code>false</code></td>
+<td>Suppress the per-read log line. Errors are always surfaced. Logging routes through Eleventy's own logger</td>
+</tr>
+<tr>
+<td><code>filterName</code></td>
+<td><code>string | false</code></td>
+<td><code>"generatedAt"</code></td>
+<td>Name of the registered date filter for <code>meta.generatedAt</code>; <code>false</code> skips registration. Pair with <code>locale</code> &amp; <code>dateFormat</code></td>
+</tr>
+</tbody>
+</table>
+
+	<nav aria-label="Pager">
+	<a rel="prev" href="/eleventy-plugin-netlify-data-store/preview/10/usage/">Usage</a>
+	<a rel="next" href="/eleventy-plugin-netlify-data-store/preview/10/compatibility/">Compatibility</a>
+</nav>
+
+
+	</article>
+</div>
+
+
+		</main>
+		<footer>
+	<div>
+		<div>
+			<p><strong>eleventy-plugin-netlify-data-store</strong></p>
+			<p>Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.</p>
+			<p>
+				<small>
+					Licensed under
+					<a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/LICENSE" data-license="">MPL-2.0</a>
+				</small>
+			</p>
+		</div>
+		<nav aria-label="Project links">
+			<p><strong>Project</strong></p>
+			<ul>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store">GitHub</a></li>
+				<li><a href="https://www.npmjs.com/package/@allons-y/eleventy-plugin-netlify-data-store">npm</a></li>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/CHANGELOG.md">Changelog</a></li>
+			</ul>
+		</nav>
+		<nav aria-label="Help links">
+			<p><strong>Help</strong></p>
+			<ul>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/issues">Report an issue</a></li>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/.github/CONTRIBUTING.md">Contributing guide</a></li>
+				<li><a href="https://github.com/allonsy-studio/.github/blob/main/CODE_OF_CONDUCT.md">Code of conduct</a></li>
+				<li><a href="https://github.com/allonsy-studio/.github/blob/main/SECURITY.md">Security policy</a></li>
+			</ul>
+		</nav>
+	</div>
+	<div>
+		<div data-studio="cta">
+	<p>Work with Allons-y Studio</p>
+	<p>Design systems, front-end engineering, &amp; accessibility consulting for teams that depend on open source.</p>
+	<a href="mailto:consulting@allons-y.studio">consulting@allons-y.studio</a>
+</div>
+
+		<a data-studio="footer" href="https://allons-y.studio">
+	<picture>
+		<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/allonsy-studio/.github/refs/heads/main/assets/svg/oss-footer-dark.svg">
+		<img src="https://raw.githubusercontent.com/allonsy-studio/.github/refs/heads/main/assets/svg/oss-footer-light.svg" alt="Brought to you by Allons-y Studio" width="440" height="75">
+	</picture>
+	
+</a>
+
+	</div>
+</footer>
+
+	
+
+</body>
+</html>
