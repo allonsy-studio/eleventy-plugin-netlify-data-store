@@ -18,8 +18,10 @@
     "docs:build": "eleventy --config=website/eleventy.config.js",
     "docs:start": "eleventy --serve --config=website/eleventy.config.js",
     "docs:test": "cypress run --project website",
-    "format": "eslint . --fix",
-    "lint": "eslint .",
+    "format": "opx lint --fix",
+    "lint": "opx lint",
+    "precommit": "lint-staged",
+    "prepare": "husky",
     "release": "changeset publish",
     "sample": "NODE_ENV=development eleventy --config=sample/eleventy.config.js --input=sample --output=sample/_site",
     "test": "ava",
@@ -93,6 +95,8 @@
     "cypress-axe": "^1.7.0",
     "eslint": "^9.39.5",
     "eslint-plugin-license-header": "^0.9.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.8",
     "markdown-it": "^14.1.0",
     "prismjs": "^1.30.0"
   },
@@ -100,6 +104,9 @@
     "cypress": {
       "built": true
     }
+  },
+  "lint-staged": {
+    "*": "opx lint --fix"
   },
   "packageManager": "yarn@4.18.1",
   "oss-docs": {

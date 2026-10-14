@@ -24,13 +24,15 @@ Node >= 22.12, Yarn 4. `@11ty/eleventy` (>= 3.0.0) is a peer dependency.
 ```sh
 yarn test        # ava
 yarn test:watch
-yarn lint        # eslint
-yarn format      # eslint --fix
+yarn lint        # opx lint: ESLint through eslint.config.js
+yarn format      # opx lint --fix
 yarn sample      # build the sample site against the committed cache fixture
 yarn docs:start  # serve the project site in website/
 yarn docs:build  # build the project site
 yarn docs:test   # axe accessibility audit of the built site (Cypress)
 ```
+
+A husky pre-commit hook runs `opx lint --fix` on staged files through lint-staged.
 
 `yarn sample` is the fastest way to see a real build: it runs with
 `NODE_ENV=development` against `sample/blobs-cache/`, so it needs no Netlify

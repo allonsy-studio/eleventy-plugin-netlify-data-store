@@ -4,6 +4,7 @@ _site
 .netlify
 .eleventy.cache
 website/_a11y
+.opx/cache
 website/cypress/screenshots
 .cache
 
