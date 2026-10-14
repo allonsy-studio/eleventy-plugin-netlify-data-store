@@ -13,8 +13,8 @@
 		<a webc:if="$data.anchors" href="#install">Install</a>
 		<a webc:if="$data.anchors && $data.project.usage" href="#usage">Usage</a>
 		<a webc:if="$data.anchors && $data.project.features && $data.project.features.length" href="#features">Features</a>
-		<a webc:if="$data.collections.docs && $data.collections.docs.length" :href="$data.collections.docs[0].url">Docs</a>
-		<a :href="$data.site.repo">GitHub</a>
-		<a webc:if="$data.site.npm" :href="$data.site.npm">npm</a>
+		<a webc:if="$data.collections.docs && $data.collections.docs.length" :href="$data.collections.docs[0].url"><span class="fa-solid fa-book-open" aria-hidden="true"></span>Docs</a>
+		<a :href="$data.site.repo"><span class="fa-brands fa-github" aria-hidden="true"></span>GitHub</a>
+		<a webc:if="$data.site.npm" :href="$data.site.npm"><span class="fa-brands fa-npm" aria-hidden="true"></span>npm</a>
 	</nav>
 </div>

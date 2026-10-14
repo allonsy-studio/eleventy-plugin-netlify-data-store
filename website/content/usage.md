@@ -1,6 +1,7 @@
 ---
 title: Usage
 description: Write an envelope from a function, read it back in a template.
+icon: "fa-solid fa-code"
 order: 2
 ---
 Something writes an envelope: a scheduled function, a form handler, or a webhook. A template reads the whole envelope back & destructures metadata & content together.

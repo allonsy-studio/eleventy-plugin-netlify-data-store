@@ -16,6 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link webc:keep rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Mono&display=swap" />
+<script webc:keep src="https://kit.fontawesome.com/42e99b4632.js" crossorigin="anonymous"></script>
 
 <link webc:keep rel="stylesheet" href="/assets/styles/tokens.css" />
 <link webc:keep rel="stylesheet" href="/assets/styles/reset.css" />

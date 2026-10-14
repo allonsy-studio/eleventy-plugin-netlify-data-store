@@ -1,6 +1,7 @@
 ---
 title: API & options
 description: Three runtime functions, a date filter, & every option.
+icon: "fa-solid fa-sliders"
 order: 3
 ---
 Three runtime functions & a date filter, all bound to the options passed at registration.

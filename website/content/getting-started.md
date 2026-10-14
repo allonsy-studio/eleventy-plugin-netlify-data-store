@@ -1,6 +1,7 @@
 ---
 title: Getting started
 description: Install the plugin, register it, & read a first blob.
+icon: "fa-solid fa-rocket"
 order: 1
 ---
 Content written long after the last deploy (by a scheduled function, a form handler, or a webhook) has to reach templates at build time. This plugin fetches it from Netlify Blobs & keeps a local copy, so builds are fast, work offline, & degrade gracefully when the store is down.
