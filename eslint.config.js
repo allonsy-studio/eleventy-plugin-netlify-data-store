@@ -28,6 +28,34 @@ export default defineConfig([
 		},
 	},
 	{
+		files: ["website/content/assets/scripts/**/*.js"],
+		languageOptions: {
+			globals: {
+				CSS: "readonly",
+				Highlight: "readonly",
+				Range: "readonly",
+				clearTimeout: "readonly",
+				document: "readonly",
+				navigator: "readonly",
+				setTimeout: "readonly",
+			},
+		},
+	},
+	{
+		files: ["website/cypress/**/*.js"],
+		languageOptions: {
+			globals: {
+				Cypress: "readonly",
+				after: "readonly",
+				before: "readonly",
+				cy: "readonly",
+				describe: "readonly",
+				expect: "readonly",
+				it: "readonly",
+			},
+		},
+	},
+	{
 		files: ["src/**/*.js", "test/**/*.js"],
 		plugins: { "license-header": licenseHeader },
 		rules: {

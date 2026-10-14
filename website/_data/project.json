@@ -1,0 +1,27 @@
+{
+	"lede": "Build-time content from Netlify Blobs, cached locally with a TTL you control, so builds stay fast, survive an outage, & never fail on missing data.",
+	"install": "yarn add @allons-y/eleventy-plugin-netlify-data-store",
+	"usage": {
+		"language": "js",
+		"caption": "eleventy.config.js",
+		"code": "import netlifyDataStore from \"@allons-y/eleventy-plugin-netlify-data-store\";\n\nexport default function (eleventyConfig) {\n\tlet { readBlob } = eleventyConfig.addPlugin(netlifyDataStore, {\n\t\timmediate: true,\n\t\tstoreName: \"content\",\n\t\tttl: \"1h\",\n\t});\n\n\televentyConfig.addGlobalData(\"activity\", () => readBlob(\"activity\"));\n}\n"
+	},
+	"features": [
+		{
+			"title": "Cached by default",
+			"body": "Reads hit a local cache first & reach Netlify Blobs only once an entry passes its TTL: fewer calls & faster builds, everywhere."
+		},
+		{
+			"title": "Never fails a build",
+			"body": "If the store is unreachable, the last good copy is served & flagged stale. Past that, an error envelope arrives instead of an exception."
+		},
+		{
+			"title": "Builds offline",
+			"body": "After one warm build, every build inside the TTL runs with no credentials & no network, locally & in CI alike."
+		},
+		{
+			"title": "One dependency",
+			"body": "Nothing but @netlify/blobs: no build step, no runtime, pure ESM."
+		}
+	]
+}

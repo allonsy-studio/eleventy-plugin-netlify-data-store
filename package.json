@@ -15,6 +15,9 @@
   "scripts": {
     "changeset": "changeset",
     "ci:test": "ava",
+    "docs:build": "eleventy --config=website/eleventy.config.js",
+    "docs:start": "eleventy --serve --config=website/eleventy.config.js",
+    "docs:test": "cypress run --project website",
     "format": "eslint . --fix",
     "lint": "eslint .",
     "release": "changeset publish",
@@ -73,12 +76,28 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",
+    "@11ty/eleventy-fetch": "^5.1.0",
+    "@11ty/eleventy-plugin-webc": "^0.11.2",
+    "@allons-y/dashly": "^0.1.0-beta.0",
+    "@allons-y/opx-cli": "^0.1.0-beta.0",
+    "@allons-y/opx-lint-js": "^0.1.0-beta.0",
+    "@allons-y/opx-lint-json": "^0.1.0-beta.0",
+    "@allons-y/opx-lint-md": "^0.1.0-beta.0",
     "@changesets/cli": "^3.0.2",
     "@eslint/js": "^9.39.5",
     "@eslint/markdown": "^8.0.2",
     "ava": "^6.4.1",
+    "axe-core": "^4.11.0",
+    "cypress": "^15.21.1",
+    "cypress-axe": "^1.7.0",
     "eslint": "^9.39.5",
-    "eslint-plugin-license-header": "^0.9.0"
+    "eslint-plugin-license-header": "^0.9.0",
+    "markdown-it": "^14.1.0",
+    "prismjs": "^1.30.0"
   },
-  "packageManager": "yarn@4.18.1"
+  "packageManager": "yarn@4.18.1",
+  "oss-docs": {
+    "site": "website",
+    "flavor": "docs"
+  }
 }
