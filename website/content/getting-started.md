@@ -7,9 +7,12 @@ order: 1
 ---
 Content written long after the last deploy (by a scheduled function, a form handler, or a webhook) has to reach templates at build time. This plugin fetches it from Netlify Blobs & keeps a local copy, so builds are fast, work offline, & degrade gracefully when the store is down.
 
-## Install
+## Requirements
 
-Install alongside Eleventy 3 or newer. Node 22.12+ is required, which is the floor set by `@netlify/blobs`.
+- Node.js 22.12 or newer, the floor set by `@netlify/blobs`
+- Eleventy 3 or newer
+
+## Install
 
 ```sh
 # yarn
@@ -37,6 +40,12 @@ export default function (eleventyConfig) {
 }
 ```
 
-## Credentials
+## Set credentials
 
-Reads that reach Netlify Blobs need `NETLIFY_SITE_ID` & `NETLIFY_TOKEN`. A read served from a warm cache needs no credentials at all, which is what lets a build run offline.
+Reads that reach Netlify Blobs need `NETLIFY_SITE_ID` & `NETLIFY_TOKEN` in the environment. A read served from a warm cache needs neither, which is what lets a build run offline.
+
+## Next steps
+
+- [How it works](/how-it-works/): the envelope, the cache, & the order reads resolve in.
+- [Configuration](/configuration/): every option & what it affects.
+- [Guides](/guides/write-from-a-function/): write from a function, read in templates, & build offline.

@@ -4,5 +4,5 @@ export default {
 	title: "Reference",
 	description: "Every function & option, generated from the JSDoc in src/.",
 	icon: "fa-solid fa-book",
-	order: 3,
+	order: 7,
 };

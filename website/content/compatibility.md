@@ -3,7 +3,7 @@ title: Compatibility
 description: Supported Eleventy & Node versions, & use outside Eleventy.
 icon: "fa-solid fa-circle-check"
 templateEngineOverride: md
-order: 4
+order: 8
 ---
 - <span class="fa-solid fa-check" aria-hidden="true"></span> **Eleventy 3.0+**: declared as an optional peer dependency.
 - <span class="fa-solid fa-check" aria-hidden="true"></span> **Node.js 22.12+**: the floor set by `@netlify/blobs`. Pure ESM, no build step.
