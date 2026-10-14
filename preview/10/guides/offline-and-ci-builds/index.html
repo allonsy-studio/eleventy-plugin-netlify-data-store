@@ -3,7 +3,7 @@
 <head>
 		<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Usage: eleventy-plugin-netlify-data-store</title>
+<title>Build offline &amp; in CI: eleventy-plugin-netlify-data-store</title>
 <meta name="description" content="Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.">
 <link rel="canonical" href="https://projects.allons-y.studio/eleventy-plugin-netlify-data-store/">
 <meta name="color-scheme" content="light dark">
@@ -13,7 +13,7 @@
 <meta property="og:description" content="Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.">
 <meta property="og:url" content="https://projects.allons-y.studio/eleventy-plugin-netlify-data-store/">
 
-
+<link rel="icon" href="/eleventy-plugin-netlify-data-store/preview/10/assets/img/favicon.svg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -61,10 +61,22 @@
 			<a href="/eleventy-plugin-netlify-data-store/preview/10/getting-started/">Getting started</a>
 		</li>
 <li>
-			<a href="/eleventy-plugin-netlify-data-store/preview/10/usage/" aria-current="page">Usage</a>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/how-it-works/">How it works</a>
 		</li>
 <li>
-			<a href="/eleventy-plugin-netlify-data-store/preview/10/api/">API &amp; options</a>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/configuration/">Configuration</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/write-from-a-function/">Write from a scheduled function</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/read-in-templates/">Read in templates</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/offline-and-ci-builds/" aria-current="page">Build offline &amp; in CI</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/reference/">Reference</a>
 		</li>
 <li>
 			<a href="/eleventy-plugin-netlify-data-store/preview/10/compatibility/">Compatibility</a>
@@ -73,39 +85,46 @@
 </nav>
 
 	<article>
-		<h1>Usage</h1>
+		<h1>Build offline &amp; in CI</h1>
 		
-	<p>Something writes an envelope: a scheduled function, a form handler, or a webhook. A template reads the whole envelope back &amp; destructures metadata &amp; content together.</p>
-<h2>Write</h2>
-<figure><pre tabindex="0"><code data-tokens="[[&quot;keyword&quot;,0,6],[&quot;punctuation&quot;,7,8],[&quot;punctuation&quot;,25,26],[&quot;keyword&quot;,27,31],[&quot;string&quot;,32,78],[&quot;punctuation&quot;,78,79],[&quot;keyword&quot;,81,86],[&quot;punctuation&quot;,87,88],[&quot;punctuation&quot;,99,100],[&quot;punctuation&quot;,101,102],[&quot;function&quot;,103,118],[&quot;punctuation&quot;,118,119],[&quot;punctuation&quot;,119,120],[&quot;punctuation&quot;,120,121],[&quot;keyword&quot;,123,129],[&quot;keyword&quot;,130,137],[&quot;keyword&quot;,138,143],[&quot;punctuation&quot;,144,145],[&quot;punctuation&quot;,145,146],[&quot;punctuation&quot;,147,149],[&quot;function&quot;,151,160],[&quot;punctuation&quot;,160,161],[&quot;string&quot;,161,171],[&quot;punctuation&quot;,171,172],[&quot;punctuation&quot;,173,174],[&quot;function&quot;,177,181],[&quot;punctuation&quot;,181,182],[&quot;punctuation&quot;,183,184],[&quot;function&quot;,185,196],[&quot;punctuation&quot;,196,197],[&quot;keyword&quot;,198,201],[&quot;function&quot;,202,206],[&quot;punctuation&quot;,206,207],[&quot;punctuation&quot;,207,208],[&quot;punctuation&quot;,208,209],[&quot;function&quot;,209,220],[&quot;punctuation&quot;,220,221],[&quot;punctuation&quot;,221,222],[&quot;punctuation&quot;,223,224],[&quot;punctuation&quot;,224,225],[&quot;function&quot;,228,235],[&quot;punctuation&quot;,235,236],[&quot;keyword&quot;,237,242],[&quot;function&quot;,243,255],[&quot;punctuation&quot;,255,256],[&quot;punctuation&quot;,256,257],[&quot;punctuation&quot;,257,258],[&quot;punctuation&quot;,260,261],[&quot;punctuation&quot;,261,262],[&quot;punctuation&quot;,262,263]]">import { createDataStore } from "@allons-y/eleventy-plugin-netlify-data-store";
-
-const { writeBlob } = createDataStore();
-
-export default async () =&gt;
-	writeBlob("activity", {
-		meta: { generatedAt: new Date().toISOString() },
-		entries: await fetchEntries(),
-	});
+	<p>A read served from the local cache needs no network &amp; no credentials. That makes offline work, fast CI builds, &amp; reproducible tests possible with one habit: warm the cache once.</p>
+<h2>Warm the cache</h2>
+<p>Run one build with <code>NETLIFY_SITE_ID</code> &amp; <code>NETLIFY_TOKEN</code> set. Every blob the build reads is written to <code>.netlify/blobs-cache</code>. Builds inside the <code>ttl</code> window then read from disk.</p>
+<p>The cache applies to every build: local, CI, &amp; production alike. <code>NODE_ENV</code> plays no part, so a CI build with a warm cache is as fast as a local one.</p>
+<h2>Choose a <code>ttl</code></h2>
+<table>
+<thead>
+<tr>
+<th>Goal</th>
+<th>Setting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fewer Blobs calls, fresh enough content</td>
+<td><code>ttl: "1h"</code> (the default)</td>
+</tr>
+<tr>
+<td>Always the latest content</td>
+<td><code>ttl: 0</code></td>
+</tr>
+<tr>
+<td>A frozen fixture that never expires</td>
+<td><code>ttl: "*"</code></td>
+</tr>
+</tbody>
+</table>
+<h2>Survive an outage</h2>
+<p>With <code>staleIfError</code> on (the default), a build that cannot reach the store serves the expired copy &amp; flags it with <code>meta.stale</code>. Templates that check <code>meta.stale</code> can say the content is from an earlier build. See <a href="/eleventy-plugin-netlify-data-store/preview/10/guides/read-in-templates/">Read in templates</a>.</p>
+<h2>Test without Netlify</h2>
+<p>The repository's <code>sample/</code> is a minimal Eleventy site that reads entirely from the cache. It points <code>cacheDir</code> at a committed fixture &amp; pins <code>ttl: "*"</code> so the fixture never expires, which needs no network access &amp; no credentials:</p>
+<figure><pre tabindex="0"><code data-tokens="[[&quot;function&quot;,0,4]]">yarn sample
 </code></pre></figure>
-<h2>Read</h2>
-<figure><pre tabindex="0"><code data-tokens="[[&quot;punctuation&quot;,31,32],[&quot;keyword&quot;,32,33],[&quot;punctuation&quot;,33,34],[&quot;punctuation&quot;,55,57],[&quot;keyword&quot;,57,58],[&quot;punctuation&quot;,58,59],[&quot;punctuation&quot;,73,74],[&quot;keyword&quot;,74,75],[&quot;punctuation&quot;,75,76],[&quot;punctuation&quot;,129,131],[&quot;keyword&quot;,131,132],[&quot;punctuation&quot;,132,133],[&quot;punctuation&quot;,165,166],[&quot;keyword&quot;,166,167],[&quot;punctuation&quot;,167,168],[&quot;punctuation&quot;,185,187],[&quot;keyword&quot;,187,188],[&quot;punctuation&quot;,188,189],[&quot;punctuation&quot;,204,205],[&quot;keyword&quot;,205,207],[&quot;punctuation&quot;,207,208],[&quot;punctuation&quot;,252,253],[&quot;keyword&quot;,253,255],[&quot;punctuation&quot;,255,256],[&quot;punctuation&quot;,273,275],[&quot;keyword&quot;,275,277],[&quot;punctuation&quot;,277,278],[&quot;punctuation&quot;,297,299],[&quot;keyword&quot;,299,301],[&quot;punctuation&quot;,301,302]]">{% if activity.meta.error %}
-  &lt;p&gt;Activity unavailable.&lt;/p&gt;
-{% else %}
-  &lt;p&gt;Updated {{ activity.meta.generatedAt | generatedAt }}&lt;/p&gt;
-  {%- if activity.meta.stale %}&lt;p&gt;Last cached copy.&lt;/p&gt;{%- endif %}
-  &lt;ul&gt;
-  {%- for entry in activity.entries %}
-    &lt;li&gt;{{ entry.title }}&lt;/li&gt;
-  {%- endfor %}
-  &lt;/ul&gt;
-{% endif %}
-</code></pre></figure>
-<h2>Resolution order</h2>
-<p>Reads resolve in order: the local cache answers while the entry is younger than <code>ttl</code>; otherwise Netlify Blobs does, &amp; the result is written into the cache for the next build. If the store cannot be reached, an expired entry is served with <code>meta.stale</code> set rather than failing.</p>
+<p>To test code that reads blobs without a store at all, supply a <a href="/eleventy-plugin-netlify-data-store/preview/10/configuration/"><code>getStore</code></a> factory. A custom factory skips the credential check.</p>
 
 	<nav aria-label="Pager">
-	<a rel="prev" href="/eleventy-plugin-netlify-data-store/preview/10/getting-started/">Getting started</a>
-	<a rel="next" href="/eleventy-plugin-netlify-data-store/preview/10/api/">API &amp; options</a>
+	<a rel="prev" href="/eleventy-plugin-netlify-data-store/preview/10/guides/read-in-templates/">Read in templates</a>
+	<a rel="next" href="/eleventy-plugin-netlify-data-store/preview/10/reference/">Reference</a>
 </nav>
 
 

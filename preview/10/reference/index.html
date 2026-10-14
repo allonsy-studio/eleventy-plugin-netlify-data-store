@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+<head>
+		<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reference: eleventy-plugin-netlify-data-store</title>
+<meta name="description" content="Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.">
+<link rel="canonical" href="https://projects.allons-y.studio/eleventy-plugin-netlify-data-store/">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="eleventy-plugin-netlify-data-store: Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds">
+<meta property="og:description" content="Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.">
+<meta property="og:url" content="https://projects.allons-y.studio/eleventy-plugin-netlify-data-store/">
+
+<link rel="icon" href="/eleventy-plugin-netlify-data-store/preview/10/assets/img/favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Mono&amp;display=swap">
+<script src="https://kit.fontawesome.com/42e99b4632.js" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/tokens.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/reset.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/layout.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/components.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/studio.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/project.css">
+<script type="module" src="/eleventy-plugin-netlify-data-store/preview/10/assets/scripts/copy-code.js"></script>
+<script type="module" src="/eleventy-plugin-netlify-data-store/preview/10/assets/scripts/code-highlight.js"></script>
+
+	</head>
+	<body>
+		<a href="#main">Skip to content</a>
+		<header>
+			<a data-studio="banner" href="https://allons-y.studio">
+	<img src="https://raw.githubusercontent.com/allonsy-studio/.github/refs/heads/main/assets/svg/oss-banner.svg" alt="Brought to you by Allons-y Studio" width="1600" height="64">
+</a>
+
+			<div>
+	<a rel="home" href="/eleventy-plugin-netlify-data-store/preview/10/">
+		
+		<span>eleventy-plugin-netlify-data-store</span>
+	</a>
+	<nav aria-label="Primary">
+		
+		
+		
+		<a href="/eleventy-plugin-netlify-data-store/preview/10/getting-started/"><span aria-hidden="true" class="fa-solid fa-book-open"></span>Docs</a>
+		<a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store"><span aria-hidden="true" class="fa-brands fa-github"></span>GitHub</a>
+		<a href="https://www.npmjs.com/package/@allons-y/eleventy-plugin-netlify-data-store"><span aria-hidden="true" class="fa-brands fa-npm"></span>npm</a>
+	</nav>
+</div>
+
+		</header>
+		<main id="main" tabindex="-1">
+			<div>
+	<nav aria-label="Documentation">
+	<ul>
+		<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/getting-started/">Getting started</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/how-it-works/">How it works</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/configuration/">Configuration</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/write-from-a-function/">Write from a scheduled function</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/read-in-templates/">Read in templates</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/offline-and-ci-builds/">Build offline &amp; in CI</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/reference/" aria-current="page">Reference</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/compatibility/">Compatibility</a>
+		</li>
+	</ul>
+</nav>
+
+	<article>
+		<h1>Reference</h1>
+		
+	<p>Generated from the JSDoc in <code>src/</code>, so it matches the code. For how the pieces fit together, see <a href="/eleventy-plugin-netlify-data-store/preview/10/how-it-works/">How it works</a> &amp; <a href="/eleventy-plugin-netlify-data-store/preview/10/configuration/">Configuration</a>.</p>
+
+<ul>
+	<li><a href="#plugin">Plugin</a>: register it with Eleventy, or build a store directly.</li>
+	<li><a href="#store">Store functions</a>: read, write, &amp; list blobs.</li>
+	<li><a href="#utilities">Utilities</a>: the date formatter &amp; the duration parser.</li>
+	<li><a href="#options">Options</a>: every option, its type, &amp; its default.</li>
+</ul>
+
+<section aria-labelledby="plugin">
+	<h2 id="plugin">Plugin</h2>
+	<article aria-labelledby="netlifyDataStorePlugin">
+	<h3 id="netlifyDataStorePlugin"><code>netlifyDataStorePlugin(eleventyConfig, pluginOptions?)</code></h3>
+	<p>Eleventy plugin. Hangs a configured data store on <code>eleventyConfig</code> &amp;
+returns it, &amp; registers a date filter for <code>meta.generatedAt</code>.</p>
+<p>The plugin never reads Eleventy's data directory: content comes from
+Netlify Blobs, cached locally between builds.</p>
+
+
+	<section>
+		<h4>Parameters</h4>
+		<table>
+			<thead>
+				<tr>
+					<th scope="col">Name</th>
+					<th scope="col">Type</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<code>eleventyConfig</code>
+						
+					</td>
+					<td><code>object</code></td>
+					
+				</tr>
+<tr>
+					<td>
+						<code>pluginOptions</code>
+						<small>(optional)</small>
+					</td>
+					<td><code>DataStoreOptions</code></td>
+					
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
+	<section>
+		<h4>Returns</h4>
+		<p>
+			<code>ReturnType&lt;typeof createDataStore&gt;</code>
+			
+		</p>
+	</section>
+</article>
+
+<article aria-labelledby="createDataStore">
+	<h3 id="createDataStore"><code>createDataStore(options?)</code></h3>
+	<p>Creates a read/write API bound to one set of options. Use this directly
+from a <code>_data/*.js</code> file or a Netlify Function; the Eleventy plugin below
+is a thin wrapper around it.</p>
+
+
+	<section>
+		<h4>Parameters</h4>
+		<table>
+			<thead>
+				<tr>
+					<th scope="col">Name</th>
+					<th scope="col">Type</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<code>options</code>
+						<small>(optional)</small>
+					</td>
+					<td><code>DataStoreOptions</code></td>
+					
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
+	
+</article>
+
+</section>
+
+<section aria-labelledby="store">
+	<h2 id="store">Store functions</h2>
+	<p>Returned by <code>createDataStore()</code> &amp; by <code>addPlugin</code>, bound to the options passed at registration.</p>
+	<article aria-labelledby="readBlob">
+	<h3 id="readBlob"><code>readBlob(name, storeName?)</code></h3>
+	<p>Reads a <code>{meta, ...content}</code> envelope by name.</p>
+<p>The local cache answers first while the entry is inside its TTL;
+otherwise the Netlify Blobs store does, &amp; the result is cached for the
+next build. When the store cannot be reached &amp; a stale entry exists,
+it is served with <code>meta.stale</code> set unless <code>staleIfError</code> is disabled.
+Every failure resolves to an envelope carrying <code>meta.error</code> rather than
+throwing, so a template renders a fallback instead of failing the build.</p>
+
+
+	<section>
+		<h4>Parameters</h4>
+		<table>
+			<thead>
+				<tr>
+					<th scope="col">Name</th>
+					<th scope="col">Type</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<code>name</code>
+						
+					</td>
+					<td><code>string</code></td>
+					
+				</tr>
+<tr>
+					<td>
+						<code>storeName</code>
+						<small>(optional)</small>
+					</td>
+					<td><code>string</code></td>
+					
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
+	<section>
+		<h4>Returns</h4>
+		<p>
+			<code>Promise&lt;object&gt;</code>
+			
+		</p>
+	</section>
+</article>
+
+<article aria-labelledby="writeBlob">
+	<h3 id="writeBlob"><code>writeBlob(name, data, storeName?)</code></h3>
+	<p>Writes a <code>{meta, ...content}</code> envelope to the Netlify Blobs store &amp;
+refreshes the local cache so a following read sees it immediately.
+Like reads, writes never throw: the response shape carries the outcome.</p>
+
+
+	<section>
+		<h4>Parameters</h4>
+		<table>
+			<thead>
+				<tr>
+					<th scope="col">Name</th>
+					<th scope="col">Type</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<code>name</code>
+						
+					</td>
+					<td><code>string</code></td>
+					
+				</tr>
+<tr>
+					<td>
+						<code>data</code>
+						
+					</td>
+					<td><code>object</code></td>
+					
+				</tr>
+<tr>
+					<td>
+						<code>storeName</code>
+						<small>(optional)</small>
+					</td>
+					<td><code>string</code></td>
+					
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
+	<section>
+		<h4>Returns</h4>
+		<p>
+			<code>Promise&lt;{statusCode: number, body: string}&gt;</code>
+			
+		</p>
+	</section>
+</article>
+
+<article aria-labelledby="listData">
+	<h3 id="listData"><code>listData(storeName?)</code></h3>
+	<p>Lists the blob keys held in a store. Always returns an array: failures
+log &amp; resolve to an empty list.</p>
+
+
+	<section>
+		<h4>Parameters</h4>
+		<table>
+			<thead>
+				<tr>
+					<th scope="col">Name</th>
+					<th scope="col">Type</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<code>storeName</code>
+						<small>(optional)</small>
+					</td>
+					<td><code>string</code></td>
+					
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
+	<section>
+		<h4>Returns</h4>
+		<p>
+			<code>Promise&lt;string[]&gt;</code>
+			
+		</p>
+	</section>
+</article>
+
+</section>
+
+<section aria-labelledby="utilities">
+	<h2 id="utilities">Utilities</h2>
+	<p>Exported from the package root. The plugin registers a bound <code>formatGeneratedAt</code> as a filter, which takes only the value.</p>
+	<article aria-labelledby="formatGeneratedAt">
+	<h3 id="formatGeneratedAt"><code>formatGeneratedAt(value, options?)</code></h3>
+	<p>Formats an envelope's <code>meta.generatedAt</code> timestamp for display.
+Returns an empty string for missing or unparseable input so a template
+can render it unconditionally.</p>
+
+
+	<section>
+		<h4>Parameters</h4>
+		<table>
+			<thead>
+				<tr>
+					<th scope="col">Name</th>
+					<th scope="col">Type</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<code>value</code>
+						
+					</td>
+					<td><code>string|number|Date</code></td>
+					
+				</tr>
+<tr>
+					<td>
+						<code>options</code>
+						<small>(optional)</small>
+					</td>
+					<td><code>{locale?: string, dateFormat?: Intl.DateTimeFormatOptions}</code></td>
+					
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
+	<section>
+		<h4>Returns</h4>
+		<p>
+			<code>string</code>
+			
+		</p>
+	</section>
+</article>
+
+<article aria-labelledby="parseDuration">
+	<h3 id="parseDuration"><code>parseDuration(value)</code></h3>
+	<p>Parses an <code>eleventy-fetch</code>-style duration into milliseconds.
+<code>"*"</code> never expires; <code>0</code> always does.</p>
+
+
+	<section>
+		<h4>Parameters</h4>
+		<table>
+			<thead>
+				<tr>
+					<th scope="col">Name</th>
+					<th scope="col">Type</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<code>value</code>
+						
+					</td>
+					<td><code>string|number</code></td>
+					
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
+	<section>
+		<h4>Returns</h4>
+		<p>
+			<code>number</code>
+			
+		</p>
+	</section>
+</article>
+
+</section>
+
+<section aria-labelledby="options">
+	<h2 id="options">Options</h2>
+	<p>Passed to <code>addPlugin</code> or <code>createDataStore</code>. Every option is optional.</p>
+	<table>
+		<thead>
+			<tr>
+				<th scope="col">Option</th>
+				<th scope="col">Type</th>
+				<th scope="col">Default</th>
+				<th scope="col">Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>storeName</code></td>
+				<td><code>string</code></td>
+				<td><code>"content"</code></td>
+				<td>Default Netlify Blobs store.</td>
+			</tr>
+<tr>
+				<td><code>cacheDir</code></td>
+				<td><code>string</code></td>
+				<td><code>".netlify/blobs-cache"</code></td>
+				<td>Local, uncommitted cache.</td>
+			</tr>
+<tr>
+				<td><code>ttl</code></td>
+				<td><code>string|number</code></td>
+				<td><code>"1h"</code></td>
+				<td>How long a cache entry stays fresh; <code>"*"</code> never expires, <code>0</code> always refetches.</td>
+			</tr>
+<tr>
+				<td><code>staleIfError</code></td>
+				<td><code>boolean</code></td>
+				<td><code>true</code></td>
+				<td>Serve an expired entry when the store cannot be reached.</td>
+			</tr>
+<tr>
+				<td><code>siteID</code></td>
+				<td><code>string</code></td>
+				<td></td>
+				<td>Defaults to <code>process.env.NETLIFY_SITE_ID</code>.</td>
+			</tr>
+<tr>
+				<td><code>token</code></td>
+				<td><code>string</code></td>
+				<td></td>
+				<td>Defaults to <code>process.env.NETLIFY_TOKEN</code>.</td>
+			</tr>
+<tr>
+				<td><code>quiet</code></td>
+				<td><code>boolean</code></td>
+				<td><code>false</code></td>
+				<td>Suppress per-read logging.</td>
+			</tr>
+<tr>
+				<td><code>locale</code></td>
+				<td><code>string</code></td>
+				<td><code>"en-GB"</code></td>
+				<td>Locale for <code>formatGeneratedAt</code>.</td>
+			</tr>
+<tr>
+				<td><code>dateFormat</code></td>
+				<td><code>Intl.DateTimeFormatOptions</code></td>
+				<td></td>
+				<td>Options for <code>formatGeneratedAt</code>.</td>
+			</tr>
+<tr>
+				<td><code>filterName</code></td>
+				<td><code>string|false</code></td>
+				<td><code>"generatedAt"</code></td>
+				<td>Filter to register; <code>false</code> to skip.</td>
+			</tr>
+<tr>
+				<td><code>getStore</code></td>
+				<td><code>Function</code></td>
+				<td></td>
+				<td>Store factory; defaults to <code>getStore</code> from <code>@netlify/blobs</code>. A custom factory skips the credential check.</td>
+			</tr>
+<tr>
+				<td><code>logger</code></td>
+				<td><code>object</code></td>
+				<td></td>
+				<td>Eleventy's logger; supplied automatically by <code>addPlugin</code>.</td>
+			</tr>
+		</tbody>
+	</table>
+</section>
+
+	<nav aria-label="Pager">
+	<a rel="prev" href="/eleventy-plugin-netlify-data-store/preview/10/guides/offline-and-ci-builds/">Build offline &amp; in CI</a>
+	<a rel="next" href="/eleventy-plugin-netlify-data-store/preview/10/compatibility/">Compatibility</a>
+</nav>
+
+
+	</article>
+</div>
+
+
+		</main>
+		<footer>
+	<div>
+		<div>
+			<p><strong>eleventy-plugin-netlify-data-store</strong></p>
+			<p>Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.</p>
+			<p>
+				<small>
+					Licensed under
+					<a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/LICENSE" data-license="">MPL-2.0</a>
+				</small>
+			</p>
+		</div>
+		<nav aria-label="Project links">
+			<p><strong>Project</strong></p>
+			<ul>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store"><span aria-hidden="true" class="fa-brands fa-github"></span>GitHub</a></li>
+				<li><a href="https://www.npmjs.com/package/@allons-y/eleventy-plugin-netlify-data-store"><span aria-hidden="true" class="fa-brands fa-npm"></span>npm</a></li>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/CHANGELOG.md"><span aria-hidden="true" class="fa-solid fa-list"></span>Changelog</a></li>
+			</ul>
+		</nav>
+		<nav aria-label="Help links">
+			<p><strong>Help</strong></p>
+			<ul>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/issues"><span aria-hidden="true" class="fa-solid fa-bug"></span>Report an issue</a></li>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/.github/CONTRIBUTING.md"><span aria-hidden="true" class="fa-solid fa-code-pull-request"></span>Contributing guide</a></li>
+				<li><a href="https://github.com/allonsy-studio/.github/blob/main/CODE_OF_CONDUCT.md"><span aria-hidden="true" class="fa-solid fa-scale-balanced"></span>Code of conduct</a></li>
+				<li><a href="https://github.com/allonsy-studio/.github/blob/main/SECURITY.md"><span aria-hidden="true" class="fa-solid fa-shield-halved"></span>Security policy</a></li>
+			</ul>
+		</nav>
+	</div>
+	<div>
+		<div data-studio="cta">
+	<p>Work with Allons-y Studio</p>
+	<p>Design systems, front-end engineering, &amp; accessibility consulting for teams that depend on open source.</p>
+	<a href="mailto:consulting@allons-y.studio">consulting@allons-y.studio</a>
+</div>
+
+		<a data-studio="footer" href="https://allons-y.studio">
+	<picture>
+		<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/allonsy-studio/.github/refs/heads/main/assets/svg/oss-footer-dark.svg">
+		<img src="https://raw.githubusercontent.com/allonsy-studio/.github/refs/heads/main/assets/svg/oss-footer-light.svg" alt="Brought to you by Allons-y Studio" width="440" height="75">
+	</picture>
+	
+</a>
+
+	</div>
+</footer>
+
+	
+
+</body>
+</html>

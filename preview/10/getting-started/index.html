@@ -13,7 +13,7 @@
 <meta property="og:description" content="Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.">
 <meta property="og:url" content="https://projects.allons-y.studio/eleventy-plugin-netlify-data-store/">
 
-
+<link rel="icon" href="/eleventy-plugin-netlify-data-store/preview/10/assets/img/favicon.svg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -61,10 +61,22 @@
 			<a href="/eleventy-plugin-netlify-data-store/preview/10/getting-started/" aria-current="page">Getting started</a>
 		</li>
 <li>
-			<a href="/eleventy-plugin-netlify-data-store/preview/10/usage/">Usage</a>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/how-it-works/">How it works</a>
 		</li>
 <li>
-			<a href="/eleventy-plugin-netlify-data-store/preview/10/api/">API &amp; options</a>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/configuration/">Configuration</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/write-from-a-function/">Write from a scheduled function</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/read-in-templates/">Read in templates</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/offline-and-ci-builds/">Build offline &amp; in CI</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/reference/">Reference</a>
 		</li>
 <li>
 			<a href="/eleventy-plugin-netlify-data-store/preview/10/compatibility/">Compatibility</a>
@@ -76,8 +88,12 @@
 		<h1>Getting started</h1>
 		
 	<p>Content written long after the last deploy (by a scheduled function, a form handler, or a webhook) has to reach templates at build time. This plugin fetches it from Netlify Blobs &amp; keeps a local copy, so builds are fast, work offline, &amp; degrade gracefully when the store is down.</p>
+<h2>Requirements</h2>
+<ul>
+<li>Node.js 22.12 or newer, the floor set by <code>@netlify/blobs</code></li>
+<li>Eleventy 3 or newer</li>
+</ul>
 <h2>Install</h2>
-<p>Install alongside Eleventy 3 or newer. Node 22.12+ is required, which is the floor set by <code>@netlify/blobs</code>.</p>
 <figure><pre tabindex="0"><code data-tokens="[[&quot;comment&quot;,0,6],[&quot;function&quot;,7,11],[&quot;function&quot;,12,15],[&quot;comment&quot;,62,67],[&quot;function&quot;,68,71],[&quot;function&quot;,72,79]]"># yarn
 yarn add @allons-y/eleventy-plugin-netlify-data-store
 
@@ -98,12 +114,18 @@ export default function (eleventyConfig) {
 	eleventyConfig.addGlobalData("activity", () =&gt; readBlob("activity"));
 }
 </code></pre></figure>
-<h2>Credentials</h2>
-<p>Reads that reach Netlify Blobs need <code>NETLIFY_SITE_ID</code> &amp; <code>NETLIFY_TOKEN</code>. A read served from a warm cache needs no credentials at all, which is what lets a build run offline.</p>
+<h2>Set credentials</h2>
+<p>Reads that reach Netlify Blobs need <code>NETLIFY_SITE_ID</code> &amp; <code>NETLIFY_TOKEN</code> in the environment. A read served from a warm cache needs neither, which is what lets a build run offline.</p>
+<h2>Next steps</h2>
+<ul>
+<li><a href="/eleventy-plugin-netlify-data-store/preview/10/how-it-works/">How it works</a>: the envelope, the cache, &amp; the order reads resolve in.</li>
+<li><a href="/eleventy-plugin-netlify-data-store/preview/10/configuration/">Configuration</a>: every option &amp; what it affects.</li>
+<li><a href="/eleventy-plugin-netlify-data-store/preview/10/guides/write-from-a-function/">Guides</a>: write from a function, read in templates, &amp; build offline.</li>
+</ul>
 
 	<nav aria-label="Pager">
 	
-	<a rel="next" href="/eleventy-plugin-netlify-data-store/preview/10/usage/">Usage</a>
+	<a rel="next" href="/eleventy-plugin-netlify-data-store/preview/10/how-it-works/">How it works</a>
 </nav>
 
 

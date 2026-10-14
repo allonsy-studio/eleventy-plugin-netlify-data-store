@@ -3,7 +3,7 @@
 <head>
 		<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>API &amp; options: eleventy-plugin-netlify-data-store</title>
+<title>How it works: eleventy-plugin-netlify-data-store</title>
 <meta name="description" content="Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.">
 <link rel="canonical" href="https://projects.allons-y.studio/eleventy-plugin-netlify-data-store/">
 <meta name="color-scheme" content="light dark">
@@ -13,7 +13,7 @@
 <meta property="og:description" content="Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.">
 <meta property="og:url" content="https://projects.allons-y.studio/eleventy-plugin-netlify-data-store/">
 
-
+<link rel="icon" href="/eleventy-plugin-netlify-data-store/preview/10/assets/img/favicon.svg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -61,10 +61,22 @@
 			<a href="/eleventy-plugin-netlify-data-store/preview/10/getting-started/">Getting started</a>
 		</li>
 <li>
-			<a href="/eleventy-plugin-netlify-data-store/preview/10/usage/">Usage</a>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/how-it-works/" aria-current="page">How it works</a>
 		</li>
 <li>
-			<a href="/eleventy-plugin-netlify-data-store/preview/10/api/" aria-current="page">API &amp; options</a>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/configuration/">Configuration</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/write-from-a-function/">Write from a scheduled function</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/read-in-templates/">Read in templates</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/offline-and-ci-builds/">Build offline &amp; in CI</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/reference/">Reference</a>
 		</li>
 <li>
 			<a href="/eleventy-plugin-netlify-data-store/preview/10/compatibility/">Compatibility</a>
@@ -73,95 +85,68 @@
 </nav>
 
 	<article>
-		<h1>API &amp; options</h1>
+		<h1>How it works</h1>
 		
-	<p>Three runtime functions &amp; a date filter, all bound to the options passed at registration.</p>
-<h2>Functions</h2>
+	<h2>The envelope</h2>
+<p>Every blob is a <code>{ meta, ...content }</code> envelope. Whatever writes it decides the content keys; <code>meta</code> carries the facts about the entry, so a template can destructure both together.</p>
 <table>
 <thead>
 <tr>
-<th>Function</th>
-<th>Returns</th>
-<th>Behavior</th>
+<th>Key</th>
+<th>Set by</th>
+<th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>readBlob(name, storeName?)</code></td>
-<td><code>Promise&lt;object&gt;</code></td>
-<td>Cache first, then Netlify Blobs. Returns the full <code>{ meta, ...content }</code> envelope, or <code>{ meta: { error } }</code> on any failure. Never throws</td>
+<td><code>meta.generatedAt</code></td>
+<td>The writer</td>
+<td>When the content was produced. The <code>generatedAt</code> filter formats it</td>
 </tr>
 <tr>
-<td><code>writeBlob(name, data, storeName?)</code></td>
-<td><code>Promise&lt;object&gt;</code></td>
-<td>Writes to the store &amp; refreshes the cached copy. Returns <code>{ statusCode, body }</code>, never throws</td>
+<td><code>meta.stale</code></td>
+<td>The plugin</td>
+<td><code>true</code> when an expired entry was served because the store was unreachable</td>
 </tr>
 <tr>
-<td><code>listData(storeName?)</code></td>
-<td><code>Promise&lt;string[]&gt;</code></td>
-<td>The blob keys held in the store</td>
+<td><code>meta.cacheAge</code></td>
+<td>The plugin</td>
+<td>How old a stale entry is, in milliseconds</td>
+</tr>
+<tr>
+<td><code>meta.error</code></td>
+<td>The plugin</td>
+<td>The reason a read failed. Present only on the error envelope</td>
 </tr>
 </tbody>
 </table>
-<h2>Options</h2>
-<table>
-<thead>
-<tr>
-<th>Option</th>
-<th>Type</th>
-<th>Default</th>
-<th>Behavior</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>storeName</code></td>
-<td><code>string</code></td>
-<td><code>"content"</code></td>
-<td>The Netlify Blobs store every call uses unless one is named explicitly</td>
-</tr>
-<tr>
-<td><code>ttl</code></td>
-<td><code>string | number</code></td>
-<td><code>"1h"</code></td>
-<td>How long a cached entry stays fresh. Takes <code>eleventy-fetch</code> durations: <code>"30m"</code>, <code>"1h"</code>, <code>"7d"</code>, plus <code>"*"</code> to never expire &amp; <code>0</code> to always refetch. An unparseable value throws at registration</td>
-</tr>
-<tr>
-<td><code>staleIfError</code></td>
-<td><code>boolean</code></td>
-<td><code>true</code></td>
-<td>Serve an expired entry when the store is unreachable, flagged with <code>meta.stale</code> &amp; <code>meta.cacheAge</code>. Set <code>false</code> to never serve data past its TTL</td>
-</tr>
-<tr>
-<td><code>cacheDir</code></td>
-<td><code>string</code></td>
-<td><code>".netlify/blobs-cache"</code></td>
-<td>The local, uncommitted cache. Each file wraps the value with the time it was fetched. Written by the plugin, safe to delete, &amp; gitignored via <code>.netlify</code></td>
-</tr>
-<tr>
-<td><code>siteID</code> / <code>token</code></td>
-<td><code>string</code></td>
-<td>from the environment</td>
-<td>Fall back to <code>NETLIFY_SITE_ID</code> &amp; <code>NETLIFY_TOKEN</code>. Missing credentials are logged as a configuration error, then returned as the usual envelope</td>
-</tr>
-<tr>
-<td><code>quiet</code></td>
-<td><code>boolean</code></td>
-<td><code>false</code></td>
-<td>Suppress the per-read log line. Errors are always surfaced. Logging routes through Eleventy's own logger</td>
-</tr>
-<tr>
-<td><code>filterName</code></td>
-<td><code>string | false</code></td>
-<td><code>"generatedAt"</code></td>
-<td>Name of the registered date filter for <code>meta.generatedAt</code>; <code>false</code> skips registration. Pair with <code>locale</code> &amp; <code>dateFormat</code></td>
-</tr>
-</tbody>
-</table>
+<p>Reads &amp; writes never throw. A failed read resolves to <code>{ meta: { error } }</code> &amp; a failed write to <code>{ statusCode, body }</code>, so a template renders a fallback instead of failing the build.</p>
+<h2>Read order</h2>
+<p><code>readBlob</code> resolves in this order:</p>
+<ol>
+<li><strong>The local cache</strong>, when the entry exists &amp; is younger than <code>ttl</code>.</li>
+<li><strong>Netlify Blobs</strong> otherwise, &amp; the result is written into the cache for the next build.</li>
+<li><strong>The stale cache</strong>, if the store could not be reached &amp; <code>staleIfError</code> is on. The envelope comes back with <code>meta.stale</code> &amp; <code>meta.cacheAge</code> added, &amp; the original <code>meta.generatedAt</code> intact.</li>
+</ol>
+<p><code>writeBlob</code> writes to the store &amp; refreshes the cached copy, so a read that follows it sees the new value immediately.</p>
+<h2>The local cache</h2>
+<p><code>cacheDir</code> holds a mirror of the store at <code>&lt;cacheDir&gt;/&lt;storeName&gt;/&lt;name&gt;.json</code>. Each file wraps the value with the time it was fetched:</p>
+<figure><pre tabindex="0"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;function&quot;,3,13],[&quot;punctuation&quot;,13,14],[&quot;string&quot;,15,41],[&quot;punctuation&quot;,41,42],[&quot;function&quot;,44,51],[&quot;punctuation&quot;,51,52],[&quot;punctuation&quot;,53,54],[&quot;function&quot;,55,61],[&quot;punctuation&quot;,61,62],[&quot;punctuation&quot;,63,64],[&quot;function&quot;,65,78],[&quot;punctuation&quot;,78,79],[&quot;string&quot;,80,106],[&quot;punctuation&quot;,107,108],[&quot;punctuation&quot;,108,109],[&quot;function&quot;,110,119],[&quot;punctuation&quot;,119,120],[&quot;punctuation&quot;,121,122],[&quot;punctuation&quot;,122,123],[&quot;punctuation&quot;,124,125],[&quot;punctuation&quot;,126,127]]">{
+	"cachedAt": "2026-09-05T06:15:00.000Z",
+	"value": { "meta": { "generatedAt": "2026-09-05T06:00:00.000Z" }, "entries": [] }
+}
+</code></pre></figure>
+<p>It is a cache, not a fixture: written by the plugin, never committed, &amp; safe to delete. Add it to <code>.gitignore</code>:</p>
+<figure><pre tabindex="0"><code>.netlify
+</code></pre></figure>
+<p>Warming it takes one build with credentials present. Every build after that runs offline until the TTL lapses. The cache applies to every build, not just local development: caching is governed by <code>ttl</code>, never by <code>NODE_ENV</code>.</p>
+<h2>Credentials</h2>
+<p><code>NETLIFY_SITE_ID</code> &amp; <code>NETLIFY_TOKEN</code> must be set for any read or write that reaches Netlify Blobs through the default <code>@netlify/blobs</code> factory. Missing credentials are a configuration error: the failure is logged, &amp; the read or write converts it into the usual envelope or <code>{ statusCode: 500 }</code>, so the build still completes.</p>
+<p>A custom <a href="/eleventy-plugin-netlify-data-store/preview/10/configuration/"><code>getStore</code></a> factory skips the check, because it owns its own configuration.</p>
 
 	<nav aria-label="Pager">
-	<a rel="prev" href="/eleventy-plugin-netlify-data-store/preview/10/usage/">Usage</a>
-	<a rel="next" href="/eleventy-plugin-netlify-data-store/preview/10/compatibility/">Compatibility</a>
+	<a rel="prev" href="/eleventy-plugin-netlify-data-store/preview/10/getting-started/">Getting started</a>
+	<a rel="next" href="/eleventy-plugin-netlify-data-store/preview/10/configuration/">Configuration</a>
 </nav>
 
 

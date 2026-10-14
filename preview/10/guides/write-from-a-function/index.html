@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+		<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Write from a scheduled function: eleventy-plugin-netlify-data-store</title>
+<meta name="description" content="Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.">
+<link rel="canonical" href="https://projects.allons-y.studio/eleventy-plugin-netlify-data-store/">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="eleventy-plugin-netlify-data-store: Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds">
+<meta property="og:description" content="Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.">
+<meta property="og:url" content="https://projects.allons-y.studio/eleventy-plugin-netlify-data-store/">
+
+<link rel="icon" href="/eleventy-plugin-netlify-data-store/preview/10/assets/img/favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Mono&amp;display=swap">
+<script src="https://kit.fontawesome.com/42e99b4632.js" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/tokens.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/reset.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/layout.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/components.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/studio.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/project.css">
+<script type="module" src="/eleventy-plugin-netlify-data-store/preview/10/assets/scripts/copy-code.js"></script>
+<script type="module" src="/eleventy-plugin-netlify-data-store/preview/10/assets/scripts/code-highlight.js"></script>
+
+	</head>
+	<body>
+		<a href="#main">Skip to content</a>
+		<header>
+			<a data-studio="banner" href="https://allons-y.studio">
+	<img src="https://raw.githubusercontent.com/allonsy-studio/.github/refs/heads/main/assets/svg/oss-banner.svg" alt="Brought to you by Allons-y Studio" width="1600" height="64">
+</a>
+
+			<div>
+	<a rel="home" href="/eleventy-plugin-netlify-data-store/preview/10/">
+		
+		<span>eleventy-plugin-netlify-data-store</span>
+	</a>
+	<nav aria-label="Primary">
+		
+		
+		
+		<a href="/eleventy-plugin-netlify-data-store/preview/10/getting-started/"><span aria-hidden="true" class="fa-solid fa-book-open"></span>Docs</a>
+		<a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store"><span aria-hidden="true" class="fa-brands fa-github"></span>GitHub</a>
+		<a href="https://www.npmjs.com/package/@allons-y/eleventy-plugin-netlify-data-store"><span aria-hidden="true" class="fa-brands fa-npm"></span>npm</a>
+	</nav>
+</div>
+
+		</header>
+		<main id="main" tabindex="-1">
+			<div>
+	<nav aria-label="Documentation">
+	<ul>
+		<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/getting-started/">Getting started</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/how-it-works/">How it works</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/configuration/">Configuration</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/write-from-a-function/" aria-current="page">Write from a scheduled function</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/read-in-templates/">Read in templates</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/offline-and-ci-builds/">Build offline &amp; in CI</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/reference/">Reference</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/compatibility/">Compatibility</a>
+		</li>
+	</ul>
+</nav>
+
+	<article>
+		<h1>Write from a scheduled function</h1>
+		
+	<p>Something has to write the content a build reads: a scheduled function, a form handler, or a webhook. Outside Eleventy, build a store directly with <code>createDataStore</code>:</p>
+<figure><pre tabindex="0"><code data-tokens="[[&quot;keyword&quot;,0,6],[&quot;punctuation&quot;,7,8],[&quot;punctuation&quot;,25,26],[&quot;keyword&quot;,27,31],[&quot;string&quot;,32,78],[&quot;punctuation&quot;,78,79],[&quot;keyword&quot;,81,86],[&quot;punctuation&quot;,87,88],[&quot;punctuation&quot;,99,100],[&quot;punctuation&quot;,101,102],[&quot;function&quot;,103,118],[&quot;punctuation&quot;,118,119],[&quot;punctuation&quot;,119,120],[&quot;function&quot;,121,130],[&quot;punctuation&quot;,130,131],[&quot;string&quot;,132,141],[&quot;punctuation&quot;,142,143],[&quot;punctuation&quot;,143,144],[&quot;punctuation&quot;,144,145],[&quot;keyword&quot;,147,153],[&quot;keyword&quot;,154,161],[&quot;keyword&quot;,162,167],[&quot;punctuation&quot;,168,169],[&quot;punctuation&quot;,169,170],[&quot;punctuation&quot;,171,173],[&quot;function&quot;,175,184],[&quot;punctuation&quot;,184,185],[&quot;string&quot;,185,195],[&quot;punctuation&quot;,195,196],[&quot;punctuation&quot;,197,198],[&quot;function&quot;,201,205],[&quot;punctuation&quot;,205,206],[&quot;punctuation&quot;,207,208],[&quot;function&quot;,209,220],[&quot;punctuation&quot;,220,221],[&quot;keyword&quot;,222,225],[&quot;function&quot;,226,230],[&quot;punctuation&quot;,230,231],[&quot;punctuation&quot;,231,232],[&quot;punctuation&quot;,232,233],[&quot;function&quot;,233,244],[&quot;punctuation&quot;,244,245],[&quot;punctuation&quot;,245,246],[&quot;punctuation&quot;,247,248],[&quot;punctuation&quot;,248,249],[&quot;function&quot;,252,259],[&quot;punctuation&quot;,259,260],[&quot;keyword&quot;,261,266],[&quot;function&quot;,267,279],[&quot;punctuation&quot;,279,280],[&quot;punctuation&quot;,280,281],[&quot;punctuation&quot;,281,282],[&quot;punctuation&quot;,284,285],[&quot;punctuation&quot;,285,286],[&quot;punctuation&quot;,286,287]]">import { createDataStore } from "@allons-y/eleventy-plugin-netlify-data-store";
+
+const { writeBlob } = createDataStore({ storeName: "content" });
+
+export default async () =&gt;
+	writeBlob("activity", {
+		meta: { generatedAt: new Date().toISOString() },
+		entries: await fetchEntries(),
+	});
+</code></pre></figure>
+<h2>Include <code>meta.generatedAt</code></h2>
+<p>The <code>generatedAt</code> filter &amp; the stale flag both build on <code>meta.generatedAt</code>, so set it to an ISO timestamp every time the content is produced. Everything else in the envelope is the writer's to define.</p>
+<h2>Check the response</h2>
+<p><code>writeBlob</code> never throws. It resolves to <code>{ statusCode, body }</code>: <code>200</code> on success, <code>400</code> when no data was supplied, &amp; <code>500</code> with the error message when the store rejects the write. A function that should fail loudly on a bad write can check <code>statusCode</code> &amp; throw.</p>
+<h2>Credentials</h2>
+<p>Set <code>NETLIFY_SITE_ID</code> &amp; <code>NETLIFY_TOKEN</code> in the function's environment, or pass <code>siteID</code> &amp; <code>token</code> as options. See <a href="/eleventy-plugin-netlify-data-store/preview/10/how-it-works/">How it works</a>.</p>
+<p>A successful write also refreshes the local cache, so a read that follows in the same process sees the new value immediately.</p>
+
+	<nav aria-label="Pager">
+	<a rel="prev" href="/eleventy-plugin-netlify-data-store/preview/10/configuration/">Configuration</a>
+	<a rel="next" href="/eleventy-plugin-netlify-data-store/preview/10/guides/read-in-templates/">Read in templates</a>
+</nav>
+
+
+	</article>
+</div>
+
+
+		</main>
+		<footer>
+	<div>
+		<div>
+			<p><strong>eleventy-plugin-netlify-data-store</strong></p>
+			<p>Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.</p>
+			<p>
+				<small>
+					Licensed under
+					<a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/LICENSE" data-license="">MPL-2.0</a>
+				</small>
+			</p>
+		</div>
+		<nav aria-label="Project links">
+			<p><strong>Project</strong></p>
+			<ul>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store"><span aria-hidden="true" class="fa-brands fa-github"></span>GitHub</a></li>
+				<li><a href="https://www.npmjs.com/package/@allons-y/eleventy-plugin-netlify-data-store"><span aria-hidden="true" class="fa-brands fa-npm"></span>npm</a></li>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/CHANGELOG.md"><span aria-hidden="true" class="fa-solid fa-list"></span>Changelog</a></li>
+			</ul>
+		</nav>
+		<nav aria-label="Help links">
+			<p><strong>Help</strong></p>
+			<ul>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/issues"><span aria-hidden="true" class="fa-solid fa-bug"></span>Report an issue</a></li>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/.github/CONTRIBUTING.md"><span aria-hidden="true" class="fa-solid fa-code-pull-request"></span>Contributing guide</a></li>
+				<li><a href="https://github.com/allonsy-studio/.github/blob/main/CODE_OF_CONDUCT.md"><span aria-hidden="true" class="fa-solid fa-scale-balanced"></span>Code of conduct</a></li>
+				<li><a href="https://github.com/allonsy-studio/.github/blob/main/SECURITY.md"><span aria-hidden="true" class="fa-solid fa-shield-halved"></span>Security policy</a></li>
+			</ul>
+		</nav>
+	</div>
+	<div>
+		<div data-studio="cta">
+	<p>Work with Allons-y Studio</p>
+	<p>Design systems, front-end engineering, &amp; accessibility consulting for teams that depend on open source.</p>
+	<a href="mailto:consulting@allons-y.studio">consulting@allons-y.studio</a>
+</div>
+
+		<a data-studio="footer" href="https://allons-y.studio">
+	<picture>
+		<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/allonsy-studio/.github/refs/heads/main/assets/svg/oss-footer-dark.svg">
+		<img src="https://raw.githubusercontent.com/allonsy-studio/.github/refs/heads/main/assets/svg/oss-footer-light.svg" alt="Brought to you by Allons-y Studio" width="440" height="75">
+	</picture>
+	
+</a>
+
+	</div>
+</footer>
+
+	
+
+</body>
+</html>

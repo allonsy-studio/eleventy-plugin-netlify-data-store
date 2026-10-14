@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+		<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Read in templates: eleventy-plugin-netlify-data-store</title>
+<meta name="description" content="Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.">
+<link rel="canonical" href="https://projects.allons-y.studio/eleventy-plugin-netlify-data-store/">
+<meta name="color-scheme" content="light dark">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="eleventy-plugin-netlify-data-store: Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds">
+<meta property="og:description" content="Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.">
+<meta property="og:url" content="https://projects.allons-y.studio/eleventy-plugin-netlify-data-store/">
+
+<link rel="icon" href="/eleventy-plugin-netlify-data-store/preview/10/assets/img/favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Mono&amp;display=swap">
+<script src="https://kit.fontawesome.com/42e99b4632.js" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/tokens.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/reset.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/layout.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/components.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/studio.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/10/assets/styles/project.css">
+<script type="module" src="/eleventy-plugin-netlify-data-store/preview/10/assets/scripts/copy-code.js"></script>
+<script type="module" src="/eleventy-plugin-netlify-data-store/preview/10/assets/scripts/code-highlight.js"></script>
+
+	</head>
+	<body>
+		<a href="#main">Skip to content</a>
+		<header>
+			<a data-studio="banner" href="https://allons-y.studio">
+	<img src="https://raw.githubusercontent.com/allonsy-studio/.github/refs/heads/main/assets/svg/oss-banner.svg" alt="Brought to you by Allons-y Studio" width="1600" height="64">
+</a>
+
+			<div>
+	<a rel="home" href="/eleventy-plugin-netlify-data-store/preview/10/">
+		
+		<span>eleventy-plugin-netlify-data-store</span>
+	</a>
+	<nav aria-label="Primary">
+		
+		
+		
+		<a href="/eleventy-plugin-netlify-data-store/preview/10/getting-started/"><span aria-hidden="true" class="fa-solid fa-book-open"></span>Docs</a>
+		<a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store"><span aria-hidden="true" class="fa-brands fa-github"></span>GitHub</a>
+		<a href="https://www.npmjs.com/package/@allons-y/eleventy-plugin-netlify-data-store"><span aria-hidden="true" class="fa-brands fa-npm"></span>npm</a>
+	</nav>
+</div>
+
+		</header>
+		<main id="main" tabindex="-1">
+			<div>
+	<nav aria-label="Documentation">
+	<ul>
+		<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/getting-started/">Getting started</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/how-it-works/">How it works</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/configuration/">Configuration</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/write-from-a-function/">Write from a scheduled function</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/read-in-templates/" aria-current="page">Read in templates</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/guides/offline-and-ci-builds/">Build offline &amp; in CI</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/reference/">Reference</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/10/compatibility/">Compatibility</a>
+		</li>
+	</ul>
+</nav>
+
+	<article>
+		<h1>Read in templates</h1>
+		
+	<p>Wire each read into global data in the Eleventy config, &amp; the whole envelope is available to every template.</p>
+<figure><pre tabindex="0"><code data-tokens="[[&quot;punctuation&quot;,14,15],[&quot;function&quot;,15,28],[&quot;punctuation&quot;,28,29],[&quot;string&quot;,29,39],[&quot;punctuation&quot;,39,40],[&quot;punctuation&quot;,41,42],[&quot;punctuation&quot;,42,43],[&quot;punctuation&quot;,44,46],[&quot;function&quot;,47,55],[&quot;punctuation&quot;,55,56],[&quot;string&quot;,56,66],[&quot;punctuation&quot;,66,67],[&quot;punctuation&quot;,67,68],[&quot;punctuation&quot;,68,69]]">eleventyConfig.addGlobalData("activity", () =&gt; readBlob("activity"));
+</code></pre></figure>
+<h2>Reach the store from a callback</h2>
+<p><code>immediate: true</code> makes the store available while the config file runs, which is what makes destructuring work. Without it, reach for <code>eleventyConfig.netlifyDataStore</code> from inside a callback, where the plugin has already run:</p>
+<figure><pre tabindex="0"><code data-tokens="[[&quot;punctuation&quot;,14,15],[&quot;function&quot;,15,24],[&quot;punctuation&quot;,24,25],[&quot;punctuation&quot;,41,42],[&quot;punctuation&quot;,43,44],[&quot;function&quot;,45,48],[&quot;punctuation&quot;,48,49],[&quot;string&quot;,50,54],[&quot;punctuation&quot;,55,56],[&quot;punctuation&quot;,56,57],[&quot;punctuation&quot;,57,58],[&quot;punctuation&quot;,74,75],[&quot;function&quot;,75,88],[&quot;punctuation&quot;,88,89],[&quot;string&quot;,89,99],[&quot;punctuation&quot;,99,100],[&quot;punctuation&quot;,101,102],[&quot;punctuation&quot;,102,103],[&quot;punctuation&quot;,104,106],[&quot;punctuation&quot;,122,123],[&quot;punctuation&quot;,139,140],[&quot;function&quot;,140,148],[&quot;punctuation&quot;,148,149],[&quot;string&quot;,149,159],[&quot;punctuation&quot;,159,160],[&quot;punctuation&quot;,161,162],[&quot;punctuation&quot;,162,163]]">eleventyConfig.addPlugin(netlifyDataStore, { ttl: "1h" });
+
+eleventyConfig.addGlobalData("activity", () =&gt;
+	eleventyConfig.netlifyDataStore.readBlob("activity")
+);
+</code></pre></figure>
+<h2>Render every state</h2>
+<p>A read resolves to the content, the content flagged stale, or an error envelope. Check <code>meta</code> first so a template renders a fallback instead of failing the build:</p>
+<figure><pre tabindex="0"><code data-tokens="[[&quot;punctuation&quot;,31,32],[&quot;keyword&quot;,32,33],[&quot;punctuation&quot;,33,34],[&quot;punctuation&quot;,55,57],[&quot;keyword&quot;,57,58],[&quot;punctuation&quot;,58,59],[&quot;punctuation&quot;,73,74],[&quot;keyword&quot;,74,75],[&quot;punctuation&quot;,75,76],[&quot;punctuation&quot;,129,131],[&quot;keyword&quot;,131,132],[&quot;punctuation&quot;,132,133],[&quot;punctuation&quot;,165,166],[&quot;keyword&quot;,166,167],[&quot;punctuation&quot;,167,168],[&quot;punctuation&quot;,185,187],[&quot;keyword&quot;,187,188],[&quot;punctuation&quot;,188,189],[&quot;punctuation&quot;,204,205],[&quot;keyword&quot;,205,207],[&quot;punctuation&quot;,207,208],[&quot;punctuation&quot;,252,253],[&quot;keyword&quot;,253,255],[&quot;punctuation&quot;,255,256],[&quot;punctuation&quot;,273,275],[&quot;keyword&quot;,275,277],[&quot;punctuation&quot;,277,278],[&quot;punctuation&quot;,297,299],[&quot;keyword&quot;,299,301],[&quot;punctuation&quot;,301,302]]">{% if activity.meta.error %}
+  &lt;p&gt;Activity unavailable.&lt;/p&gt;
+{% else %}
+  &lt;p&gt;Updated {{ activity.meta.generatedAt | generatedAt }}&lt;/p&gt;
+  {%- if activity.meta.stale %}&lt;p&gt;Last cached copy.&lt;/p&gt;{%- endif %}
+  &lt;ul&gt;
+  {%- for entry in activity.entries %}
+    &lt;li&gt;{{ entry.title }}&lt;/li&gt;
+  {%- endfor %}
+  &lt;/ul&gt;
+{% endif %}
+</code></pre></figure>
+<p><code>meta.cacheAge</code> is the stale entry's age in milliseconds, for a message such as "last updated 3 hours ago". See <a href="/eleventy-plugin-netlify-data-store/preview/10/how-it-works/">How it works</a> for every <code>meta</code> key.</p>
+<h2>Read from another store</h2>
+<p>Both <code>readBlob</code> &amp; <code>listData</code> take an optional store name as their last argument, &amp; fall back to the <code>storeName</code> option.</p>
+<figure><pre tabindex="0"><code data-tokens="[[&quot;keyword&quot;,0,3],[&quot;punctuation&quot;,11,12],[&quot;keyword&quot;,13,18],[&quot;function&quot;,19,27],[&quot;punctuation&quot;,27,28],[&quot;string&quot;,28,36],[&quot;punctuation&quot;,36,37],[&quot;punctuation&quot;,37,38],[&quot;keyword&quot;,39,42],[&quot;punctuation&quot;,49,50],[&quot;keyword&quot;,51,56],[&quot;function&quot;,57,65],[&quot;punctuation&quot;,65,66],[&quot;punctuation&quot;,72,73],[&quot;number&quot;,73,74],[&quot;punctuation&quot;,74,75],[&quot;punctuation&quot;,75,76],[&quot;string&quot;,77,85],[&quot;punctuation&quot;,85,86],[&quot;punctuation&quot;,86,87]]">let drafts = await listData("drafts");
+let first = await readBlob(drafts[0], "drafts");
+</code></pre></figure>
+
+	<nav aria-label="Pager">
+	<a rel="prev" href="/eleventy-plugin-netlify-data-store/preview/10/guides/write-from-a-function/">Write from a scheduled function</a>
+	<a rel="next" href="/eleventy-plugin-netlify-data-store/preview/10/guides/offline-and-ci-builds/">Build offline &amp; in CI</a>
+</nav>
+
+
+	</article>
+</div>
+
+
+		</main>
+		<footer>
+	<div>
+		<div>
+			<p><strong>eleventy-plugin-netlify-data-store</strong></p>
+			<p>Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.</p>
+			<p>
+				<small>
+					Licensed under
+					<a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/LICENSE" data-license="">MPL-2.0</a>
+				</small>
+			</p>
+		</div>
+		<nav aria-label="Project links">
+			<p><strong>Project</strong></p>
+			<ul>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store"><span aria-hidden="true" class="fa-brands fa-github"></span>GitHub</a></li>
+				<li><a href="https://www.npmjs.com/package/@allons-y/eleventy-plugin-netlify-data-store"><span aria-hidden="true" class="fa-brands fa-npm"></span>npm</a></li>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/CHANGELOG.md"><span aria-hidden="true" class="fa-solid fa-list"></span>Changelog</a></li>
+			</ul>
+		</nav>
+		<nav aria-label="Help links">
+			<p><strong>Help</strong></p>
+			<ul>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/issues"><span aria-hidden="true" class="fa-solid fa-bug"></span>Report an issue</a></li>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/.github/CONTRIBUTING.md"><span aria-hidden="true" class="fa-solid fa-code-pull-request"></span>Contributing guide</a></li>
+				<li><a href="https://github.com/allonsy-studio/.github/blob/main/CODE_OF_CONDUCT.md"><span aria-hidden="true" class="fa-solid fa-scale-balanced"></span>Code of conduct</a></li>
+				<li><a href="https://github.com/allonsy-studio/.github/blob/main/SECURITY.md"><span aria-hidden="true" class="fa-solid fa-shield-halved"></span>Security policy</a></li>
+			</ul>
+		</nav>
+	</div>
+	<div>
+		<div data-studio="cta">
+	<p>Work with Allons-y Studio</p>
+	<p>Design systems, front-end engineering, &amp; accessibility consulting for teams that depend on open source.</p>
+	<a href="mailto:consulting@allons-y.studio">consulting@allons-y.studio</a>
+</div>
+
+		<a data-studio="footer" href="https://allons-y.studio">
+	<picture>
+		<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/allonsy-studio/.github/refs/heads/main/assets/svg/oss-footer-dark.svg">
+		<img src="https://raw.githubusercontent.com/allonsy-studio/.github/refs/heads/main/assets/svg/oss-footer-light.svg" alt="Brought to you by Allons-y Studio" width="440" height="75">
+	</picture>
+	
+</a>
+
+	</div>
+</footer>
+
+	
+
+</body>
+</html>
