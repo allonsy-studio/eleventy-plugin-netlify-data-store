@@ -12,7 +12,7 @@ const HEADER = [
 
 export default defineConfig([
 	{
-		ignores: ["**/_site/**", "node_modules/**", "sample/blobs-cache/**", "CHANGELOG.md"],
+		ignores: ["**/_site/**", ".yarn/**", "node_modules/**", "sample/blobs-cache/**", "CHANGELOG.md"],
 	},
 	{
 		files: ["**/*.js"],
@@ -22,6 +22,7 @@ export default defineConfig([
 			ecmaVersion: "latest",
 			sourceType: "module",
 			globals: {
+				URL: "readonly",
 				console: "readonly",
 				process: "readonly",
 			},

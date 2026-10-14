@@ -241,6 +241,7 @@ __metadata:
     "@netlify/blobs": "npm:^11.0.3"
     ava: "npm:^6.4.1"
     axe-core: "npm:^4.11.0"
+    comment-parser: "npm:^1.4.9"
     cypress: "npm:^15.21.1"
     cypress-axe: "npm:^1.7.0"
     eslint: "npm:^9.39.5"
@@ -2188,6 +2189,13 @@ __metadata:
   version: 8.3.0
   resolution: "commander@npm:8.3.0"
   checksum: 10c0/8b043bb8322ea1c39664a1598a95e0495bfe4ca2fad0d84a92d7d1d8d213e2a155b441d2470c8e08de7c4a28cf2bc6e169211c49e1b21d9f7edc6ae4d9356060
+  languageName: node
+  linkType: hard
+
+"comment-parser@npm:^1.4.9":
+  version: 1.4.9
+  resolution: "comment-parser@npm:1.4.9"
+  checksum: 10c0/bf81563f8588a9de7f1b49f46c8660899147c8313a01a5c48cc88a89a401c68952004cdd15644f21d9fb10c1f21e63366dc8627468a576d5d3400ee5ca7178a4
   languageName: node
   linkType: hard
 

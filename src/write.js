@@ -9,7 +9,7 @@ import { getStore, storeLabel } from "./store.js";
 /**
  * Writes a `{meta, ...content}` envelope to the Netlify Blobs store &
  * refreshes the local cache so a following read sees it immediately.
- * Like reads, writes never throw — the response shape carries the outcome.
+ * Like reads, writes never throw: the response shape carries the outcome.
  * @param {string} name
  * @param {object} data
  * @param {string} [storeName]

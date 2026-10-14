@@ -6,7 +6,7 @@
 import { getStore } from "./store.js";
 
 /**
- * Lists the blob keys held in a store. Always returns an array — failures
+ * Lists the blob keys held in a store. Always returns an array: failures
  * log & resolve to an empty list.
  * @param {string} [storeName]
  * @param {import("./index.js").DataStoreContext} context
