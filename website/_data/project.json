@@ -1,6 +1,7 @@
 {
 	"lede": "Build-time content from Netlify Blobs, cached locally with a TTL you control, so builds stay fast, survive an outage, & never fail on missing data.",
 	"install": "yarn add @allons-y/eleventy-plugin-netlify-data-store",
+	"favicon": "favicon.svg",
 	"usage": {
 		"language": "js",
 		"caption": "eleventy.config.js",

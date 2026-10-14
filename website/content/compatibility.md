@@ -2,6 +2,7 @@
 title: Compatibility
 description: Supported Eleventy & Node versions, & use outside Eleventy.
 icon: "fa-solid fa-circle-check"
+templateEngineOverride: md
 order: 4
 ---
 - <span class="fa-solid fa-check" aria-hidden="true"></span> **Eleventy 3.0+**: declared as an optional peer dependency.

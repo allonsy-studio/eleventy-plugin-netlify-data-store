@@ -2,6 +2,7 @@
 title: Usage
 description: Write an envelope from a function, read it back in a template.
 icon: "fa-solid fa-code"
+templateEngineOverride: md
 order: 2
 ---
 Something writes an envelope: a scheduled function, a form handler, or a webhook. A template reads the whole envelope back & destructures metadata & content together.
@@ -22,7 +23,6 @@ export default async () =>
 
 ## Read
 
-{% raw %}
 ```html
 {% if activity.meta.error %}
   <p>Activity unavailable.</p>
@@ -36,7 +36,6 @@ export default async () =>
   </ul>
 {% endif %}
 ```
-{% endraw %}
 
 ## Resolution order
 
