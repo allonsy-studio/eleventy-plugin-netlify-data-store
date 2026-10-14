@@ -249,6 +249,9 @@ __metadata:
     prismjs: "npm:^1.30.0"
   peerDependencies:
     "@11ty/eleventy": ">=3.0.0"
+  dependenciesMeta:
+    cypress:
+      built: true
   peerDependenciesMeta:
     "@11ty/eleventy":
       optional: true
