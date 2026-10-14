@@ -3,6 +3,6 @@
 export default {
 	title: "Reference",
 	description: "Every function & option, generated from the JSDoc in src/.",
-	icon: "fa-solid fa-book",
+	icon: "book",
 	order: 7,
 };

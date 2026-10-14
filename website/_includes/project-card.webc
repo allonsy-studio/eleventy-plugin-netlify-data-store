@@ -1,7 +1,7 @@
-<!--- Card. Props: title, body, href (optional), icon (optional Font Awesome classes). --->
+<!--- Card. Props: title, body, href (optional), icon (optional: "rocket", "brands/github"). --->
 <article>
+	<span webc:if="icon" aria-hidden="true"><fa-icon :@name="icon"></fa-icon></span>
 	<h3>
-		<span webc:if="icon" :class="icon" aria-hidden="true"></span>
 		<a webc:if="href" :href="href" @text="title"></a>
 		<span webc:else @text="title"></span>
 	</h3>

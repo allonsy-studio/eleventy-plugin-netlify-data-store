@@ -1,7 +1,7 @@
 ---
 title: Configuration
 description: Pass options to the plugin, & what the common ones do.
-icon: "fa-solid fa-sliders"
+icon: sliders
 templateEngineOverride: md
 order: 3
 ---

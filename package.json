@@ -88,6 +88,7 @@
     "@changesets/cli": "^3.0.2",
     "@eslint/js": "^9.39.5",
     "@eslint/markdown": "^8.0.2",
+    "@fortawesome/fontawesome-free": "^7.3.1",
     "ava": "^6.4.1",
     "axe-core": "^4.11.0",
     "comment-parser": "^1.4.9",

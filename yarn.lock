@@ -238,6 +238,7 @@ __metadata:
     "@changesets/cli": "npm:^3.0.2"
     "@eslint/js": "npm:^9.39.5"
     "@eslint/markdown": "npm:^8.0.2"
+    "@fortawesome/fontawesome-free": "npm:^7.3.1"
     "@netlify/blobs": "npm:^11.0.3"
     ava: "npm:^6.4.1"
     axe-core: "npm:^4.11.0"
@@ -813,6 +814,13 @@ __metadata:
   version: 3.2.2
   resolution: "@fastify/busboy@npm:3.2.2"
   checksum: 10c0/d19f67952b7e2b3305606444d3e9da8dc20e18537e52ec2f367429d4b4846fcbbd1b5b6b4e79c00dbf59c1734af2b2135a2dedb5b28eaa7f21b72eef40ca8f2f
+  languageName: node
+  linkType: hard
+
+"@fortawesome/fontawesome-free@npm:^7.3.1":
+  version: 7.3.1
+  resolution: "@fortawesome/fontawesome-free@npm:7.3.1"
+  checksum: 10c0/85b70ea64e69b9635ff0b949871acaaf0e6c6fd41860b8a78a5067123a42dd71144f7f7feea7aee013a485166ee8bf8ee3aafb15146dc0f55512d07015adddee
   languageName: node
   linkType: hard
 

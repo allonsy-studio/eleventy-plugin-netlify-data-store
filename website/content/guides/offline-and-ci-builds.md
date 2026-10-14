@@ -1,7 +1,7 @@
 ---
 title: Build offline & in CI
 description: Run builds from a warm cache with no credentials & no network.
-icon: "fa-solid fa-plane-up"
+icon: plane-up
 templateEngineOverride: md
 order: 6
 ---

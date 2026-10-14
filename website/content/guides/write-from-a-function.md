@@ -1,7 +1,7 @@
 ---
 title: Write from a scheduled function
 description: Produce an envelope outside Eleventy & store it in Netlify Blobs.
-icon: "fa-solid fa-pen-to-square"
+icon: pen-to-square
 templateEngineOverride: md
 order: 4
 ---

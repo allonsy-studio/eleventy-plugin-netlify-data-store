@@ -1,7 +1,7 @@
 ---
 title: Read in templates
 description: Load blobs into global data, & render the stale & error states.
-icon: "fa-solid fa-code"
+icon: code
 templateEngineOverride: md
 order: 5
 ---
