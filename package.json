@@ -80,7 +80,7 @@
     "@11ty/eleventy-plugin-webc": "^0.11.2",
     "@allons-y/dashly": "^0.1.0-beta.0",
     "@allons-y/opx-cli": "^0.1.0-beta.0",
-    "@allons-y/opx-lint-js": "^0.1.0-beta.0",
+    "@allons-y/opx-lint-js": "^1.0.0-beta.1",
     "@allons-y/opx-lint-json": "^0.1.0-beta.0",
     "@allons-y/opx-lint-md": "^0.1.0-beta.0",
     "@changesets/cli": "^3.0.2",
