@@ -1,7 +1,0 @@
-/* ============================================================
-   FONTS — Allons-y's four typefaces, loaded from Google Fonts.
-   These are the genuine families used in production (not
-   substitutes). Self-host the .woff2 files for offline use.
-   ============================================================ */
-
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Dancing+Script:wght@400..700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=PT+Mono&display=swap");
