@@ -1,6 +1,24 @@
 /* Project styles: the accent & fonts. Edit freely; the scaffold never overwrites this file. */
 :root {
 	--accent: #ff944d;
+	/* Ink blue for text & rings, instead of the orange pulled toward the text color (brown). */
+	--accent-text: light-dark(#2b3a67, #b8c7f5);
 	/* Fonts: Instrument Sans for text & headings. Yellowtail is a signature face for signing a name, so it is not set as the display font. */
 	--font-sans: "Instrument Sans", "Instrument Sans Fallback", var(--sans-stack);
+}
+
+/* The studio name in the call to action reads as plain text, not small caps in yellow. */
+[data-studio="cta"] > div > p:has(+ h2) {
+	color: inherit;
+	font-size: inherit;
+	font-weight: 600;
+	letter-spacing: normal;
+	text-transform: none;
+}
+
+/* The call to action closes the page body, above the footer. */
+main > [data-studio="cta"] {
+	max-inline-size: 64rem;
+	margin-block: var(--space-xl) 0;
+	margin-inline: auto;
 }
