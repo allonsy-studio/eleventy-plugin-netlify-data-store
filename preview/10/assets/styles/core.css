@@ -77,8 +77,8 @@
 
 		/* Surfaces */
 		--bg: light-dark(#ffffff, #101216);
-		--bg-elev: light-dark(#f4f5f8, #181b21);
-		--code-bg: light-dark(#eceef3, #1d212a);
+		--bg-elev: light-dark(hsl(40, 14%, 96%), hsl(0, 0%, 11%));
+		--code-bg: light-dark(hsl(40, 14%, 94%), hsl(0, 0%, 14%));
 		--border: light-dark(#d3d8e2, #2d323e);
 
 		/* Text */
@@ -87,8 +87,11 @@
 
 		/* Placeholder, replaced by the project block. */
 		--accent: #2346d4;
-		/* Accent pulled toward the text color. */
-		--accent-text: color-mix(in oklab, var(--accent) 45%, var(--fg));
+		/* Accent for text & links: darkened on light surfaces (never lighter than L 0.52, so bright accents hold 4.5:1), lightened on dark ones. */
+		--accent-text: light-dark(
+			oklch(from color-mix(in oklch, var(--accent) 82%, black) min(l, 0.52) c h),
+			color-mix(in oklch, var(--accent) 55%, white)
+		);
 		/* Ink or white by accent lightness. */
 		--on-accent: oklab(from var(--accent) clamp(0, calc((0.58 - l) * 1000), 1) 0 0);
 
@@ -125,7 +128,7 @@
 		--feature-4: var(--studio-yellow);
 
 		/* Shape & rhythm */
-		--radius: 0.5rem;
+		--radius: 6px;
 		--space-xs: 0.5rem;
 		--space-s: 0.75rem;
 		--space-m: 1.25rem;
@@ -219,6 +222,10 @@
 		text-wrap: pretty;
 	}
 
+	p {
+		line-height: 1.4;
+	}
+
 	a {
 		color: var(--accent-text);
 		text-decoration: underline dotted;
@@ -233,8 +240,19 @@
 	}
 
 	:focus-visible {
-		outline: 3px solid var(--accent-text);
+		outline: 2px solid var(--accent-text);
 		outline-offset: 2px;
+	}
+
+	/* Links in running text take a hairline ring; bold or large text, & controls, keep 2px. */
+	:is(p, li, dd, td, th, small, figcaption, nav) a:focus-visible {
+		outline-width: 1px;
+	}
+
+	:is(h1, h2, h3, strong) a:focus-visible,
+	main > header nav a:focus-visible,
+	[data-studio="cta"] a:focus-visible {
+		outline-width: 2px;
 	}
 
 	main:focus {
@@ -268,7 +286,7 @@
 	}
 
 	:is(body > footer > div > *, li > article) {
-		gap: var(--space-xs);
+		gap: var(--space-s);
 	}
 
 	/* Header */
@@ -292,6 +310,12 @@
 		font-size: 1.2rem;
 		font-weight: 700;
 		text-decoration: none;
+	}
+
+	/* The reset's block-size: auto would drop the height attribute, so an SVG logo renders at full size. */
+	body > header a[rel="home"] img {
+		block-size: 2rem;
+		inline-size: auto;
 	}
 
 	body > header nav {
@@ -331,7 +355,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-xs);
-		font-size: clamp(1.9rem, 5vw, 3.1rem);
+		font-size: clamp(2rem, 5vw, 3.25rem);
 	}
 
 	main > header h1 > :first-child {
@@ -345,6 +369,7 @@
 
 	main > header > p {
 		max-inline-size: var(--measure);
+		color: var(--fg-muted);
 		font-size: 1.2rem;
 	}
 
@@ -362,7 +387,7 @@
 	main > header > ul {
 		display: flex;
 		flex-wrap: wrap;
-		gap: var(--space-xs);
+		gap: var(--space-l) var(--space-m);
 		color: var(--fg-muted);
 		font-size: 0.95rem;
 	}
@@ -377,32 +402,99 @@
 		padding-block: var(--space-l);
 	}
 
+	/* The sidebar stays in view beside the page; a long list scrolls inside it, below the search. */
 	nav[aria-label="Documentation"] {
+		position: sticky;
+		inset-block-start: var(--space-m);
+		display: flex;
+		flex-direction: column;
 		align-self: start;
-		font-size: 0.95rem;
+		max-block-size: calc(100dvh - 2 * var(--space-m));
+		font-size: 0.92rem;
+	}
+
+	/* Padding with an equal negative margin gives focus rings room: overflow clips them at the box edge. */
+	nav[aria-label="Documentation"] > ul {
+		min-block-size: 0;
+		margin: -6px;
+		padding: 6px;
+		overflow-y: auto;
+		overscroll-behavior: contain;
 	}
 
 	nav[aria-label="Documentation"] ul {
 		display: flex;
 		flex-direction: column;
-		gap: 0.4rem;
+		gap: 0.15rem;
+	}
+
+	/* Pages nested under a page: a rule down the left. */
+	nav[aria-label="Documentation"] ul ul {
+		margin: 0.15rem 0 0.5rem 0.5rem;
+		padding-inline-start: 0.75rem;
+		border-inline-start: 1px solid var(--border);
+	}
+
+	nav[aria-label="Documentation"] a {
+		display: flex;
+		align-items: baseline;
+		gap: 0.55rem;
+		padding: 0.25rem 0.5rem;
+		border-radius: 0 4px 4px 0;
+		color: var(--fg-muted);
+		text-decoration: none;
+	}
+
+	nav[aria-label="Documentation"] a > svg {
+		color: var(--accent-text);
+	}
+
+	nav[aria-label="Documentation"] a:hover {
+		background: var(--bg-elev);
+		color: var(--fg);
 	}
 
 	nav[aria-label="Documentation"] a[aria-current="page"] {
-		color: var(--fg);
-		font-weight: 700;
-		text-decoration: none;
+		background: var(--bg-elev);
+		box-shadow: inset 3px 0 0 var(--accent);
+		color: var(--accent-text);
+		font-weight: 600;
 	}
 
 	main > div > article {
 		display: grid;
 		align-content: start;
 		gap: var(--space-m);
-		max-inline-size: var(--measure);
 	}
 
 	main > div > article h1 {
 		font-size: clamp(1.9rem, 4vw, 2.5rem);
+	}
+
+	/* A package icon sits beside the heading; a package wordmark replaces its text. */
+	main > div > article h1:has(> img) {
+		display: flex;
+		align-items: center;
+		gap: var(--space-s);
+	}
+
+	main > div > article h1 > img {
+		flex: none;
+		block-size: 1.4em;
+		inline-size: auto;
+	}
+
+	main > div > article h1 > img:only-child {
+		block-size: clamp(2.5rem, 6vw, 3.5rem);
+	}
+
+	/* Sections inside a page stack with a small row gap. */
+	main > div > article :is(article, section) {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		min-inline-size: 0;
+		align-content: start;
+		gap: var(--space-s);
 	}
 
 	nav[aria-label="Pager"] {
@@ -449,18 +541,25 @@
 		margin-inline: auto;
 	}
 
-	/* Lock-up: name, link columns, & the studio credit */
+	/* Lock-up: name, link columns, & the studio credit, which takes a fourth column when wide */
 	body > footer > div {
-		display: flex;
-		flex-wrap: wrap;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
 		align-items: start;
-		justify-content: space-between;
 		gap: var(--space-l);
 	}
 
-	body > footer > div > :first-child {
-		flex: 1 1 18rem;
-		max-inline-size: 28rem;
+	@media (min-width: 60rem) {
+		body > footer > div {
+			grid-template-columns: minmax(0, 25rem) repeat(2, minmax(min-content, max-content));
+			justify-content: space-between;
+		}
+
+		body > footer > div:has(> [data-studio="footer"]) {
+			grid-template-columns:
+				minmax(0, 25rem) repeat(2, minmax(min-content, max-content))
+				minmax(0, 13.75rem);
+		}
 	}
 
 	body > footer > div > :first-child strong {
@@ -483,9 +582,30 @@
 		font-size: 0.9rem;
 	}
 
+	/* npm badges: shown only once the package has a release */
+	body > footer [data-badges] {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-xs);
+	}
+
+	body > footer [data-badges] img {
+		inline-size: auto;
+		block-size: 20px;
+	}
+
 	@media (max-width: 40rem) {
 		main > div:has(> nav[aria-label="Documentation"]) {
 			grid-template-columns: minmax(0, 1fr);
+		}
+
+		nav[aria-label="Documentation"] {
+			position: static;
+			max-block-size: none;
+		}
+
+		nav[aria-label="Documentation"] > ul {
+			overflow-y: visible;
 		}
 	}
 }
@@ -540,7 +660,7 @@
 		align-items: center;
 		gap: 0.5em;
 		padding: 0.6rem 1.1rem;
-		border: 2px solid var(--accent-text);
+		border: 1px solid var(--accent);
 		border-radius: var(--radius);
 		background: var(--accent);
 		color: var(--on-accent);
@@ -564,15 +684,11 @@
 		}
 	}
 
-	/* Chips */
+	/* Tags: an icon & a few words, no box */
 	main > header > ul > li {
 		display: inline-flex;
 		align-items: center;
 		gap: 0.4em;
-		padding: 0.15rem 0.75rem;
-		border: 1px solid var(--border);
-		border-radius: 999px;
-		background: var(--bg-elev);
 		line-height: 1.5;
 	}
 
@@ -618,7 +734,7 @@
 		position: absolute;
 		inset: -1px;
 		inline-size: calc(100% + 2px);
-		block-size: 1em;
+		block-size: 0.6em;
 		border-radius: var(--radius) var(--radius) 0 0;
 		background: var(--feature);
 	}
@@ -632,6 +748,13 @@
 		border-radius: var(--radius);
 		background: color-mix(in srgb, var(--feature) 28%, transparent);
 		font-size: 1.25rem;
+	}
+
+	li > article > img {
+		justify-self: start;
+		inline-size: 3rem;
+		block-size: 3rem;
+		border-radius: var(--radius);
 	}
 
 	li > article > h3 {
@@ -651,9 +774,47 @@
 		color: var(--fg-muted);
 	}
 
+	/* Contents: a term & its description, in two columns when wide */
+	main > section > dl {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+		gap: var(--space-m) var(--space-l);
+	}
+
+	main > section > dl > div {
+		display: grid;
+		align-content: start;
+		gap: 0.25rem;
+		padding-block-end: var(--space-s);
+		border-block-end: 1px solid var(--border);
+	}
+
+	main > section > dl dt {
+		font-family: var(--font-display);
+		font-size: 1.1rem;
+		font-weight: 700;
+	}
+
+	main > section > dl dd {
+		margin: 0;
+		color: var(--fg-muted);
+	}
+
 	/* Prose: the body of a docs page */
 	main > div > article :is(h2, h3) {
 		margin-block-start: var(--space-s);
+	}
+
+	/* A heading that links is marked with a #, & its link takes the text color. */
+	:is(main > div > article, [data-pagefind-body]) :is(h1, h2, h3, h4, h5, h6):has(> a)::before {
+		content: "#";
+		content: "#" / "";
+		margin-inline-end: 0.25em;
+	}
+
+	:is(main > div > article, [data-pagefind-body]) :is(h1, h2, h3, h4, h5, h6) > a {
+		color: inherit;
+		text-underline-offset: 0.1em;
 	}
 
 	main > div > article h2 {
@@ -679,13 +840,18 @@
 
 	main > div > article table {
 		border-collapse: collapse;
-		border-block: 1px solid var(--border);
+		border-block-end: 1px solid var(--border);
 	}
 
 	main > div > article :is(th, td) {
 		padding: var(--space-xs) var(--space-s);
 		border-block-end: 1px solid var(--border);
 		text-align: start;
+	}
+
+	/* A wide table scrolls sideways inside its own focusable region. */
+	[data-scroll] {
+		overflow-x: auto;
 	}
 
 	main > div > article hr {
@@ -915,6 +1081,18 @@
 		font-size: clamp(1.35rem, 3vw, 1.75rem);
 	}
 
+	/* The studio name is signed, wherever it appears in the call to action. */
+	[data-studio="cta"] [data-signature] {
+		font-family: var(--font-signature);
+		font-size: 1.3em;
+		font-weight: 400;
+		line-height: 1;
+	}
+
+	[data-studio="cta"] > div > p [data-signature] {
+		font-size: 1.5em;
+	}
+
 	[data-studio="cta"] ul {
 		flex-direction: row;
 		flex-wrap: wrap;
@@ -950,9 +1128,15 @@
 		}
 	}
 
+	/* The footer art is 880 x 150 with about 270 of blank canvas on each side: crop to a 300 x 135 box. */
 	[data-studio="footer"] {
 		display: block;
-		max-inline-size: 100%;
-		margin-inline-start: auto;
+		max-inline-size: min(100%, 20rem);
+	}
+
+	[data-studio="footer"] img {
+		inline-size: 100%;
+		aspect-ratio: 300 / 135;
+		object-fit: cover;
 	}
 }
