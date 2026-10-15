@@ -13,7 +13,7 @@
   <img src="https://github.com/allonsy-studio/.github/blob/main/assets/tag-rule.gif" alt="" height="30" />
 </p>
 
-<p align="center"><b>Read & write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.</b></p>
+<p align="center"><b>Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.</b></p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/@allons-y/eleventy-plugin-netlify-data-store">
@@ -291,7 +291,7 @@ Full details are in [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
 <h2>Contributing</h2>
 
-Contributions are welcome and appreciated! Please open an [issue](https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/issues/new) (before submitting a pull request) if you find a bug, have a feature request, or have a question. Be sure to follow the [contribution guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md) but most importantly, be excellent to each other. 💖
+Contributions are welcome & appreciated! Please open an [issue](https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/issues/new) (before submitting a pull request) if you find a bug, have a feature request, or have a question. Be sure to follow the [contribution guidelines](.github/CONTRIBUTING.md) and [code of conduct](.github/CODE_OF_CONDUCT.md) but most importantly, be excellent to each other. 💖
 
 <!-- weaver:contribution:END -->
 
