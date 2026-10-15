@@ -1,7 +1,6 @@
 ---
 title: Getting started
 description: Install the plugin, register it, & read a first blob.
-icon: rocket
 templateEngineOverride: md
 order: 1
 ---

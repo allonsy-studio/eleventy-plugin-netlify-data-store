@@ -3,6 +3,5 @@
 export default {
 	title: "Reference",
 	description: "Every function & option, generated from the JSDoc in src/.",
-	icon: "book",
 	order: 7,
 };

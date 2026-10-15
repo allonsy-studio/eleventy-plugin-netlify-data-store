@@ -1,7 +1,6 @@
 ---
 title: How it works
 description: The envelope, the order reads resolve in, & the local cache.
-icon: diagram-project
 templateEngineOverride: md
 order: 2
 ---

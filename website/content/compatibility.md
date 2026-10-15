@@ -1,7 +1,6 @@
 ---
 title: Compatibility
 description: Supported Eleventy & Node versions, & use outside Eleventy.
-icon: circle-check
 templateEngineOverride: md
 order: 8
 ---

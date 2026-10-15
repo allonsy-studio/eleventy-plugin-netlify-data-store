@@ -1,7 +1,6 @@
 ---
 title: Configuration
 description: Pass options to the plugin, & what the common ones do.
-icon: sliders
 templateEngineOverride: md
 order: 3
 ---
