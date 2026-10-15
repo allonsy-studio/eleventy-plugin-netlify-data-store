@@ -7,7 +7,7 @@
  * Builds the reference page from the JSDoc in `src/`, so the docs can't
  * drift from the code.
  *
- * @module website/reference
+ * @module docs/reference
  */
 
 import { readFileSync } from "node:fs";

@@ -17,7 +17,7 @@ Node >= 22.12, Yarn 4. `@11ty/eleventy` (>= 3.0.0) is a peer dependency.
 | `src/logger.js` | `createLogger`, with a `quiet` option                             |
 | `test/`     | AVA specs, one per `src` module, plus `_helpers.js`                   |
 | `sample/`   | A runnable Eleventy site with a committed `blobs-cache/` fixture      |
-| `website/`  | The project site, built from the studio `oss-docs-site` skill (Eleventy & WebC) |
+| `docs/`    | The project site, built from the studio `oss-docs-site` skill (Eleventy & WebC) |
 
 ## Commands
 
@@ -27,7 +27,7 @@ yarn test:watch
 yarn lint        # opx lint: ESLint through eslint.config.js
 yarn format      # opx lint --fix
 yarn sample      # build the sample site against the committed cache fixture
-yarn docs:start  # serve the project site in website/
+yarn docs:start  # serve the project site in docs/
 yarn docs:build  # build the project site
 yarn docs:test   # axe accessibility audit of the built site (Cypress)
 ```
@@ -38,10 +38,10 @@ A husky pre-commit hook runs `opx lint --fix` on staged files through lint-stage
 `NODE_ENV=development` against `sample/blobs-cache/`, so it needs no Netlify
 credentials.
 
-The project site in `website/` is scaffolded from the studio `oss-docs-site` skill: its
+The project site in `docs/` is scaffolded from the studio `oss-docs-site` skill: its
 studio layer (`_includes/studio-*.webc`, `_data/studio.js`, `studio.css`, & the studio
 SVGs) is locked, so never edit those by hand. The project's own copy lives in
-`website/_data/project.json`, `website/content/`, & `website/content/assets/styles/project.css`.
+`docs/_data/project.json`, `docs/content/`, & `docs/content/assets/styles/project.css`.
 A build fetches the studio data from `allons-y.studio`, so it needs the network or a
 cached copy.
 

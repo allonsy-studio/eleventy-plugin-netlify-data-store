@@ -115,7 +115,7 @@ eleventy-plugin-netlify-data-store/
 │   └── logger.js               # Eleventy logger passthrough, console fallback
 ├── test/                       # Ava specs mirroring src/
 ├── sample/                     # Minimal Eleventy site reading from a committed cache fixture
-├── website/                    # Project site published to GitHub Pages
+├── docs/                       # Project site published to GitHub Pages
 ├── eslint.config.js
 ├── .changeset/                 # Pending changesets + Changesets config
 └── .github/

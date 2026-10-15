@@ -16,5 +16,5 @@ jobs:
         uses: allonsy-studio/.github/.github/workflows/pages.yml@main
         with:
             build-command: yarn docs:build && yarn docs:test
-            output-dir: website/_site
+            output-dir: docs/_site
             node-version-file: .nvmrc

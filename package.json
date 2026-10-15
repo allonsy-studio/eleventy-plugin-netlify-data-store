@@ -15,9 +15,9 @@
   "scripts": {
     "changeset": "changeset",
     "ci:test": "ava",
-    "docs:build": "eleventy --config=website/eleventy.config.js",
-    "docs:start": "eleventy --serve --config=website/eleventy.config.js",
-    "docs:test": "cypress run --project website",
+    "docs:build": "eleventy --config=docs/eleventy.config.js",
+    "docs:start": "eleventy --serve --config=docs/eleventy.config.js",
+    "docs:test": "cypress run --project docs",
     "format": "opx lint --fix",
     "lint": "opx lint",
     "precommit": "lint-staged",
@@ -111,7 +111,7 @@
   },
   "packageManager": "yarn@4.18.1",
   "oss-docs": {
-    "site": "website",
+    "site": "docs",
     "flavor": "docs"
   }
 }

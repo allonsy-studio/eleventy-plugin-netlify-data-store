@@ -29,7 +29,7 @@ export default defineConfig([
 		},
 	},
 	{
-		files: ["website/content/assets/scripts/**/*.js"],
+		files: ["docs/content/assets/scripts/**/*.js"],
 		languageOptions: {
 			globals: {
 				CSS: "readonly",
@@ -43,7 +43,7 @@ export default defineConfig([
 		},
 	},
 	{
-		files: ["website/cypress/**/*.js"],
+		files: ["docs/cypress/**/*.js"],
 		languageOptions: {
 			globals: {
 				Cypress: "readonly",
