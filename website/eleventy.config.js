@@ -55,7 +55,7 @@ export default function (config) {
 		{ filter: ["**/*", `!styles/{${CORE_SHEETS.join(",")}}.css`] },
 	);
 	config.addWatchTarget(at("content/assets/styles"));
-	// `directories`, not the deprecated `dir`: the API & `--output` override the config's output directory.
+	// `directories.output` is where this build writes (the audit overrides it); `dir.output` is only the config's.
 	config.on("eleventy.after", ({ directories }) => {
 		const out = path.join(directories.output, "assets/styles");
 		mkdirSync(out, { recursive: true });
