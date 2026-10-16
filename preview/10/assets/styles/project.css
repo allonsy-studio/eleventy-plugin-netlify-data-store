@@ -1,8 +1,0 @@
-/* Project styles: the accent & fonts. Edit freely; the scaffold never overwrites this file. */
-:root {
-	--accent: #ff944d;
-	/* Ink blue for text & rings, instead of the orange pulled toward the text color (brown). */
-	--accent-text: light-dark(#2b3a67, #b8c7f5);
-	/* Fonts: Instrument Sans for text & headings. Yellowtail is a signature face for signing a name, so it is not set as the display font. */
-	--font-sans: "Instrument Sans", "Instrument Sans Fallback", var(--sans-stack);
-}
