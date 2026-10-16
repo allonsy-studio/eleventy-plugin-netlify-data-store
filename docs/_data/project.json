@@ -1,0 +1,11 @@
+{
+	"lede": "Build-time content from Netlify Blobs, cached locally with a TTL you control, so builds stay fast, survive an outage, & never fail on missing data.",
+	"install": "yarn add -D @allons-y/eleventy-plugin-netlify-data-store",
+	"logo": "logo.svg",
+	"favicon": "favicon.svg",
+	"usage": {
+		"language": "js",
+		"caption": "eleventy.config.js",
+		"code": "import netlifyDataStore from \"@allons-y/eleventy-plugin-netlify-data-store\";\n\nexport default function (eleventyConfig) {\n\tlet { readBlob } = eleventyConfig.addPlugin(netlifyDataStore, {\n\t\timmediate: true,\n\t\tstoreName: \"content\",\n\t\tttl: \"1h\",\n\t});\n\n\televentyConfig.addGlobalData(\"activity\", () => readBlob(\"activity\"));\n}\n"
+	}
+}

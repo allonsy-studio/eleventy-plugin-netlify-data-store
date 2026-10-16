@@ -15,8 +15,13 @@
   "scripts": {
     "changeset": "changeset",
     "ci:test": "ava",
-    "format": "eslint . --fix",
-    "lint": "eslint .",
+    "docs:build": "eleventy --config=docs/eleventy.config.js",
+    "docs:start": "eleventy --serve --config=docs/eleventy.config.js",
+    "docs:test": "cypress run --project docs",
+    "format": "opx lint --fix",
+    "lint": "opx lint",
+    "precommit": "lint-staged",
+    "prepare": "husky",
     "release": "changeset publish",
     "sample": "NODE_ENV=development eleventy --config=sample/eleventy.config.js --input=sample --output=sample/_site",
     "test": "ava",
@@ -73,12 +78,40 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",
+    "@11ty/eleventy-fetch": "^5.1.0",
+    "@11ty/eleventy-plugin-webc": "^0.11.2",
+    "@allons-y/dashly": "^0.1.0-beta.0",
+    "@allons-y/opx-cli": "^0.1.0-beta.0",
+    "@allons-y/opx-lint-js": "^1.0.0-beta.1",
+    "@allons-y/opx-lint-json": "^0.1.0-beta.0",
+    "@allons-y/opx-lint-md": "^0.1.0-beta.0",
     "@changesets/cli": "^3.0.2",
     "@eslint/js": "^9.39.5",
     "@eslint/markdown": "^8.0.2",
+    "@fortawesome/fontawesome-free": "^7.3.1",
     "ava": "^6.4.1",
+    "axe-core": "^4.11.0",
+    "comment-parser": "^1.4.9",
+    "cypress": "^15.21.1",
+    "cypress-axe": "^1.7.0",
     "eslint": "^9.39.5",
-    "eslint-plugin-license-header": "^0.9.0"
+    "eslint-plugin-license-header": "^0.9.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.8",
+    "markdown-it": "^14.1.0",
+    "prismjs": "^1.30.0"
   },
-  "packageManager": "yarn@4.18.0"
+  "dependenciesMeta": {
+    "cypress": {
+      "built": true
+    }
+  },
+  "lint-staged": {
+    "*": "opx lint --fix"
+  },
+  "packageManager": "yarn@4.18.1",
+  "oss-docs": {
+    "site": "docs",
+    "flavor": "docs"
+  }
 }

@@ -1,0 +1,52 @@
+---
+layout: docs.webc
+---
+<!--- Generated from the JSDoc in src/ by _data/reference.js. --->
+<p>Generated from the JSDoc in <code>src/</code>, so it matches the code. For how the pieces fit together, see <a href="/how-it-works/">How it works</a> & <a href="/configuration/">Configuration</a>.</p>
+
+<ul>
+	<li><a href="#plugin">Plugin</a>: register it with Eleventy, or build a store directly.</li>
+	<li><a href="#store">Store functions</a>: read, write, & list blobs.</li>
+	<li><a href="#utilities">Utilities</a>: the date formatter & the duration parser.</li>
+	<li><a href="#options">Options</a>: every option, its type, & its default.</li>
+</ul>
+
+<section aria-labelledby="plugin">
+	<h2 id="plugin">Plugin</h2>
+	<api-entry webc:for="entry of $data.reference.plugin" :@entry="entry"></api-entry>
+</section>
+
+<section aria-labelledby="store">
+	<h2 id="store">Store functions</h2>
+	<p>Returned by <code>createDataStore()</code> & by <code>addPlugin</code>, bound to the options passed at registration.</p>
+	<api-entry webc:for="entry of $data.reference.store" :@entry="entry"></api-entry>
+</section>
+
+<section aria-labelledby="utilities">
+	<h2 id="utilities">Utilities</h2>
+	<p>Exported from the package root. The plugin registers a bound <code>formatGeneratedAt</code> as a filter, which takes only the value.</p>
+	<api-entry webc:for="entry of $data.reference.utilities" :@entry="entry"></api-entry>
+</section>
+
+<section aria-labelledby="options">
+	<h2 id="options">Options</h2>
+	<p>Passed to <code>addPlugin</code> or <code>createDataStore</code>. Every option is optional.</p>
+	<table>
+		<thead>
+			<tr>
+				<th scope="col">Option</th>
+				<th scope="col">Type</th>
+				<th scope="col">Default</th>
+				<th scope="col">Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr webc:for="option of $data.reference.options">
+				<td><code @text="option.name"></code></td>
+				<td><code @text="option.type"></code></td>
+				<td><code webc:if="option.default" @text="option.default"></code></td>
+				<td><template webc:nokeep @html="option.descriptionHtml"></template></td>
+			</tr>
+		</tbody>
+	</table>
+</section>

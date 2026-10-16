@@ -12,7 +12,7 @@ const HEADER = [
 
 export default defineConfig([
 	{
-		ignores: ["**/_site/**", "node_modules/**", "sample/blobs-cache/**", "CHANGELOG.md"],
+		ignores: ["**/_site/**", ".yarn/**", "node_modules/**", "sample/blobs-cache/**", "CHANGELOG.md"],
 	},
 	{
 		files: ["**/*.js"],
@@ -22,8 +22,37 @@ export default defineConfig([
 			ecmaVersion: "latest",
 			sourceType: "module",
 			globals: {
+				URL: "readonly",
 				console: "readonly",
 				process: "readonly",
+			},
+		},
+	},
+	{
+		files: ["docs/content/assets/scripts/**/*.js"],
+		languageOptions: {
+			globals: {
+				CSS: "readonly",
+				Highlight: "readonly",
+				Range: "readonly",
+				clearTimeout: "readonly",
+				document: "readonly",
+				navigator: "readonly",
+				setTimeout: "readonly",
+			},
+		},
+	},
+	{
+		files: ["docs/cypress/**/*.js"],
+		languageOptions: {
+			globals: {
+				Cypress: "readonly",
+				after: "readonly",
+				before: "readonly",
+				cy: "readonly",
+				describe: "readonly",
+				expect: "readonly",
+				it: "readonly",
 			},
 		},
 	},

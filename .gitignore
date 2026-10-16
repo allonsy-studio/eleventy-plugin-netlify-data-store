@@ -3,6 +3,10 @@ _site
 **/_site
 .netlify
 .eleventy.cache
+docs/_a11y
+.opx/cache
+docs/cypress/screenshots
+.cache
 
 # Yarn Berry
 .yarn/*

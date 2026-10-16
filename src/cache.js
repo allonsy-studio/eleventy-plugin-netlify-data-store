@@ -102,7 +102,7 @@ export async function readCacheEntry(name, storeName, context) {
 
 /**
  * Records a freshly fetched value in the cache. Cache failures are
- * non-fatal — the value is already in hand.
+ * non-fatal: the value is already in hand.
  * @param {string} name
  * @param {string} storeName
  * @param {object} value

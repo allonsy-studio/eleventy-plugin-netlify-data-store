@@ -1,0 +1,36 @@
+<!--- One documented function. Prop: entry, from _data/reference.js (name, signature, descriptionHtml, params, hasDescriptions, returns). --->
+<article :aria-labelledby="entry.name">
+	<h3 :id="entry.name"><code @text="entry.signature"></code></h3>
+	<template webc:nokeep @html="entry.descriptionHtml"></template>
+
+	<section webc:if="entry.params.length">
+		<h4>Parameters</h4>
+		<table>
+			<thead>
+				<tr>
+					<th scope="col">Name</th>
+					<th scope="col">Type</th>
+					<th webc:if="entry.hasDescriptions" scope="col">Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr webc:for="param of entry.params">
+					<td>
+						<code @text="param.name"></code>
+						<small webc:if="param.optional">(optional)</small>
+					</td>
+					<td><code @text="param.type"></code></td>
+					<td webc:if="entry.hasDescriptions"><template webc:nokeep @html="param.descriptionHtml"></template></td>
+				</tr>
+			</tbody>
+		</table>
+	</section>
+
+	<section webc:if="entry.returns && entry.returns.type">
+		<h4>Returns</h4>
+		<p>
+			<code @text="entry.returns.type"></code>
+			<template webc:if="entry.returns.descriptionHtml" webc:nokeep>: <template webc:nokeep @html="entry.returns.descriptionHtml"></template></template>
+		</p>
+	</section>
+</article>
