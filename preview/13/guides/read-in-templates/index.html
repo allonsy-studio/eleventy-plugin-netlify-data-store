@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+		<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Read in templates: eleventy-plugin-netlify-data-store</title>
+<meta name="description" content="Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.">
+<link rel="canonical" href="https://projects.allons-y.studio/eleventy-plugin-netlify-data-store/">
+<meta name="color-scheme" content="light dark">
+
+<meta name="theme-color" content="#33394e">
+
+
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="eleventy-plugin-netlify-data-store">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="eleventy-plugin-netlify-data-store: Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds">
+<meta property="og:description" content="Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.">
+<meta property="og:url" content="https://projects.allons-y.studio/eleventy-plugin-netlify-data-store/">
+
+
+
+
+
+
+<link rel="icon" href="/eleventy-plugin-netlify-data-store/preview/13/assets/img/favicon.svg" type="image/svg+xml">
+
+
+
+<link rel="preload" href="/eleventy-plugin-netlify-data-store/preview/13/assets/fonts/pt-mono.woff2" as="font" type="font/woff2" crossorigin="">
+
+
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/13/assets/styles/tokens.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/13/assets/styles/reset.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/13/assets/styles/layout.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/13/assets/styles/components.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/13/assets/styles/studio.css">
+<link rel="stylesheet" href="/eleventy-plugin-netlify-data-store/preview/13/assets/styles/project.css">
+<script type="module" src="/eleventy-plugin-netlify-data-store/preview/13/assets/scripts/copy-code.js"></script>
+<script type="module" src="/eleventy-plugin-netlify-data-store/preview/13/assets/scripts/code-highlight.js"></script>
+
+	</head>
+	<body>
+		<a href="#main">Skip to content</a>
+		<header>
+			<a data-studio="banner" href="https://allons-y.studio">
+	<img src="/eleventy-plugin-netlify-data-store/preview/13/assets/img/studio/oss-banner.svg" alt="Brought to you by Allons-y Studio" width="1600" height="64" fetchpriority="high">
+</a>
+
+			<div>
+	<a rel="home" href="/eleventy-plugin-netlify-data-store/preview/13/">
+		<img src="/eleventy-plugin-netlify-data-store/preview/13/assets/img/logo.svg" alt="eleventy-plugin-netlify-data-store" height="32">
+		
+	</a>
+	<nav aria-label="Primary">
+		
+		
+		
+		<a href="/eleventy-plugin-netlify-data-store/preview/13/getting-started/"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc. --><path fill="currentColor" d="M384 512L96 512c-53 0-96-43-96-96L0 96C0 43 43 0 96 0L400 0c26.5 0 48 21.5 48 48l0 288c0 20.9-13.4 38.7-32 45.3l0 66.7c17.7 0 32 14.3 32 32s-14.3 32-32 32l-32 0zM96 384c-17.7 0-32 14.3-32 32s14.3 32 32 32l256 0 0-64-256 0zm32-232c0 13.3 10.7 24 24 24l176 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-176 0c-13.3 0-24 10.7-24 24zm24 72c-13.3 0-24 10.7-24 24s10.7 24 24 24l176 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-176 0z"></path></svg>
+ Docs</a>
+		<a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc. --><path fill="currentColor" d="M216.5 362.5c-66-8-112.5-55.5-112.5-117 0-25 9-52 24-70-6.5-16.5-5.5-51.5 2-66 20-2.5 47 8 63 22.5 19-6 39-9 63.5-9s44.5 3 62.5 8.5c15.5-14 43-24.5 63-22 7 13.5 8 48.5 1.5 65.5 16 19 24.5 44.5 24.5 70.5 0 61.5-46.5 108-113.5 116.5 17 11 28.5 35 28.5 62.5l0 52C323 491.5 335.5 500 350.5 494 441 459.5 512 369 512 257 512 115.5 397 0 255.5 0S0 115.5 0 257c0 111 70.5 203 165.5 237.5 13.5 5 26.5-4 26.5-17.5l0-40c-7 3-16 5-24 5-33 0-52.5-18-66.5-51.5-5.5-13.5-11.5-21.5-23-23-6-.5-8-3-8-6 0-6 10-10.5 20-10.5 14.5 0 27 9 40 27.5 10 14.5 20.5 21 33 21s20.5-4.5 32-16c8.5-8.5 15-16 21-21z"></path></svg>
+ GitHub</a>
+		<a href="https://www.npmjs.com/package/@allons-y/eleventy-plugin-netlify-data-store"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc. --><path fill="currentColor" d="M288 288l-32 0 0-64 32 0 0 64zM576 160l0 192-288 0 0 32-128 0 0-32-160 0 0-192 576 0zM160 192l-128 0 0 128 64 0 0-96 32 0 0 96 32 0 0-128zm160 0l-128 0 0 160 64 0 0-32 64 0 0-128zm224 0l-192 0 0 128 64 0 0-96 32 0 0 96 32 0 0-96 32 0 0 96 32 0 0-128z"></path></svg>
+ npm</a>
+	</nav>
+</div>
+
+		</header>
+		<main id="main" tabindex="-1">
+			<div>
+	<nav aria-label="Documentation">
+	<ul>
+		<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/13/getting-started/">Getting started</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/13/how-it-works/">How it works</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/13/configuration/">Configuration</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/13/guides/write-from-a-function/">Write from a scheduled function</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/13/guides/read-in-templates/" aria-current="page">Read in templates</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/13/guides/offline-and-ci-builds/">Build offline &amp; in CI</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/13/reference/">Reference</a>
+		</li>
+<li>
+			<a href="/eleventy-plugin-netlify-data-store/preview/13/compatibility/">Compatibility</a>
+		</li>
+	</ul>
+</nav>
+
+	<article>
+		
+		
+		<h1>Read in templates</h1>
+		
+	<p>Wire each read into global data in the Eleventy config, &amp; the whole envelope is available to every template.</p>
+<figure><pre tabindex="0"><code data-tokens="[[&quot;punctuation&quot;,14,15],[&quot;function&quot;,15,28],[&quot;punctuation&quot;,28,29],[&quot;string&quot;,29,39],[&quot;punctuation&quot;,39,40],[&quot;punctuation&quot;,41,42],[&quot;punctuation&quot;,42,43],[&quot;punctuation&quot;,44,46],[&quot;function&quot;,47,55],[&quot;punctuation&quot;,55,56],[&quot;string&quot;,56,66],[&quot;punctuation&quot;,66,67],[&quot;punctuation&quot;,67,68],[&quot;punctuation&quot;,68,69]]">eleventyConfig.addGlobalData("activity", () =&gt; readBlob("activity"));
+</code></pre></figure>
+<h2>Reach the store from a callback</h2>
+<p><code>immediate: true</code> makes the store available while the config file runs, which is what makes destructuring work. Without it, reach for <code>eleventyConfig.netlifyDataStore</code> from inside a callback, where the plugin has already run:</p>
+<figure><pre tabindex="0"><code data-tokens="[[&quot;punctuation&quot;,14,15],[&quot;function&quot;,15,24],[&quot;punctuation&quot;,24,25],[&quot;punctuation&quot;,41,42],[&quot;punctuation&quot;,43,44],[&quot;function&quot;,45,48],[&quot;punctuation&quot;,48,49],[&quot;string&quot;,50,54],[&quot;punctuation&quot;,55,56],[&quot;punctuation&quot;,56,57],[&quot;punctuation&quot;,57,58],[&quot;punctuation&quot;,74,75],[&quot;function&quot;,75,88],[&quot;punctuation&quot;,88,89],[&quot;string&quot;,89,99],[&quot;punctuation&quot;,99,100],[&quot;punctuation&quot;,101,102],[&quot;punctuation&quot;,102,103],[&quot;punctuation&quot;,104,106],[&quot;punctuation&quot;,122,123],[&quot;punctuation&quot;,139,140],[&quot;function&quot;,140,148],[&quot;punctuation&quot;,148,149],[&quot;string&quot;,149,159],[&quot;punctuation&quot;,159,160],[&quot;punctuation&quot;,161,162],[&quot;punctuation&quot;,162,163]]">eleventyConfig.addPlugin(netlifyDataStore, { ttl: "1h" });
+
+eleventyConfig.addGlobalData("activity", () =&gt;
+	eleventyConfig.netlifyDataStore.readBlob("activity")
+);
+</code></pre></figure>
+<h2>Render every state</h2>
+<p>A read resolves to the content, the content flagged stale, or an error envelope. Check <code>meta</code> first so a template renders a fallback instead of failing the build:</p>
+<figure><pre tabindex="0"><code data-tokens="[[&quot;punctuation&quot;,31,32],[&quot;keyword&quot;,32,33],[&quot;punctuation&quot;,33,34],[&quot;punctuation&quot;,55,57],[&quot;keyword&quot;,57,58],[&quot;punctuation&quot;,58,59],[&quot;punctuation&quot;,73,74],[&quot;keyword&quot;,74,75],[&quot;punctuation&quot;,75,76],[&quot;punctuation&quot;,129,131],[&quot;keyword&quot;,131,132],[&quot;punctuation&quot;,132,133],[&quot;punctuation&quot;,165,166],[&quot;keyword&quot;,166,167],[&quot;punctuation&quot;,167,168],[&quot;punctuation&quot;,185,187],[&quot;keyword&quot;,187,188],[&quot;punctuation&quot;,188,189],[&quot;punctuation&quot;,204,205],[&quot;keyword&quot;,205,207],[&quot;punctuation&quot;,207,208],[&quot;punctuation&quot;,252,253],[&quot;keyword&quot;,253,255],[&quot;punctuation&quot;,255,256],[&quot;punctuation&quot;,273,275],[&quot;keyword&quot;,275,277],[&quot;punctuation&quot;,277,278],[&quot;punctuation&quot;,297,299],[&quot;keyword&quot;,299,301],[&quot;punctuation&quot;,301,302]]">{% if activity.meta.error %}
+  &lt;p&gt;Activity unavailable.&lt;/p&gt;
+{% else %}
+  &lt;p&gt;Updated {{ activity.meta.generatedAt | generatedAt }}&lt;/p&gt;
+  {%- if activity.meta.stale %}&lt;p&gt;Last cached copy.&lt;/p&gt;{%- endif %}
+  &lt;ul&gt;
+  {%- for entry in activity.entries %}
+    &lt;li&gt;{{ entry.title }}&lt;/li&gt;
+  {%- endfor %}
+  &lt;/ul&gt;
+{% endif %}
+</code></pre></figure>
+<p><code>meta.cacheAge</code> is the stale entry's age in milliseconds, for a message such as "last updated 3 hours ago". See <a href="/eleventy-plugin-netlify-data-store/preview/13/how-it-works/">How it works</a> for every <code>meta</code> key.</p>
+<h2>Read from another store</h2>
+<p>Both <code>readBlob</code> &amp; <code>listData</code> take an optional store name as their last argument, &amp; fall back to the <code>storeName</code> option.</p>
+<figure><pre tabindex="0"><code data-tokens="[[&quot;keyword&quot;,0,3],[&quot;punctuation&quot;,11,12],[&quot;keyword&quot;,13,18],[&quot;function&quot;,19,27],[&quot;punctuation&quot;,27,28],[&quot;string&quot;,28,36],[&quot;punctuation&quot;,36,37],[&quot;punctuation&quot;,37,38],[&quot;keyword&quot;,39,42],[&quot;punctuation&quot;,49,50],[&quot;keyword&quot;,51,56],[&quot;function&quot;,57,65],[&quot;punctuation&quot;,65,66],[&quot;punctuation&quot;,72,73],[&quot;number&quot;,73,74],[&quot;punctuation&quot;,74,75],[&quot;punctuation&quot;,75,76],[&quot;string&quot;,77,85],[&quot;punctuation&quot;,85,86],[&quot;punctuation&quot;,86,87]]">let drafts = await listData("drafts");
+let first = await readBlob(drafts[0], "drafts");
+</code></pre></figure>
+
+	<nav aria-label="Pager">
+	<a rel="prev" href="/eleventy-plugin-netlify-data-store/preview/13/guides/write-from-a-function/">Write from a scheduled function</a>
+	<a rel="next" href="/eleventy-plugin-netlify-data-store/preview/13/guides/offline-and-ci-builds/">Build offline &amp; in CI</a>
+</nav>
+
+
+	</article>
+</div>
+
+
+			<section data-studio="cta">
+	<img src="/eleventy-plugin-netlify-data-store/preview/13/assets/img/studio/mark.svg" alt="" width="72" height="72" loading="lazy">
+	<div>
+		<p><span data-signature="">Allons-y Studio</span></p>
+		<h2>Let's build something great together</h2>
+		<p>A front-end &amp; design systems studio helping teams ship consistent, accessible UI faster.</p>
+	</div>
+	<ul>
+		<li>
+			<a href="https://scheduler.zoom.us/allonsy-studio/discovery">Book a discovery call</a>
+		</li>
+<li>
+			<a href="mailto:consulting@allons-y.studio">Email the studio</a>
+		</li>
+	</ul>
+</section>
+
+		</main>
+		<footer>
+	<div>
+		<div>
+			<p><strong>@allons-y/eleventy-plugin-netlify-data-store</strong></p>
+			<p>Read &amp; write build-time content for Eleventy from Netlify Blobs, with a TTL-based local cache for fast, offline-tolerant builds.</p>
+			<p data-badges="">
+				<a href="https://www.npmjs.com/package/@allons-y/eleventy-plugin-netlify-data-store"><img alt="npm version" src="https://img.shields.io/npm/v/@allons-y/eleventy-plugin-netlify-data-store?logo=npm&amp;labelColor=black&amp;color=%23ff944d" height="20" loading="lazy"></a>
+				<a href="https://www.npmjs.com/package/@allons-y/eleventy-plugin-netlify-data-store"><img alt="npm weekly downloads" src="https://img.shields.io/npm/dw/@allons-y/eleventy-plugin-netlify-data-store?logo=npm&amp;labelColor=black&amp;color=%23ff944d" height="20" loading="lazy"></a>
+			</p>
+			<p>
+				<small>
+					Licensed under
+					<a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/LICENSE" data-license="">MPL-2.0</a>
+				</small>
+			</p>
+		</div>
+		<nav aria-label="Project links">
+			<p><strong>Project</strong></p>
+			<ul>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc. --><path fill="currentColor" d="M216.5 362.5c-66-8-112.5-55.5-112.5-117 0-25 9-52 24-70-6.5-16.5-5.5-51.5 2-66 20-2.5 47 8 63 22.5 19-6 39-9 63.5-9s44.5 3 62.5 8.5c15.5-14 43-24.5 63-22 7 13.5 8 48.5 1.5 65.5 16 19 24.5 44.5 24.5 70.5 0 61.5-46.5 108-113.5 116.5 17 11 28.5 35 28.5 62.5l0 52C323 491.5 335.5 500 350.5 494 441 459.5 512 369 512 257 512 115.5 397 0 255.5 0S0 115.5 0 257c0 111 70.5 203 165.5 237.5 13.5 5 26.5-4 26.5-17.5l0-40c-7 3-16 5-24 5-33 0-52.5-18-66.5-51.5-5.5-13.5-11.5-21.5-23-23-6-.5-8-3-8-6 0-6 10-10.5 20-10.5 14.5 0 27 9 40 27.5 10 14.5 20.5 21 33 21s20.5-4.5 32-16c8.5-8.5 15-16 21-21z"></path></svg>
+ GitHub</a></li>
+				<li><a href="https://www.npmjs.com/package/@allons-y/eleventy-plugin-netlify-data-store"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc. --><path fill="currentColor" d="M288 288l-32 0 0-64 32 0 0 64zM576 160l0 192-288 0 0 32-128 0 0-32-160 0 0-192 576 0zM160 192l-128 0 0 128 64 0 0-96 32 0 0 96 32 0 0-128zm160 0l-128 0 0 160 64 0 0-32 64 0 0-128zm224 0l-192 0 0 128 64 0 0-96 32 0 0 96 32 0 0-96 32 0 0 96 32 0 0-128z"></path></svg>
+ npm</a></li>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/CHANGELOG.md"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc. --><path fill="currentColor" d="M288 64c106 0 192 86 192 192S394 448 288 448c-65.2 0-122.9-32.5-157.6-82.3-10.1-14.5-30.1-18-44.6-7.9s-18 30.1-7.9 44.6C124.1 468.6 201 512 288 512 429.4 512 544 397.4 544 256S429.4 0 288 0C202.3 0 126.5 42.1 80 106.7L80 80c0-17.7-14.3-32-32-32S16 62.3 16 80l0 112c0 17.7 14.3 32 32 32l24.6 0c.5 0 1 0 1.5 0l86 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-38.3 0C154.9 102.6 217 64 288 64zm24 88c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 104c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65 0-94.1z"></path></svg>
+ Changelog</a></li>
+			</ul>
+		</nav>
+		<nav aria-label="Help links">
+			<p><strong>Help</strong></p>
+			<ul>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/issues"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc. --><path fill="currentColor" d="M192 96c0-53 43-96 96-96s96 43 96 96l0 3.6c0 15.7-12.7 28.4-28.4 28.4l-135.1 0c-15.7 0-28.4-12.7-28.4-28.4l0-3.6zm345.6 12.8c10.6 14.1 7.7 34.2-6.4 44.8l-97.8 73.3c5.3 8.9 9.3 18.7 11.8 29.1l98.8 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-96 0 0 32c0 2.6-.1 5.3-.2 7.9l83.4 62.5c14.1 10.6 17 30.7 6.4 44.8s-30.7 17-44.8 6.4l-63.1-47.3c-23.2 44.2-66.5 76.2-117.7 83.9L312 280c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 230.2c-51.2-7.7-94.5-39.7-117.7-83.9L83.2 473.6c-14.1 10.6-34.2 7.7-44.8-6.4s-7.7-34.2 6.4-44.8l83.4-62.5c-.1-2.6-.2-5.2-.2-7.9l0-32-96 0c-17.7 0-32-14.3-32-32s14.3-32 32-32l98.8 0c2.5-10.4 6.5-20.2 11.8-29.1L44.8 153.6c-14.1-10.6-17-30.7-6.4-44.8s30.7-17 44.8-6.4L192 184c12.3-5.1 25.8-8 40-8l112 0c14.2 0 27.7 2.8 40 8l108.8-81.6c14.1-10.6 34.2-7.7 44.8 6.4z"></path></svg>
+ Report an issue</a></li>
+				<li><a href="https://github.com/allonsy-studio/eleventy-plugin-netlify-data-store/blob/main/.github/CONTRIBUTING.md"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc. --><path fill="currentColor" d="M256 141.3l0 309.3 .5-.2C311.1 427.7 369.7 416 428.8 416l19.2 0 0-320-19.2 0c-42.2 0-84.1 8.4-123.1 24.6-16.8 7-33.4 13.9-49.7 20.7zM230.9 61.5L256 72 281.1 61.5C327.9 42 378.1 32 428.8 32L464 32c26.5 0 48 21.5 48 48l0 352c0 26.5-21.5 48-48 48l-35.2 0c-50.7 0-100.9 10-147.7 29.5l-12.8 5.3c-7.9 3.3-16.7 3.3-24.6 0l-12.8-5.3C184.1 490 133.9 480 83.2 480L48 480c-26.5 0-48-21.5-48-48L0 80C0 53.5 21.5 32 48 32l35.2 0c50.7 0 100.9 10 147.7 29.5z"></path></svg>
+ Contributing guide</a></li>
+				<li><a href="https://github.com/allonsy-studio/.github/blob/main/CODE_OF_CONDUCT.md"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc. --><path fill="currentColor" d="M268.9 85.2L152.3 214.8c-4.6 5.1-4.4 13 .5 17.9 30.5 30.5 80 30.5 110.5 0l31.8-31.8c4.2-4.2 9.5-6.5 14.9-6.9 6.8-.6 13.8 1.7 19 6.9L505.6 376 576 320 576 32 464 96 440.2 80.1C424.4 69.6 405.9 64 386.9 64l-70.4 0c-1.1 0-2.3 0-3.4 .1-16.9 .9-32.8 8.5-44.2 21.1zM116.6 182.7L223.4 64 183.8 64c-25.5 0-49.9 10.1-67.9 28.1L112 96 0 32 0 320 156.4 450.3c23 19.2 52 29.7 81.9 29.7l15.7 0-7-7c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l41 41 9 0c19.1 0 37.8-4.3 54.8-12.3L359 441c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l32 32 17.5-17.5c8.9-8.9 11.5-21.8 7.6-33.1l-137.9-136.8-14.9 14.9c-49.3 49.3-129.1 49.3-178.4 0-23-23-23.9-59.9-2.2-84z"></path></svg>
+ Code of conduct</a></li>
+				<li><a href="https://github.com/allonsy-studio/.github/blob/main/SECURITY.md"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc. --><path fill="currentColor" d="M256 0c4.6 0 9.2 1 13.4 2.9L457.8 82.8c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0-172.4-82.5-213.1-264-213.6-363.2-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0zm0 66.8l0 378.1c138-66.8 175.1-214.8 176-303.4l-176-74.6 0 0z"></path></svg>
+ Security policy</a></li>
+			</ul>
+		</nav>
+		<a data-studio="footer" href="https://allons-y.studio">
+	<picture>
+		<source media="(prefers-color-scheme: dark)" srcset="/eleventy-plugin-netlify-data-store/preview/13/assets/img/studio/oss-footer-dark.svg">
+		<img src="/eleventy-plugin-netlify-data-store/preview/13/assets/img/studio/oss-footer-light.svg" alt="Brought to you by Allons-y Studio" width="440" height="75" loading="lazy">
+	</picture>
+	
+</a>
+
+	</div>
+</footer>
+
+	
+
+</body>
+</html>
