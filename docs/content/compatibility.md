@@ -1,7 +1,6 @@
 ---
 title: Compatibility
 description: Supported Eleventy & Node versions, & use outside Eleventy.
-templateEngineOverride: md
 order: 8
 ---
 - **Eleventy 3.0+**: declared as an optional peer dependency.

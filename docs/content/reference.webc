@@ -1,5 +1,5 @@
 ---
-layout: docs.webc
+layout: norn-docs.webc
 ---
 <!--- Generated from the JSDoc in src/ by _data/reference.js. --->
 <p>Generated from the JSDoc in <code>src/</code>, so it matches the code. For how the pieces fit together, see <a href="/how-it-works/">How it works</a> & <a href="/configuration/">Configuration</a>.</p>

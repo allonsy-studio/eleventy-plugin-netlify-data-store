@@ -1,7 +1,6 @@
 ---
 title: Build offline & in CI
 description: Run builds from a warm cache with no credentials & no network.
-templateEngineOverride: md
 order: 6
 ---
 A read served from the local cache needs no network & no credentials. That makes offline work, fast CI builds, & reproducible tests possible with one habit: warm the cache once.

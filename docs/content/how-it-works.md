@@ -1,7 +1,6 @@
 ---
 title: How it works
 description: The envelope, the order reads resolve in, & the local cache.
-templateEngineOverride: md
 order: 2
 ---
 ## The envelope

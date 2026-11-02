@@ -12,10 +12,9 @@
 
 import { readFileSync } from "node:fs";
 
+import { highlightFences } from "@allons-y/webc-code-sample/markdown";
 import { parse, tokenizers } from "comment-parser";
 import markdownIt from "markdown-it";
-
-import { highlightFences } from "../utilities/highlight.js";
 
 const SRC = new URL("../../src/", import.meta.url);
 

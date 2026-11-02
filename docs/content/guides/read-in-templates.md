@@ -1,7 +1,6 @@
 ---
 title: Read in templates
 description: Load blobs into global data, & render the stale & error states.
-templateEngineOverride: md
 order: 5
 ---
 Wire each read into global data in the Eleventy config, & the whole envelope is available to every template.
