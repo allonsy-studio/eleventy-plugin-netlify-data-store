@@ -38,12 +38,15 @@ A husky pre-commit hook runs `opx lint --fix` on staged files through lint-stage
 `NODE_ENV=development` against `sample/blobs-cache/`, so it needs no Netlify
 credentials.
 
-The project site in `docs/` is scaffolded from the studio `oss-docs-site` skill: its
-studio layer (`_includes/studio-*.webc`, `_data/studio.js`, `studio.css`, & the studio
-SVGs) is locked, so never edit those by hand. The project's own copy lives in
-`docs/_data/project.json`, `docs/content/`, & `docs/content/assets/styles/project.css`.
-A build fetches the studio data from `allons-y.studio`, so it needs the network or a
-cached copy.
+The project site in `docs/` is scaffolded from the studio `oss-docs-site` skill & built on
+the Norn packages (`@allons-y/webc-patterns`, `@allons-y/webc-oss-site`, &
+`@allons-y/webc-code-sample`). They provide the layouts, components, styles, fonts, code
+highlighting, & the locked studio layer (banner, call to action, credit), so never edit
+or copy those. The project's own files are `docs/_data/project.json`, `docs/content/`,
+`docs/content/assets/styles/project.css` (the accent & fonts as `--norn-*` tokens), &
+any component of its own in `docs/_includes/`, named without a `norn-` or `oss-` prefix.
+The site facts come from this `package.json` at build time. The Yarn age gate is waived
+for `@allons-y/*` in `.yarnrc.yml`.
 
 ## Credentials
 

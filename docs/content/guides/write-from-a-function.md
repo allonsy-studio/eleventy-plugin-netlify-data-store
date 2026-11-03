@@ -1,7 +1,6 @@
 ---
 title: Write from a scheduled function
 description: Produce an envelope outside Eleventy & store it in Netlify Blobs.
-templateEngineOverride: md
 order: 4
 ---
 Something has to write the content a build reads: a scheduled function, a form handler, or a webhook. Outside Eleventy, build a store directly with `createDataStore`:

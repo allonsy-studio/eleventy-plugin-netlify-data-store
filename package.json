@@ -78,17 +78,18 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",
-    "@11ty/eleventy-fetch": "^5.1.0",
     "@11ty/eleventy-plugin-webc": "^0.11.2",
     "@allons-y/dashly": "^0.1.0-beta.0",
     "@allons-y/opx-cli": "^0.1.0-beta.0",
     "@allons-y/opx-lint-js": "^1.0.0-beta.1",
     "@allons-y/opx-lint-json": "^0.1.0-beta.0",
     "@allons-y/opx-lint-md": "^0.1.0-beta.0",
+    "@allons-y/webc-code-sample": "^0.1.0-beta.1",
+    "@allons-y/webc-oss-site": "^0.1.0-beta.1",
+    "@allons-y/webc-patterns": "^0.1.0-beta.1",
     "@changesets/cli": "^3.0.2",
     "@eslint/js": "^9.39.5",
     "@eslint/markdown": "^8.0.2",
-    "@fortawesome/fontawesome-free": "^7.3.1",
     "ava": "^6.4.1",
     "axe-core": "^4.11.0",
     "comment-parser": "^1.4.9",
@@ -98,8 +99,7 @@
     "eslint-plugin-license-header": "^0.9.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.8",
-    "markdown-it": "^14.1.0",
-    "prismjs": "^1.30.0"
+    "markdown-it": "^14.1.0"
   },
   "dependenciesMeta": {
     "cypress": {

@@ -1,7 +1,6 @@
 ---
 title: Configuration
 description: Pass options to the plugin, & what the common ones do.
-templateEngineOverride: md
 order: 3
 ---
 Pass options as the second argument to `addPlugin`, or to `createDataStore` outside Eleventy. Every option is optional; the defaults are:
