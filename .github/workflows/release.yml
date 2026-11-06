@@ -62,11 +62,21 @@ jobs:
       pull-requests: write
 
     steps:
+      - name: Create GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ secrets.APP_CLIENT_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
           persist-credentials: false
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Use Node LTS version
         uses: actions/setup-node@v7
@@ -79,11 +89,11 @@ jobs:
       - name: Install Node dependencies
         run: yarn install --immutable
 
-      # A PAT rather than the job token so the release PR triggers CI.
+      # An app token rather than the job token so the release PR triggers CI.
       - name: Open or update the release PR
         uses: changesets/action/version@v2
         with:
-          github-token: ${{ secrets.PAT_GITHUB }}
+          github-token: ${{ steps.app-token.outputs.token }}
           script: yarn changeset version
           commit-message: "chore(release): version packages"
           pr-title: "chore(release): version packages"
