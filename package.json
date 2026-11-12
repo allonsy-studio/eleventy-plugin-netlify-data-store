@@ -77,7 +77,7 @@
     "@netlify/blobs": "^11.0.3"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^3.1.6",
+    "@11ty/eleventy": "^3.1.8",
     "@11ty/eleventy-plugin-webc": "^0.11.2",
     "@allons-y/dashly": "^0.1.0-beta.0",
     "@allons-y/opx-cli": "^0.1.0-beta.0",
