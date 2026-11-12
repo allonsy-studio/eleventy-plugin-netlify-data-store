@@ -4,7 +4,6 @@ _site
 .netlify
 .eleventy.cache
 docs/_a11y
-.opx/cache
 docs/cypress/screenshots
 .cache
 
@@ -15,3 +14,5 @@ docs/cypress/screenshots
 !.yarn/releases
 !.yarn/versions
 .pnp.*
+.opx/*
+!.opx/config.json
