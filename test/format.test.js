@@ -11,7 +11,7 @@ test("formats an ISO timestamp in en-GB by default", (t) => {
 });
 
 test("accepts a Date & a numeric timestamp", (t) => {
-	let expected = formatGeneratedAt("2026-09-05T14:32:00Z");
+	const expected = formatGeneratedAt("2026-09-05T14:32:00Z");
 	t.is(formatGeneratedAt(new Date("2026-09-05T14:32:00Z")), expected);
 	t.is(formatGeneratedAt(Date.parse("2026-09-05T14:32:00Z")), expected);
 });
@@ -28,6 +28,6 @@ test("honours the locale & dateFormat options", (t) => {
 });
 
 test("is reachable from a configured data store", (t) => {
-	let store = createDataStore({ locale: "en-US", dateFormat: { dateStyle: "short", timeZone: "UTC" } });
+	const store = createDataStore({ locale: "en-US", dateFormat: { dateStyle: "short", timeZone: "UTC" } });
 	t.is(store.formatGeneratedAt("2026-09-05T14:32:00Z"), "9/5/26");
 });

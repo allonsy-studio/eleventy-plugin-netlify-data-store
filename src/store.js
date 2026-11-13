@@ -39,17 +39,17 @@ export function getStore(storeName, context) {
 		return context.stores.get(storeName);
 	}
 
-	let siteID = context.siteID ?? process.env.NETLIFY_SITE_ID;
-	let token = context.token ?? process.env.NETLIFY_TOKEN;
+	const siteID = context.siteID ?? process.env.NETLIFY_SITE_ID;
+	const token = context.token ?? process.env.NETLIFY_TOKEN;
 
 	if (!context.getStore && (!siteID || !token)) {
 		throw new Error(
-			"Missing Netlify Blobs credentials: set NETLIFY_SITE_ID & NETLIFY_TOKEN, or pass `siteID` & `token` as plugin options."
+			"Missing Netlify Blobs credentials: set NETLIFY_SITE_ID & NETLIFY_TOKEN, or pass `siteID` & `token` as plugin options.",
 		);
 	}
 
-	let factory = context.getStore ?? getNetlifyStore;
-	let store = factory({ name: storeName, siteID, token });
+	const factory = context.getStore ?? getNetlifyStore;
+	const store = factory({ name: storeName, siteID, token });
 	context.stores.set(storeName, store);
 	return store;
 }

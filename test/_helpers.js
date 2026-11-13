@@ -13,7 +13,7 @@ import path from "node:path";
  * @param {Record<string, object>} [blobs]
  */
 export function fakeBlobs(blobs = {}) {
-	let created = [];
+	const created = [];
 
 	function factory({ name }) {
 		created.push(name);
@@ -52,7 +52,7 @@ export function failingBlobs(message = "kaboom") {
 
 /** Creates a scratch directory removed when the test finishes. */
 export async function tempDir(t, prefix = "nds-") {
-	let dir = await fs.mkdtemp(path.join(os.tmpdir(), prefix));
+	const dir = await fs.mkdtemp(path.join(os.tmpdir(), prefix));
 	t.teardown(() => fs.rm(dir, { recursive: true, force: true }));
 	return dir;
 }
@@ -62,19 +62,19 @@ export async function tempDir(t, prefix = "nds-") {
  * @returns {Promise<string>} the file written
  */
 export async function seedCache(cacheDir, storeName, name, value, ageMs = 0) {
-	let dir = path.join(cacheDir, storeName);
+	const dir = path.join(cacheDir, storeName);
 	await fs.mkdir(dir, { recursive: true });
-	let file = path.join(dir, `${name}.json`);
-	let entry = { cachedAt: new Date(Date.now() - ageMs).toISOString(), value };
+	const file = path.join(dir, `${name}.json`);
+	const entry = { cachedAt: new Date(Date.now() - ageMs).toISOString(), value };
 	await fs.writeFile(file, JSON.stringify(entry, null, 2), "utf8");
 	return file;
 }
 
 /** Writes raw text to a cache path, for malformed-file tests. */
 export async function seedRawCache(cacheDir, storeName, name, contents) {
-	let dir = path.join(cacheDir, storeName);
+	const dir = path.join(cacheDir, storeName);
 	await fs.mkdir(dir, { recursive: true });
-	let file = path.join(dir, `${name}.json`);
+	const file = path.join(dir, `${name}.json`);
 	await fs.writeFile(file, contents, "utf8");
 	return file;
 }
@@ -92,7 +92,7 @@ export async function readCacheFile(cacheDir, storeName, name) {
  * @param {string|undefined} value
  */
 export function setEnv(t, key, value) {
-	let previous = process.env[key];
+	const previous = process.env[key];
 	t.teardown(() => {
 		if (previous === undefined) {
 			delete process.env[key];

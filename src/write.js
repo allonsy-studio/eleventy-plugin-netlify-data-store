@@ -27,7 +27,7 @@ export async function writeBlob(name, data, storeName, context) {
 	}
 
 	try {
-		let store = getStore(storeName, context);
+		const store = getStore(storeName, context);
 		await store.setJSON(name, data);
 		context.log.log(`wrote "${name}" to ${storeLabel(context)} store "${storeName}"`);
 		await writeCacheEntry(name, storeName, data, context);

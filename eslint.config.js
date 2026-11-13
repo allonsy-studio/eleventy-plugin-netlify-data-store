@@ -1,7 +1,9 @@
-import js from "@eslint/js";
-import markdown from "@eslint/markdown";
 import { defineConfig } from "eslint/config";
+
 import licenseHeader from "eslint-plugin-license-header";
+import js from "@allons-y/opx-lint-js/eslint.config.js";
+import json from "@allons-y/opx-lint-json/eslint.config.js";
+import md from "@allons-y/opx-lint-md/eslint.config.js";
 
 const HEADER = [
 	"/**",
@@ -11,22 +13,11 @@ const HEADER = [
 ];
 
 export default defineConfig([
+	...js,
+	...json,
+	...md,
 	{
-		ignores: ["**/_site/**", ".yarn/**", "node_modules/**", "sample/blobs-cache/**", "CHANGELOG.md"],
-	},
-	{
-		files: ["**/*.js"],
-		plugins: { js },
-		extends: ["js/recommended"],
-		languageOptions: {
-			ecmaVersion: "latest",
-			sourceType: "module",
-			globals: {
-				URL: "readonly",
-				console: "readonly",
-				process: "readonly",
-			},
-		},
+		ignores: ["**/_site/**", "sample/blobs-cache/**"],
 	},
 	{
 		files: ["docs/content/assets/scripts/**/*.js"],
@@ -65,8 +56,6 @@ export default defineConfig([
 	},
 	{
 		files: ["**/*.md"],
-		plugins: { markdown },
 		language: "markdown/gfm",
-		extends: ["markdown/recommended"],
 	},
 ]);

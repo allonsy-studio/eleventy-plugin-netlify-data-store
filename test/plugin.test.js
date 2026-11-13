@@ -23,8 +23,8 @@ function fakeEleventyConfig() {
 }
 
 test("exposes a data store on eleventyConfig & returns it", (t) => {
-	let eleventyConfig = fakeEleventyConfig();
-	let returned = netlifyDataStore(eleventyConfig, quiet);
+	const eleventyConfig = fakeEleventyConfig();
+	const returned = netlifyDataStore(eleventyConfig, quiet);
 
 	t.is(typeof returned.readBlob, "function");
 	t.is(typeof returned.writeBlob, "function");
@@ -33,7 +33,7 @@ test("exposes a data store on eleventyConfig & returns it", (t) => {
 });
 
 test("defaults to a one hour ttl & serving stale on error", (t) => {
-	let { options } = netlifyDataStore(fakeEleventyConfig(), quiet);
+	const { options } = netlifyDataStore(fakeEleventyConfig(), quiet);
 
 	t.is(options.ttl, "1h");
 	t.is(options.ttlMs, 60 * 60 * 1000);
@@ -42,7 +42,7 @@ test("defaults to a one hour ttl & serving stale on error", (t) => {
 });
 
 test("accepts a ttl & staleIfError override", (t) => {
-	let { options } = netlifyDataStore(fakeEleventyConfig(), { ...quiet, ttl: "15m", staleIfError: false });
+	const { options } = netlifyDataStore(fakeEleventyConfig(), { ...quiet, ttl: "15m", staleIfError: false });
 
 	t.is(options.ttlMs, 15 * 60 * 1000);
 	t.false(options.staleIfError);
@@ -53,11 +53,11 @@ test("rejects an unparseable ttl at registration", (t) => {
 });
 
 test("has no data-directory coupling at all", (t) => {
-	let eleventyConfig = fakeEleventyConfig();
-	let added = [];
+	const eleventyConfig = fakeEleventyConfig();
+	const added = [];
 	eleventyConfig.addGlobalData = (name) => added.push(name);
 
-	let { options } = netlifyDataStore(eleventyConfig, quiet);
+	const { options } = netlifyDataStore(eleventyConfig, quiet);
 
 	t.is(options.dataDir, undefined, "the plugin never resolves a data directory");
 	t.is(options.localContent, undefined, "there is no repo-managed content layer");
@@ -65,7 +65,7 @@ test("has no data-directory coupling at all", (t) => {
 });
 
 test("registers the generatedAt filter & ignores the cache directory", (t) => {
-	let eleventyConfig = fakeEleventyConfig();
+	const eleventyConfig = fakeEleventyConfig();
 	netlifyDataStore(eleventyConfig, quiet);
 
 	t.is(typeof eleventyConfig.filters.generatedAt, "function");
@@ -74,12 +74,12 @@ test("registers the generatedAt filter & ignores the cache directory", (t) => {
 });
 
 test("filterName renames the filter & false skips it", (t) => {
-	let renamed = fakeEleventyConfig();
+	const renamed = fakeEleventyConfig();
 	netlifyDataStore(renamed, { ...quiet, filterName: "lastUpdated" });
 	t.is(typeof renamed.filters.lastUpdated, "function");
 	t.is(renamed.filters.generatedAt, undefined);
 
-	let skipped = fakeEleventyConfig();
+	const skipped = fakeEleventyConfig();
 	netlifyDataStore(skipped, { ...quiet, filterName: false });
 	t.deepEqual(skipped.filters, {});
 });
@@ -89,11 +89,11 @@ test.serial("builds the sample site from the local cache alone", async (t) => {
 	// fixture answers every read.
 	clearCredentials(t);
 
-	let elev = new Eleventy("sample", "sample/_site", {
+	const elev = new Eleventy("sample", "sample/_site", {
 		configPath: "sample/eleventy.config.js",
 		quietMode: true,
 	});
-	let [page] = await elev.toJSON();
+	const [page] = await elev.toJSON();
 
 	t.regex(page.content, /Ada Lovelace/, "cached team content renders");
 	t.regex(page.content, /Nightly content sync/, "cached activity content renders");

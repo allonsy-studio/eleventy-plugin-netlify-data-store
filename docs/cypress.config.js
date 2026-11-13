@@ -12,7 +12,7 @@ const BUILD_DIR = join(import.meta.dirname, "_a11y");
 /** @param {string} dir */
 const hasBundleCss = (dir) => existsSync(dir) && readdirSync(dir).some((f) => f.endsWith(".css"));
 
-const toUrl = (file) => "/" + file.split(sep).join("/").replace(/(^|\/)index\.html$/, "$1");
+const toUrl = (file) => `/${file.split(sep).join("/").replace(/(^|\/)index\.html$/, "$1")}`;
 
 export default defineConfig({
 	defaultBrowser: "chrome",
