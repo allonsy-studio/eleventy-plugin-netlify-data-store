@@ -49,20 +49,18 @@ export { parseDuration } from "./cache.js";
 export function normalizeOptions(options = {}) {
 	// `undefined` must not shadow a default: callers routinely spread
 	// partially-filled option objects.
-	let supplied = Object.fromEntries(Object.entries(options).filter(([, value]) => value !== undefined));
+	const supplied = Object.fromEntries(Object.entries(options).filter(([, value]) => value !== undefined));
 
-	let normalized = Object.assign(
-		{
-			storeName: "content",
-			cacheDir: ".netlify/blobs-cache",
-			ttl: "1h",
-			staleIfError: true,
-			quiet: false,
-			locale: "en-GB",
-			filterName: "generatedAt",
-		},
-		supplied
-	);
+	const normalized = {
+		storeName: "content",
+		cacheDir: ".netlify/blobs-cache",
+		ttl: "1h",
+		staleIfError: true,
+		quiet: false,
+		locale: "en-GB",
+		filterName: "generatedAt",
+		...supplied,
+	};
 
 	normalized.ttlMs = parseDuration(normalized.ttl);
 	normalized.stores = new Map();
@@ -78,7 +76,7 @@ export function normalizeOptions(options = {}) {
  * @param {DataStoreOptions} [options]
  */
 export function createDataStore(options = {}) {
-	let context = normalizeOptions(options);
+	const context = normalizeOptions(options);
 
 	return {
 		/**
@@ -127,11 +125,11 @@ export default function netlifyDataStorePlugin(eleventyConfig, pluginOptions = {
 		eleventyConfig.versionCheck(">=3.0.0-0");
 	}
 
-	let dataStore = createDataStore(Object.assign({ logger: eleventyConfig.logger }, pluginOptions));
+	const dataStore = createDataStore({ logger: eleventyConfig.logger, ...pluginOptions });
 
 	eleventyConfig.netlifyDataStore = dataStore;
 
-	let { filterName } = dataStore.options;
+	const { filterName } = dataStore.options;
 	if (filterName) {
 		eleventyConfig.addFilter(filterName, dataStore.formatGeneratedAt);
 	}

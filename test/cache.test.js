@@ -37,12 +37,12 @@ test("a bad ttl fails at construction, not mid-build", (t) => {
 });
 
 test("round-trips a value through the cache", async (t) => {
-	let cacheDir = await tempDir(t);
-	let context = normalizeOptions({ ...quiet, cacheDir });
-	let value = { meta: { generatedAt: "2026-09-05T00:00:00Z" }, entries: [1, 2] };
+	const cacheDir = await tempDir(t);
+	const context = normalizeOptions({ ...quiet, cacheDir });
+	const value = { meta: { generatedAt: "2026-09-05T00:00:00Z" }, entries: [1, 2] };
 
 	await writeCacheEntry("activity", "content", value, context);
-	let entry = await readCacheEntry("activity", "content", context);
+	const entry = await readCacheEntry("activity", "content", context);
 
 	t.deepEqual(entry.value, value);
 	t.false(entry.expired);
@@ -50,59 +50,59 @@ test("round-trips a value through the cache", async (t) => {
 });
 
 test("stores cachedAt alongside the value rather than replacing it", async (t) => {
-	let cacheDir = await tempDir(t);
-	let context = normalizeOptions({ ...quiet, cacheDir });
+	const cacheDir = await tempDir(t);
+	const context = normalizeOptions({ ...quiet, cacheDir });
 	await writeCacheEntry("activity", "content", { meta: {}, entries: [] }, context);
 
-	let onDisk = await readCacheFile(cacheDir, "content", "activity");
+	const onDisk = await readCacheFile(cacheDir, "content", "activity");
 	t.true(typeof onDisk.cachedAt === "string");
 	t.false(Number.isNaN(Date.parse(onDisk.cachedAt)));
 	t.deepEqual(onDisk.value, { meta: {}, entries: [] });
 });
 
 test("marks an entry expired once it is older than the ttl", async (t) => {
-	let cacheDir = await tempDir(t);
-	let context = normalizeOptions({ ...quiet, cacheDir, ttl: "1h" });
+	const cacheDir = await tempDir(t);
+	const context = normalizeOptions({ ...quiet, cacheDir, ttl: "1h" });
 	await seedCache(cacheDir, "content", "activity", { meta: {} }, 2 * 60 * 60 * 1000);
 
-	let entry = await readCacheEntry("activity", "content", context);
+	const entry = await readCacheEntry("activity", "content", context);
 	t.true(entry.expired);
 	t.true(entry.age >= 60 * 60 * 1000);
 });
 
 test("keeps an entry fresh inside the ttl", async (t) => {
-	let cacheDir = await tempDir(t);
-	let context = normalizeOptions({ ...quiet, cacheDir, ttl: "1h" });
+	const cacheDir = await tempDir(t);
+	const context = normalizeOptions({ ...quiet, cacheDir, ttl: "1h" });
 	await seedCache(cacheDir, "content", "activity", { meta: {} }, 10 * 60 * 1000);
 
 	t.false((await readCacheEntry("activity", "content", context)).expired);
 });
 
 test("never expires an entry when ttl is *", async (t) => {
-	let cacheDir = await tempDir(t);
-	let context = normalizeOptions({ ...quiet, cacheDir, ttl: "*" });
+	const cacheDir = await tempDir(t);
+	const context = normalizeOptions({ ...quiet, cacheDir, ttl: "*" });
 	await seedCache(cacheDir, "content", "activity", { meta: {} }, 10 * 365 * 24 * 60 * 60 * 1000);
 
 	t.false((await readCacheEntry("activity", "content", context)).expired);
 });
 
 test("always expires an entry when ttl is 0", async (t) => {
-	let cacheDir = await tempDir(t);
-	let context = normalizeOptions({ ...quiet, cacheDir, ttl: 0 });
+	const cacheDir = await tempDir(t);
+	const context = normalizeOptions({ ...quiet, cacheDir, ttl: 0 });
 	await seedCache(cacheDir, "content", "activity", { meta: {} }, 0);
 
 	t.true((await readCacheEntry("activity", "content", context)).expired);
 });
 
 test("returns undefined for a missing entry", async (t) => {
-	let cacheDir = await tempDir(t);
-	let context = normalizeOptions({ ...quiet, cacheDir });
+	const cacheDir = await tempDir(t);
+	const context = normalizeOptions({ ...quiet, cacheDir });
 	t.is(await readCacheEntry("nothing", "content", context), undefined);
 });
 
 test("returns undefined for a malformed or foreign-shaped entry", async (t) => {
-	let cacheDir = await tempDir(t);
-	let context = normalizeOptions({ ...quiet, cacheDir });
+	const cacheDir = await tempDir(t);
+	const context = normalizeOptions({ ...quiet, cacheDir });
 
 	await seedRawCache(cacheDir, "content", "truncated", "{ not json");
 	t.is(await readCacheEntry("truncated", "content", context), undefined);
@@ -112,10 +112,10 @@ test("returns undefined for a malformed or foreign-shaped entry", async (t) => {
 });
 
 test("treats an unparseable cachedAt as infinitely old", async (t) => {
-	let cacheDir = await tempDir(t);
-	let context = normalizeOptions({ ...quiet, cacheDir, ttl: "*" });
+	const cacheDir = await tempDir(t);
+	const context = normalizeOptions({ ...quiet, cacheDir, ttl: "*" });
 	await seedRawCache(cacheDir, "content", "activity", JSON.stringify({ cachedAt: "not a date", value: { meta: {} } }));
 
-	let entry = await readCacheEntry("activity", "content", context);
+	const entry = await readCacheEntry("activity", "content", context);
 	t.is(entry.age, Infinity);
 });

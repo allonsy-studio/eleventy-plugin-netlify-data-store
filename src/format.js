@@ -19,7 +19,7 @@ const DEFAULT_FORMAT = {
  * @returns {Intl.DateTimeFormat}
  */
 function getFormatter(locale, options) {
-	let key = `${locale}|${JSON.stringify(options)}`;
+	const key = `${locale}|${JSON.stringify(options)}`;
 	if (!formatterCache.has(key)) {
 		formatterCache.set(key, new Intl.DateTimeFormat(locale, options));
 	}
@@ -39,12 +39,12 @@ export function formatGeneratedAt(value, options = {}) {
 		return "";
 	}
 
-	let date = value instanceof Date ? value : new Date(value);
+	const date = value instanceof Date ? value : new Date(value);
 	if (Number.isNaN(date.getTime())) {
 		return "";
 	}
 
-	let { locale = "en-GB", dateFormat = DEFAULT_FORMAT } = options;
+	const { locale = "en-GB", dateFormat = DEFAULT_FORMAT } = options;
 	return getFormatter(locale, dateFormat).format(date);
 }
 

@@ -16,8 +16,8 @@ export async function listData(storeName, context) {
 	storeName = storeName || context.storeName;
 
 	try {
-		let store = getStore(storeName, context);
-		let { blobs = [] } = (await store.list()) ?? {};
+		const store = getStore(storeName, context);
+		const { blobs = [] } = (await store.list()) ?? {};
 		return blobs.map((blob) => blob.key);
 	} catch (error) {
 		context.log.error(`Could not list store "${storeName}": ${error.message}`);

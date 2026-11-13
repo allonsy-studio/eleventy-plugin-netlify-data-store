@@ -8,7 +8,7 @@ export default function (eleventyConfig) {
 	// `immediate: true` runs the plugin now instead of after the config file,
 	// so the store can be destructured here. Without it, reach for
 	// `eleventyConfig.netlifyDataStore` inside a callback instead.
-	let { readBlob } = eleventyConfig.addPlugin(netlifyDataStore, {
+	const { readBlob } = eleventyConfig.addPlugin(netlifyDataStore, {
 		immediate: true,
 		storeName: "content",
 		// A real project leaves cacheDir at the default `.netlify/blobs-cache`

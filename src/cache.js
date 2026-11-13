@@ -34,7 +34,7 @@ export function parseDuration(value) {
 		return value;
 	}
 
-	let match = /^(\d+(?:\.\d+)?)([smhdwy])$/i.exec(String(value).trim());
+	const match = /^(\d+(?:\.\d+)?)([smhdwy])$/i.exec(String(value).trim());
 	if (!match) {
 		throw new Error(`Invalid ttl: ${JSON.stringify(value)}. Use a duration like "30m", "1h", "7d", or "*" to never expire.`);
 	}
@@ -72,7 +72,7 @@ export function getCachePath(name, storeName, context) {
  * @returns {Promise<{value: object, cachedAt: string, age: number, expired: boolean}|undefined>}
  */
 export async function readCacheEntry(name, storeName, context) {
-	let file = getCachePath(name, storeName, context);
+	const file = getCachePath(name, storeName, context);
 
 	let contents;
 	try {
@@ -94,8 +94,8 @@ export async function readCacheEntry(name, storeName, context) {
 		return undefined;
 	}
 
-	let cachedAt = Date.parse(entry.cachedAt);
-	let age = Number.isNaN(cachedAt) ? Infinity : Math.max(0, Date.now() - cachedAt);
+	const cachedAt = Date.parse(entry.cachedAt);
+	const age = Number.isNaN(cachedAt) ? Infinity : Math.max(0, Date.now() - cachedAt);
 
 	return { value: entry.value, cachedAt: entry.cachedAt, age, expired: age >= context.ttlMs };
 }
@@ -110,8 +110,8 @@ export async function readCacheEntry(name, storeName, context) {
  * @returns {Promise<void>}
  */
 export async function writeCacheEntry(name, storeName, value, context) {
-	let file = getCachePath(name, storeName, context);
-	let entry = { cachedAt: new Date().toISOString(), value };
+	const file = getCachePath(name, storeName, context);
+	const entry = { cachedAt: new Date().toISOString(), value };
 
 	try {
 		await fs.mkdir(path.dirname(file), { recursive: true });

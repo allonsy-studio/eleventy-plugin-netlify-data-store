@@ -8,12 +8,12 @@ import { createDataStore } from "../src/index.js";
 import { CREDENTIALS, clearCredentials, fakeBlobs, failingBlobs, quiet, readCacheFile, tempDir } from "./_helpers.js";
 
 test("writes to the Netlify Blobs store", async (t) => {
-	let cacheDir = await tempDir(t);
-	let store = fakeBlobs();
-	let payload = { meta: { generatedAt: "2026-09-05T00:00:00Z" }, entries: ["one"] };
+	const cacheDir = await tempDir(t);
+	const store = fakeBlobs();
+	const payload = { meta: { generatedAt: "2026-09-05T00:00:00Z" }, entries: ["one"] };
 
-	let { writeBlob } = createDataStore({ ...quiet, ...CREDENTIALS, cacheDir, getStore: store.factory });
-	let response = await writeBlob("activity", payload);
+	const { writeBlob } = createDataStore({ ...quiet, ...CREDENTIALS, cacheDir, getStore: store.factory });
+	const response = await writeBlob("activity", payload);
 
 	t.is(response.statusCode, 200);
 	t.deepEqual(store.created, ["content"]);
@@ -21,11 +21,11 @@ test("writes to the Netlify Blobs store", async (t) => {
 });
 
 test("refreshes the local cache so a following read sees the write", async (t) => {
-	let cacheDir = await tempDir(t);
-	let store = fakeBlobs();
-	let payload = { meta: {}, entries: ["one"] };
+	const cacheDir = await tempDir(t);
+	const store = fakeBlobs();
+	const payload = { meta: {}, entries: ["one"] };
 
-	let { writeBlob, readBlob } = createDataStore({ ...quiet, ...CREDENTIALS, cacheDir, getStore: store.factory });
+	const { writeBlob, readBlob } = createDataStore({ ...quiet, ...CREDENTIALS, cacheDir, getStore: store.factory });
 	await writeBlob("activity", payload);
 
 	t.deepEqual((await readCacheFile(cacheDir, "content", "activity")).value, payload);
@@ -33,9 +33,9 @@ test("refreshes the local cache so a following read sees the write", async (t) =
 });
 
 test("refuses to write nothing", async (t) => {
-	let cacheDir = await tempDir(t);
-	let store = fakeBlobs();
-	let { writeBlob } = createDataStore({ ...quiet, ...CREDENTIALS, cacheDir, getStore: store.factory });
+	const cacheDir = await tempDir(t);
+	const store = fakeBlobs();
+	const { writeBlob } = createDataStore({ ...quiet, ...CREDENTIALS, cacheDir, getStore: store.factory });
 
 	t.is((await writeBlob("activity", undefined)).statusCode, 400);
 	t.is((await writeBlob("activity", null)).statusCode, 400);
@@ -43,30 +43,30 @@ test("refuses to write nothing", async (t) => {
 });
 
 test("honours an explicit store name argument", async (t) => {
-	let cacheDir = await tempDir(t);
-	let store = fakeBlobs();
+	const cacheDir = await tempDir(t);
+	const store = fakeBlobs();
 
-	let { writeBlob } = createDataStore({ ...quiet, ...CREDENTIALS, cacheDir, getStore: store.factory });
+	const { writeBlob } = createDataStore({ ...quiet, ...CREDENTIALS, cacheDir, getStore: store.factory });
 	await writeBlob("activity", { meta: {} }, "archive");
 
 	t.deepEqual(store.created, ["archive"]);
 });
 
 test("returns a 500 rather than throwing when the store fails", async (t) => {
-	let cacheDir = await tempDir(t);
-	let { writeBlob } = createDataStore({ ...quiet, ...CREDENTIALS, cacheDir, getStore: failingBlobs("write rejected") });
+	const cacheDir = await tempDir(t);
+	const { writeBlob } = createDataStore({ ...quiet, ...CREDENTIALS, cacheDir, getStore: failingBlobs("write rejected") });
 
-	let response = await writeBlob("activity", { meta: {} });
+	const response = await writeBlob("activity", { meta: {} });
 	t.is(response.statusCode, 500);
 	t.is(response.body, "write rejected");
 });
 
 test.serial("returns a 500 rather than throwing when credentials are missing", async (t) => {
 	clearCredentials(t);
-	let cacheDir = await tempDir(t);
-	let { writeBlob } = createDataStore({ ...quiet, cacheDir });
+	const cacheDir = await tempDir(t);
+	const { writeBlob } = createDataStore({ ...quiet, cacheDir });
 
-	let response = await writeBlob("activity", { meta: {} });
+	const response = await writeBlob("activity", { meta: {} });
 	t.is(response.statusCode, 500);
 	t.regex(response.body, /NETLIFY_TOKEN/);
 });

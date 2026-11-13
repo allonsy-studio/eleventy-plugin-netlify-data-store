@@ -10,22 +10,22 @@ import { clearCredentials, fakeBlobs, quiet, setEnv } from "./_helpers.js";
 
 test.serial("throws when NETLIFY_SITE_ID is unset", (t) => {
 	clearCredentials(t);
-	let context = normalizeOptions({ ...quiet, token: "token" });
+	const context = normalizeOptions({ ...quiet, token: "token" });
 
 	t.throws(() => getStore("content", context), { message: /NETLIFY_SITE_ID/ });
 });
 
 test.serial("throws when NETLIFY_TOKEN is unset", (t) => {
 	clearCredentials(t);
-	let context = normalizeOptions({ ...quiet, siteID: "site-id" });
+	const context = normalizeOptions({ ...quiet, siteID: "site-id" });
 
 	t.throws(() => getStore("content", context), { message: /NETLIFY_TOKEN/ });
 });
 
 test.serial("a custom factory needs no credentials", (t) => {
 	clearCredentials(t);
-	let calls = [];
-	let context = normalizeOptions({
+	const calls = [];
+	const context = normalizeOptions({
 		...quiet,
 		getStore(config) {
 			calls.push(config);
@@ -38,8 +38,8 @@ test.serial("a custom factory needs no credentials", (t) => {
 });
 
 test("storeSource & storeLabel name the factory in use", (t) => {
-	let custom = normalizeOptions({ ...quiet, getStore: fakeBlobs().factory });
-	let netlify = normalizeOptions({ ...quiet });
+	const custom = normalizeOptions({ ...quiet, getStore: fakeBlobs().factory });
+	const netlify = normalizeOptions({ ...quiet });
 
 	t.is(storeSource(custom), "custom");
 	t.is(storeLabel(custom), "custom");
@@ -50,8 +50,8 @@ test("storeSource & storeLabel name the factory in use", (t) => {
 test.serial("falls back to the Netlify environment variables", (t) => {
 	setEnv(t, "NETLIFY_SITE_ID", "from-env");
 	setEnv(t, "NETLIFY_TOKEN", "from-env");
-	let calls = [];
-	let context = normalizeOptions({
+	const calls = [];
+	const context = normalizeOptions({
 		...quiet,
 		getStore(config) {
 			calls.push(config);
@@ -66,8 +66,8 @@ test.serial("falls back to the Netlify environment variables", (t) => {
 test.serial("prefers explicit credentials over the environment", (t) => {
 	setEnv(t, "NETLIFY_SITE_ID", "from-env");
 	setEnv(t, "NETLIFY_TOKEN", "from-env");
-	let calls = [];
-	let context = normalizeOptions({
+	const calls = [];
+	const context = normalizeOptions({
 		...quiet,
 		siteID: "explicit",
 		token: "explicit",
@@ -82,22 +82,22 @@ test.serial("prefers explicit credentials over the environment", (t) => {
 });
 
 test("returns a cached instance on a second call with the same store name", (t) => {
-	let store = fakeBlobs();
-	let context = normalizeOptions({ ...quiet, siteID: "site-id", token: "token", getStore: store.factory });
+	const store = fakeBlobs();
+	const context = normalizeOptions({ ...quiet, siteID: "site-id", token: "token", getStore: store.factory });
 
-	let first = getStore("content", context);
-	let second = getStore("content", context);
+	const first = getStore("content", context);
+	const second = getStore("content", context);
 
 	t.is(first, second);
 	t.deepEqual(store.created, ["content"], "the factory runs once per store name");
 });
 
 test("caches each store name separately", (t) => {
-	let store = fakeBlobs();
-	let context = normalizeOptions({ ...quiet, siteID: "site-id", token: "token", getStore: store.factory });
+	const store = fakeBlobs();
+	const context = normalizeOptions({ ...quiet, siteID: "site-id", token: "token", getStore: store.factory });
 
-	let content = getStore("content", context);
-	let archive = getStore("archive", context);
+	const content = getStore("content", context);
+	const archive = getStore("archive", context);
 
 	t.not(content, archive);
 	t.deepEqual(store.created, ["content", "archive"]);

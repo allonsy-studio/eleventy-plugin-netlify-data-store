@@ -55,15 +55,15 @@ function markStale(value, age) {
 export async function readBlob(name, storeName, context) {
 	storeName = storeName || context.storeName;
 
-	let cached = await readCacheEntry(name, storeName, context);
+	const cached = await readCacheEntry(name, storeName, context);
 	if (cached && !cached.expired) {
 		context.log.log(`read "${name}" from cache (age ${Math.round(cached.age / 1000)}s)`);
 		return cached.value;
 	}
 
 	try {
-		let store = getStore(storeName, context);
-		let value = await store.get(name, { type: "json" });
+		const store = getStore(storeName, context);
+		const value = await store.get(name, { type: "json" });
 
 		if (value === null || value === undefined) {
 			if (cached && context.staleIfError) {
