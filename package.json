@@ -13,7 +13,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "changeset": "changeset",
+    "changeset": "opx release add",
     "ci:test": "ava",
     "docs:build": "eleventy --config=docs/eleventy.config.js",
     "docs:start": "eleventy --serve --config=docs/eleventy.config.js",
@@ -22,10 +22,11 @@
     "lint": "opx lint",
     "precommit": "lint-staged",
     "prepare": "husky",
-    "release": "changeset publish",
+    "release": "opx release publish",
     "sample": "NODE_ENV=development eleventy --config=sample/eleventy.config.js --input=sample --output=sample/_site",
     "test": "ava",
-    "test:watch": "ava --watch"
+    "test:watch": "ava --watch",
+    "version": "opx release version && yarn install --mode update-lockfile"
   },
   "publishConfig": {
     "access": "public",
@@ -84,10 +85,10 @@
     "@allons-y/opx-lint-js": "^1.0.0",
     "@allons-y/opx-lint-json": "^0.1.0",
     "@allons-y/opx-lint-md": "^0.1.0",
+    "@allons-y/opx-release": "^0.1.1",
     "@allons-y/webc-code-sample": "^0.1.0-beta.1",
     "@allons-y/webc-oss-site": "^0.1.0-beta.1",
     "@allons-y/webc-patterns": "^0.1.0-beta.1",
-    "@changesets/cli": "^3.0.2",
     "ava": "^6.4.1",
     "axe-core": "^4.11.0",
     "comment-parser": "^1.4.9",
