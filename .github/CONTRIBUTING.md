@@ -124,7 +124,7 @@ eleventy-plugin-netlify-data-store/
 
 ## Release process
 
-Releases are managed by [Changesets](https://github.com/changesets/changesets).
+Releases are managed by [Changesets](https://github.com/changesets/changesets), run through [`opx release`](https://github.com/allonsy-studio/opx).
 
 **As a contributor:**
 
@@ -134,15 +134,15 @@ Releases are managed by [Changesets](https://github.com/changesets/changesets).
 
 **What happens on merge:**
 
-1. On every push to `main`, the **Release** workflow asks `changesets/action/select-mode` whether the repo needs versioning or publishing.
-2. If pending changesets exist, the **version** job opens (or updates) a **"Version packages"** PR that consumes them, bumps `package.json`, and prepends an entry to `CHANGELOG.md`.
-3. Merging the "Version packages" PR triggers the workflow again. This time there are no changesets and an unpublished version, so the **publish** job publishes to npm and tags the release on GitHub.
+1. On every push to `main`, the **Release** workflow runs `changesets/action` with the `opx release` scripts.
+2. If pending changesets exist, it opens (or updates) a **"Version packages"** PR that consumes them, bumps `package.json`, and prepends an entry to `CHANGELOG.md`.
+3. Merging the "Version packages" PR triggers the workflow again. This time there are no changesets and an unpublished version, so `opx release publish` publishes to npm, tags the release, pushes the tag, and creates the GitHub release.
 
 **Do not** edit `version` in `package.json` or the released sections of `CHANGELOG.md` by hand — those are owned by the Release workflow.
 
 ### npm authentication
 
-Publishing uses [npm trusted publishing](https://docs.npmjs.com/trusted-publishers). There is no npm token: the publish job requests a GitHub Actions OIDC token, and Yarn exchanges it with npm for a short-lived, single-package publish credential. That is also what signs the [provenance](https://docs.npmjs.com/generating-provenance-statements) attestation enabled by `publishConfig.provenance` in `package.json`.
+Publishing uses [npm trusted publishing](https://docs.npmjs.com/trusted-publishers). There is no npm token: the release job requests a GitHub Actions OIDC token, and npm exchanges it for a short-lived, single-package publish credential. That is also what signs the [provenance](https://docs.npmjs.com/generating-provenance-statements) attestation enabled by `publishConfig.provenance` in `package.json`.
 
 For this to work, npm must list this repository's `release.yml` workflow as a trusted publisher for the package — under **Settings → Trusted publisher** on the package's npm page, or with `npm trust github` (npm 11.15+). Publishing fails with `YN0033: No authentication configured for request` when that entry is missing, because Yarn has no other credential to fall back on.
 

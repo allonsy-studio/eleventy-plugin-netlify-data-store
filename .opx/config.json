@@ -6,6 +6,6 @@
 		"json": "./eslint.config.js",
 		"md": "./eslint.config.js"
 	},
-	"release": false,
+	"release": true,
 	"test": false
 }

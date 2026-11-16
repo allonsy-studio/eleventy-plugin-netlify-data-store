@@ -1,6 +1,11 @@
 {
 	"$schema": "https://unpkg.com/@changesets/config@4.0.0/schema.json",
-	"changelog": "@changesets/cli/changelog",
+	"changelog": [
+		"@allons-y/opx-release/changelog",
+		{
+			"repo": "allonsy-studio/eleventy-plugin-netlify-data-store"
+		}
+	],
 	"commit": false,
 	"fixed": [],
 	"linked": [],
