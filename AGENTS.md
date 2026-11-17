@@ -71,6 +71,8 @@ write it for the upgrader rather than the reviewer. Docs, CI, and test-only chan
 need no changeset. Never hand-edit `CHANGELOG.md` or the `version` field in
 `package.json`.
 
+Pull requests are squash-merged: the PR title becomes the commit subject & the commit messages its body, so the title must be a valid Conventional Commits subject.
+
 See [`.github/CONTRIBUTING.md`](.github/CONTRIBUTING.md) for the full contributor flow.
 
 Never add AI attribution to a commit or a PR: no `Co-Authored-By` trailer, no
